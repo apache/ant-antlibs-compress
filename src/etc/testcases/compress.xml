@@ -16,27 +16,34 @@
   limitations under the License.
 -->
 
-<project name="compress-test" basedir="../../../" 
+<project name="compress-test" basedir="." 
          default="all" xmlns:compress="antlib:org.apache.ant.js.compressor">
 
   <property name="output" value="test.js"/>
-  <property name="outputPath" value="."/>
+  <property name="outputPath" value="${basedir}/min"/>
+  <property name="testscript.dir" value="${basedir}/testscripts"/>
 
-  <target name="all">
+  <target name="init">
+    <mkdir dir="${outputPath}"/>
+  </target>
+	
+  <target name="all" depends="init">
+  	
   	<compress:yui.compressor verbose="true" output="${output}" mergefiles="true" type="js">
-  	  <fileset dir="testscripts">
+  	  <fileset dir="${testscript.dir}">
   	  	<include name="*.js"/>
   	  </fileset>
   	</compress:yui.compressor>
   	
   	<compress:yui.compressor verbose="true" outputPath="${outputPath}" type="js">
-  	  <fileset dir="testscripts">
+  	  <fileset dir="${testscript.dir}">
   	  	<include name="*.js"/>
   	  </fileset>
   	</compress:yui.compressor>
   </target>
 
   <target name="cleanup">
-    <delete file="${output}" />
+    <delete file="${output}"/>
+  	<delete dir="${outputPath}"/>
   </target>
 </project>

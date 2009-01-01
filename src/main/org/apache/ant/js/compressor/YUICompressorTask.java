@@ -43,7 +43,7 @@ public class YUICompressorTask extends Task {
 					}
 					cmd.createArgument().setValue("-o");
 					if(null != outputPath && outputPath.trim() != "") {
-						cmd.createArgument().setValue(outputPath + File.separator + f.getFile().getAbsolutePath());
+						cmd.createArgument().setValue(outputPath + File.separator + f.getFile().getName());
 					} else {
 						cmd.createArgument().setValue(f.getFile().getAbsolutePath());
 					}
