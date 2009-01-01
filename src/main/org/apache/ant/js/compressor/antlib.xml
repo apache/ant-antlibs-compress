@@ -1,0 +1,6 @@
+<antlib>
+  <taskdef
+    name="yui.compressor"
+    classname="org.apache.ant.js.compressor.YUICompressorTask"
+    />
+</antlib>

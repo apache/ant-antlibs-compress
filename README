@@ -1,0 +1,4 @@
+This library provides Ant task(s) that compress input JavaScript and CSS files.
+
+Currently the Yahoo UI Compressor is supported and is required on Ant's classpath.
+
