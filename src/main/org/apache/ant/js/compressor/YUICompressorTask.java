@@ -1,18 +1,26 @@
 package org.apache.ant.js.compressor;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.io.File;
 
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Commandline;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.FileResource;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 
+import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import com.yahoo.platform.yui.compressor.YUICompressor;
-
 
 public class YUICompressorTask extends Task {
 
@@ -29,32 +37,82 @@ public class YUICompressorTask extends Task {
 	private List inputResources = new ArrayList();
 	
 	public void execute() {
-		if(mergeFiles) {
-			Commandline cmd = buildArgs();
-			YUICompressor.main(cmd.getArguments());
-		} else {
-			for(Iterator i = inputResources.iterator(); i.hasNext();) {
-				FileSet fs = (FileSet)i.next();
-				for(Iterator j = fs.iterator(); j.hasNext();) {
-					Commandline cmd = buildArgs();
-					FileResource f = (FileResource)j.next();
-					if(verbose) {
-						log("Minifying: "+f.getFile().getAbsolutePath());	
+		try {
+			if(mergeFiles) {
+				//TODO
+				//refactor to remove the commandline building
+				Commandline cmd = buildArgs();
+				YUICompressor.main(cmd.getArguments());
+			} else {
+				for(Iterator i = inputResources.iterator(); i.hasNext();) {
+					FileSet fs = (FileSet)i.next();
+					for(Iterator j = fs.iterator(); j.hasNext();) {
+						Commandline cmd = buildArgs();
+						FileResource f = (FileResource)j.next();
+						if(verbose) {
+							log("Minifying: "+f.getFile().getAbsolutePath());	
+						}
+						
+						//TODO
+						//get the charset from the property
+						//check the specified type and create the appropriate compressor 
+						InputStreamReader in = new InputStreamReader(new FileInputStream(f.getFile().getAbsolutePath()), "UTF-8");
+						JavaScriptCompressor c = getJavaScriptCompressor(in);
+						Writer out;
+						if(null != outputPath && outputPath.trim() != "") {
+							out = new OutputStreamWriter(new FileOutputStream(outputPath + File.separator + f.getFile().getName()));
+						} else {
+							out = new OutputStreamWriter(new FileOutputStream(f.getFile().getAbsolutePath()));
+						}
+						
+						c.compress(out, 
+								(null == getLineBreak() || getLineBreak() == "" ? -1 : Integer.parseInt(getLineBreak())), 
+								isNomunge(), 
+								isVerbose(), 
+								isPreserveSemi(), 
+								isDisableOptimization() 
+						);
 					}
-					cmd.createArgument().setValue("-o");
-					if(null != outputPath && outputPath.trim() != "") {
-						cmd.createArgument().setValue(outputPath + File.separator + f.getFile().getName());
-					} else {
-						cmd.createArgument().setValue(f.getFile().getAbsolutePath());
-					}
-					cmd.createArgument().setValue(f.getFile().getAbsolutePath());
-					YUICompressor.main(cmd.getArguments());
-				}
 			
-			}		
+				}		
+			}
+		} catch (Exception e) {
+			log("Error occurred processing file "+ e.getMessage());
 		}
 	}
 
+	protected JavaScriptCompressor getJavaScriptCompressor(InputStreamReader in) throws IOException {
+		
+		JavaScriptCompressor compressor = new JavaScriptCompressor(in, new ErrorReporter() {
+
+            public void warning(String message, String sourceName,
+                    int line, String lineSource, int lineOffset) {
+                if (line < 0) {
+                    log("\n[WARNING] " + message);
+                } else {
+                    log("\n[WARNING] " + line + ':' + lineOffset + ':' + message);
+                }
+            }
+
+            public void error(String message, String sourceName,
+                    int line, String lineSource, int lineOffset) {
+                if (line < 0) {
+                    log("\n[ERROR] " + message);
+                } else {
+                    log("\n[ERROR] " + line + ':' + lineOffset + ':' + message);
+                }
+            }
+
+            public EvaluatorException runtimeError(String message, String sourceName,
+                    int line, String lineSource, int lineOffset) {
+                error(message, sourceName, line, lineSource, lineOffset);
+                return new EvaluatorException(message);
+            }
+        });
+		
+		return compressor;
+	}
+	
 	protected Commandline buildArgs() {
 		Commandline cmd = new Commandline();
 		if(verbose) {

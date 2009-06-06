@@ -2,3 +2,21 @@ This library provides Ant task(s) that compress input JavaScript and CSS files.
 
 Currently the Yahoo UI Compressor is supported and is required on Ant's classpath.
 
+Example Usage
+-------------
+# Referencing: 
+<project name="x" basedir="." default="y" xmlns:compress="antlib:org.apache.ant.js.compressor">
+
+# Compressing many javascript files
+<compress:yui.compressor verbose="true" outputPath="${outputPath}" type="js">
+  <fileset dir="${testscript.dir}">
+    <include name="*.js"/>
+  </fileset>
+</compress:yui.compressor>
+
+TODO
+----
+
+# Make the type parameter work so that the code creates the correct compressor depending on the type
+# Make the charset parameter work
+
