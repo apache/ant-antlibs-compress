@@ -8,7 +8,11 @@ Example Usage
 <project name="x" basedir="." default="y" xmlns:compress="antlib:org.apache.ant.js.compressor">
 
 # Compressing many javascript files
-<compress:yui.compressor verbose="true" outputPath="${outputPath}" type="js">
+<compress:yui.compressor 
+  		verbose="true" 
+  		outputPath="${outputPath}"
+  		linebreak="80"
+  		type="js">
   <fileset dir="${testscript.dir}">
     <include name="*.js"/>
   </fileset>
