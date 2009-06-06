@@ -1,0 +1,198 @@
+/* STORY */
+.storybody{
+	float:left;
+	width:466px;
+	line-height:1.4em;
+	font-size:1.3em;
+}
+.storybodywide{
+	float:left;
+	display:block;	
+	line-height:1.4em;
+	font-size:1.3em;
+}
+.storybody p,.storybodywide p{padding:0 0 10px 0;}
+.storybody pre{font-size:1.1em;}
+.storybody form,.storybodywide form{font-size:1.2em;}
+.storybody form input,.storybodywide form input{margin:3px 0 0 0;}
+.storybody .di .arr, .storybody form .di .arr,.storybodywide .di .arr, .storybodywide form .di .arr{font-size:0.6em;}
+.storybody table td div .cap{padding:0;}
+.storybodywide{width:800px;}
+.sh{font-size:18px;font-weight:bold;color:#464646;}
+.storybody .avinline {
+	margin:4px 0;
+	font-size:0.9em
+}
+.storybody .avinline img{margin:3px 0 0 0;}
+td.sib606 {
+	background:#EEE none repeat scroll 0%;
+	font-size:11px;
+}
+.ibqlinks {
+border-top:1px dotted #666666;
+padding:5px;
+}
+.storybody .arr, .storybodywide .arr{font-size:1.1em;}
+.storybody .arr a.bodl, .storybodywide .arr a.bodl{font-size:0.9em;}
+/* -------- STRUCTURE -------- */
+table.main{
+	clear:both;
+	border:0;
+}
+table.main td.sidebar1{
+	width:160px;
+	border-right:14px solid #fff;
+	vertical-align:top;
+}
+table.datetools{width:800px;}
+td.storybody{
+	width:466px;
+	vertical-align:top;	
+	}
+table.storycontent .sh{
+	font-size:2.4em;
+	margin:10px 0 10px 0;
+}
+td.storyextra{
+	width:306px;
+	border-left:14px solid #fff;
+	vertical-align:top;
+	line-height:1.5em;
+}
+td.contentwrapper, td.contentwrapperwide{vertical-align:top;}
+.storyextra .nlp{font-size:1.1em;text-transform:uppercase;font-weight:bold;font-family:verdana;}
+.storycontent h1, td.contentwrapperwide .sh{
+	font-family:arial;
+	font-size:2.4em;
+	margin:5px 0 15px 0;
+	font-weight:normal;
+}
+
+.contentwrapperwide .datetools .mxb .h1,.contentwrapperwide .datetools .mxb h1{
+	font-family:arial;
+	font-size:2.4em;
+	margin:5px 0 15px 0;
+	font-weight:normal;
+}
+
+.sah {
+	font-family:arial;
+	background:#666 none repeat scroll 0%;
+	color:#FFF;
+	font-size:1.1em;
+	font-weight:bold;
+	padding:4px 0 4px 5px;
+	text-transform:uppercase;
+}
+hr.pufff {
+	border:0pt none;
+	height:2px;
+	width:100%;
+	margin:5px 0 0 0;
+}
+#tabnavbox {
+    clear:both;
+	width: 100%;
+	height: 24px;
+	font-size: 100%;
+	padding:0;
+	border-bottom: 1px dashed #999;
+	background: #eee;
+}
+#tabnav {
+	height:25px;
+	margin: 0;
+	padding: 0;		
+}
+#tabnav li {
+	margin: 0;
+	padding: 0;
+	display: inline;
+	list-style: none;
+	width: 104px;
+	height: 25px;
+	float: left;
+	text-align: center;
+	font-size: 10px;
+	line-height: 22px;
+	font-weight: bold;
+	color: #333;
+}
+#tabnav a:link, #tabnav a:visited {
+	font-size: 10px;
+	line-height: 22px;
+	font-weight: bold;
+	padding: 3px 4px 3px 4px;
+	margin:0 4px;	
+	text-decoration: none;
+	color: #ff0;
+	text-align: center;
+	height: 18px !important;
+	height /**/: 20px;
+	/* for IE5/Win */
+}
+#tabnav a:hover {text-decoration: underline;}
+#liveTopBox1 {
+	width: 480px;
+	float: left;
+}
+#liveTopBox1 .sh{
+	margin:8px 0 0 0;
+	color:#464646;
+	font-size:18px;
+	font-weight:normal;
+}
+#liveTopBox1 .avinline{
+	padding:6px 0 0 0;
+	font-size:1.2em;
+}
+#liveTopBox1 .avinline a img{margin:1px 0 0 0;}
+#liveTopBox2 {
+	line-height:1.4em;
+	padding:30px 0pt 0pt;
+	width: 306px;
+	float: left;
+}
+#tabnav li {background:#000;}
+.cap{
+	color:#666;
+	font-weight:normal;
+	margin:3px 0 0 0;
+	font-size:11px;	
+	line-height:13px;
+}
+.msd{font-size:11px;font-weight:bold;color:#666}
+.comm{background:#606;color:#FFF;font-size:12px;font-weight:bold;padding:0 0 0 5px;}
+.cfaxh{font-size:16px;font-weight:bold;}
+.sib606 .sihf {
+	font-weight: normal;
+	font-family:arial;
+	font-size: 12px;	
+	padding:4px 0 4px 5px;	
+}
+#q1 {
+	height: 13px;
+	width: 20px;	
+	background-repeat: no-repeat;
+	float: left;	
+}
+.sib606 .mva {line-height:1.3em;}
+#q2 {
+	height: 13px;
+	width: 20px;	
+	background-repeat: no-repeat;
+	float: right;
+}
+.sibStdQuote{font-size:11px;line-height:1.3em;}
+.sibStdQuote #q1 {
+	height: 13px;
+	width: 20px;	
+	background-repeat: no-repeat;
+	float: left;
+}
+.sibStdQuote #q2 {
+	height: 13px;
+	width: 20px;	
+	background-repeat: no-repeat;
+	float: right;
+}

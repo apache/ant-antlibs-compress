@@ -13,10 +13,3 @@ Example Usage
     <include name="*.js"/>
   </fileset>
 </compress:yui.compressor>
-
-TODO
-----
-
-# Make the type parameter work so that the code creates the correct compressor depending on the type
-# Make the charset parameter work
-

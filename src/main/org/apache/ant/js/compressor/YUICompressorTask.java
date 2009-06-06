@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,6 +20,7 @@ import org.apache.tools.ant.types.resources.FileResource;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 
+import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import com.yahoo.platform.yui.compressor.YUICompressor;
 
@@ -47,17 +49,15 @@ public class YUICompressorTask extends Task {
 				for(Iterator i = inputResources.iterator(); i.hasNext();) {
 					FileSet fs = (FileSet)i.next();
 					for(Iterator j = fs.iterator(); j.hasNext();) {
-						Commandline cmd = buildArgs();
 						FileResource f = (FileResource)j.next();
 						if(verbose) {
 							log("Minifying: "+f.getFile().getAbsolutePath());	
 						}
-						
-						//TODO
-						//get the charset from the property
-						//check the specified type and create the appropriate compressor 
-						InputStreamReader in = new InputStreamReader(new FileInputStream(f.getFile().getAbsolutePath()), "UTF-8");
-						JavaScriptCompressor c = getJavaScriptCompressor(in);
+						//Ensure charset is set
+						if(null == charset || charset.trim() == "") {
+							charset = "UTF-8";
+						}
+						InputStreamReader in = new InputStreamReader(new FileInputStream(f.getFile().getAbsolutePath()), charset);
 						Writer out;
 						if(null != outputPath && outputPath.trim() != "") {
 							out = new OutputStreamWriter(new FileOutputStream(outputPath + File.separator + f.getFile().getName()));
@@ -65,13 +65,21 @@ public class YUICompressorTask extends Task {
 							out = new OutputStreamWriter(new FileOutputStream(f.getFile().getAbsolutePath()));
 						}
 						
-						c.compress(out, 
-								(null == getLineBreak() || getLineBreak() == "" ? -1 : Integer.parseInt(getLineBreak())), 
-								isNomunge(), 
-								isVerbose(), 
-								isPreserveSemi(), 
-								isDisableOptimization() 
-						);
+						if(null != type && type.trim() != "" && "js".equals(type)) {
+							JavaScriptCompressor c = getJavaScriptCompressor(in);
+							c.compress(out, 
+									(null == getLineBreak() || getLineBreak() == "" ? -1 : Integer.parseInt(getLineBreak())), 
+									isNomunge(), 
+									isVerbose(), 
+									isPreserveSemi(), 
+									isDisableOptimization() 
+							);
+						} else if(null != type && type != "" && "css".equals(type)) {
+							CssCompressor c = getCssCompressor(in);
+							c.compress(out, (null == getLineBreak() || getLineBreak() == "" ? -1 : Integer.parseInt(getLineBreak())));
+						}
+						in.close();
+						out.close();
 					}
 			
 				}		
@@ -81,7 +89,7 @@ public class YUICompressorTask extends Task {
 		}
 	}
 
-	protected JavaScriptCompressor getJavaScriptCompressor(InputStreamReader in) throws IOException {
+	protected JavaScriptCompressor getJavaScriptCompressor(Reader in) throws IOException {
 		
 		JavaScriptCompressor compressor = new JavaScriptCompressor(in, new ErrorReporter() {
 
@@ -111,6 +119,10 @@ public class YUICompressorTask extends Task {
         });
 		
 		return compressor;
+	}
+	
+	protected CssCompressor getCssCompressor(Reader in) throws IOException {
+		return new CssCompressor(in);
 	}
 	
 	protected Commandline buildArgs() {

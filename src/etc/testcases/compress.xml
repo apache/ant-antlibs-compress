@@ -40,6 +40,12 @@
   	  	<include name="*.js"/>
   	  </fileset>
   	</compress:yui.compressor>
+  	
+	<compress:yui.compressor verbose="true" outputPath="${outputPath}" type="css">
+	  <fileset dir="${testscript.dir}">
+	    <include name="*.css"/>
+	  </fileset>
+	</compress:yui.compressor>
   </target>
 
   <target name="cleanup">
