@@ -62,4 +62,14 @@
        expected="../resources/asf-logo.gif"
        />
   </target>
+
+  <target name="testStrippingOfPathsep" depends="setUp">
+    <touch file="${input}/file"/>
+    <zip destfile="${output}/a.zip">
+      <zipfileset dir="${input}" prefix="/foo"/>
+    </zip>
+    <cmp:unzip src="${output}/a.zip" stripAbsolutePathSpec="true"
+           dest="${output}"/>
+    <au:assertFileExists file="${output}/foo/file"/>
+  </target>
 </project>
