@@ -28,4 +28,8 @@
     name="untar"
     classname="org.apache.ant.compress.taskdefs.Untar"
     />
+  <taskdef
+    name="unzip"
+    classname="org.apache.ant.compress.taskdefs.Unzip"
+    />
 </antlib>

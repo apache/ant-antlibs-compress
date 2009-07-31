@@ -24,20 +24,20 @@ import java.util.Date;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 
 /**
- * Untar a file.
+ * Unzip a file.
  */
-public class Untar extends ExpandBase {
+public class Unzip extends ExpandBase {
     protected ArchiveInputStream getArchiveStream(InputStream is)
         throws IOException {
-        return new TarArchiveInputStream(is);
+        return new ZipArchiveInputStream(is);
     }
 
     protected Date getLastModified(ArchiveEntry entry) {
-        return ((TarArchiveEntry) entry).getModTime();
+        return new Date(((ZipArchiveEntry) entry).getTime());
     }
 
 }
