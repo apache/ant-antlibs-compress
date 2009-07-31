@@ -37,7 +37,7 @@ public class Uncpio extends ExpandBase {
     }
 
     protected Date getLastModified(ArchiveEntry entry) {
-        return new Date(((CpioArchiveEntry) entry).getTime());
+        return new Date(((CpioArchiveEntry) entry).getTime() * 1000);
     }
 
 }
