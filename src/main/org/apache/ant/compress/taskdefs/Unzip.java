@@ -47,7 +47,7 @@ public class Unzip extends ExpandBase {
         internalSetScanForUnicodeExtraFields(b);
     }
 
-    // overridden in order to tale advantage of ZipFile
+    // overridden in order to take advantage of ZipFile
     protected void expandFile(FileUtils fileUtils, File srcF, File dir) {
         log("Expanding: " + srcF + " into " + dir, Project.MSG_INFO);
         ZipFile zf = null;
