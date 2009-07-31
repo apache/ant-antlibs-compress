@@ -18,19 +18,63 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Enumeration;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.compress.archivers.zip.ZipFile;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.util.FileNameMapper;
+import org.apache.tools.ant.util.FileUtils;
 
 /**
  * Unzip a file.
  */
 public class Unzip extends ExpandBase {
+
+    // overridden in order to tale advantage of ZipFile
+    protected void expandFile(FileUtils fileUtils, File srcF, File dir) {
+        log("Expanding: " + srcF + " into " + dir, Project.MSG_INFO);
+        ZipFile zf = null;
+        FileNameMapper mapper = getMapper();
+        if (!srcF.exists()) {
+            throw new BuildException("Unable to expand " + srcF
+                                     + " as the file does not exist",
+                                     getLocation());
+        }
+        try {
+            zf = new ZipFile(srcF);
+            boolean empty = true;
+            Enumeration e = zf.getEntries();
+            while (e.hasMoreElements()) {
+                empty = false;
+                ZipArchiveEntry ze = (ZipArchiveEntry) e.nextElement();
+                extractFile(fileUtils, srcF, dir, zf.getInputStream(ze),
+                            ze.getName(), new Date(ze.getTime()),
+                            ze.isDirectory(), mapper);
+            }
+            if (empty && getFailOnEmptyArchive()) {
+                throw new BuildException("archive '" + srcF + "' is empty");
+            }
+            log("expand complete", Project.MSG_VERBOSE);
+        } catch (IOException ioe) {
+            throw new BuildException(
+                "Error while expanding " + srcF.getPath()
+                + "\n" + ioe.toString(),
+                ioe);
+        } finally {
+            ZipFile.closeQuietly(zf);
+        }
+    }
+
     protected ArchiveInputStream getArchiveStream(InputStream is)
         throws IOException {
         return new ZipArchiveInputStream(is);
