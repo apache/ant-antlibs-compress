@@ -40,7 +40,7 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
  * <p>PatternSets are used to select files to extract
  * <I>from</I> the archive.  If no patternset is used, all files are extracted.
  * </p>
- * <p>FileSet's may be used to select archived files
+ * <p>FileSets may be used to select archived files
  * to perform unarchival upon.
  * </p>
  * <p>File permissions will not be restored on extracted files.</p>
@@ -51,6 +51,15 @@ public abstract class ExpandBase extends Expand {
      * @param encoding not used
      */
     public void setEncoding(String encoding) {
+        throw new BuildException("The " + getTaskName()
+                                 + " task doesn't support the encoding"
+                                 + " attribute", getLocation());
+    }
+
+    /**
+     * No unicode extra fields in general.
+     */
+    public void setScanForUnicodeExtraFields(boolean b) {
         throw new BuildException("The " + getTaskName()
                                  + " task doesn't support the encoding"
                                  + " attribute", getLocation());

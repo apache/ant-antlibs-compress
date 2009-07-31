@@ -40,6 +40,13 @@ import org.apache.tools.ant.util.FileUtils;
  */
 public class Unzip extends ExpandBase {
 
+    public void setEncoding(String encoding) {
+        internalSetEncoding(encoding);
+    }
+    public void setScanForUnicodeExtraFields(boolean b) {
+        internalSetScanForUnicodeExtraFields(b);
+    }
+
     // overridden in order to tale advantage of ZipFile
     protected void expandFile(FileUtils fileUtils, File srcF, File dir) {
         log("Expanding: " + srcF + " into " + dir, Project.MSG_INFO);
@@ -51,7 +58,8 @@ public class Unzip extends ExpandBase {
                                      getLocation());
         }
         try {
-            zf = new ZipFile(srcF);
+            zf = new ZipFile(srcF, getEncoding(),
+                             getScanForUnicodeExtraFields());
             boolean empty = true;
             Enumeration e = zf.getEntries();
             while (e.hasMoreElements()) {
@@ -77,7 +85,8 @@ public class Unzip extends ExpandBase {
 
     protected ArchiveInputStream getArchiveStream(InputStream is)
         throws IOException {
-        return new ZipArchiveInputStream(is);
+        return new ZipArchiveInputStream(is, getEncoding(),
+                                         getScanForUnicodeExtraFields());
     }
 
     protected Date getLastModified(ArchiveEntry entry) {
