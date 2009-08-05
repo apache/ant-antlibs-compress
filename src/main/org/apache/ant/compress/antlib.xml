@@ -32,4 +32,9 @@
     name="unzip"
     classname="org.apache.ant.compress.taskdefs.Unzip"
     />
+
+  <typedef
+    name="tarentry"
+    classname="org.apache.ant.compress.resources.TarResource"
+    />
 </antlib>
