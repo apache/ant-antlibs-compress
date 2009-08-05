@@ -45,4 +45,8 @@
     name="cpioentry"
     classname="org.apache.ant.compress.resources.CpioResource"
     />
+  <typedef
+    name="zipentry"
+    classname="org.apache.ant.compress.resources.ZipResource"
+    />
 </antlib>
