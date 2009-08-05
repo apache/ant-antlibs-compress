@@ -38,7 +38,7 @@ public class Unar extends ExpandBase {
 
     protected Date getLastModified(ArchiveEntry entry) {
         /* TODO - revisit */
-        return new Date(((ArArchiveEntry) entry).getLastModified());
+        return new Date(((ArArchiveEntry) entry).getLastModified() * 1000);
     }
 
 }
