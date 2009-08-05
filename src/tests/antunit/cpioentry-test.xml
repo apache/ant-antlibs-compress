@@ -15,34 +15,26 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<antlib>
-  <taskdef
-    name="uncpio"
-    classname="org.apache.ant.compress.taskdefs.Uncpio"
-    />
-  <taskdef
-    name="unar"
-    classname="org.apache.ant.compress.taskdefs.Unar"
-    />
-  <taskdef
-    name="untar"
-    classname="org.apache.ant.compress.taskdefs.Untar"
-    />
-  <taskdef
-    name="unzip"
-    classname="org.apache.ant.compress.taskdefs.Unzip"
-    />
+<project default="antunit"
+         xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cmp="antlib:org.apache.ant.compress">
 
-  <typedef
-    name="tarentry"
-    classname="org.apache.ant.compress.resources.TarResource"
-    />
-  <typedef
-    name="arentry"
-    classname="org.apache.ant.compress.resources.ArResource"
-    />
-  <typedef
-    name="cpioentry"
-    classname="org.apache.ant.compress.resources.CpioResource"
-    />
-</antlib>
+  <import file="antunit-base.xml" />
+
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+  </target>
+
+  <target name="testCpioSource" depends="setUp">
+    <copy todir="${output}">
+      <cmp:cpioentry name="asf-logo.gif">
+        <file file="../resources/asf-logo.gif.cpio"/>
+      </cmp:cpioentry>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+</project>
