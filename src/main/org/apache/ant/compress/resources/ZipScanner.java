@@ -18,35 +18,37 @@
 
 package org.apache.ant.compress.resources;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Map;
+import java.util.zip.ZipException;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.ArchiveScanner;
-import org.apache.tools.ant.types.Resource;
-import org.apache.tools.ant.util.FileUtils;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.compress.archivers.zip.ZipFile;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.Resource;
+import org.apache.tools.ant.types.resources.FileProvider;
 
 /**
- * Scans tar archives for resources.
+ * Scans zip archives for resources.
  */
-public abstract class CommonsCompressArchiveScanner extends ArchiveScanner {
+public class ZipScanner extends CommonsCompressArchiveScanner {
 
-    /**
-     * Provides an ArchiveInputStream to a given archive.
-     */
-    protected abstract ArchiveInputStream getArchiveStream(InputStream is,
-                                                           String encoding)
-        throws IOException;
+    protected ArchiveInputStream getArchiveStream(InputStream is,
+                                                  String encoding)
+        throws IOException {
+        return new ZipArchiveInputStream(is, encoding, true);
+    }
 
-    /**
-     * Creates the matching archive entry resource.
-     */
-    protected abstract Resource getResource(Resource archive,
-                                            String encoding,
-                                            ArchiveEntry entry);
+    protected Resource getResource(Resource archive, String encoding,
+                                   ArchiveEntry entry) {
+        return new ZipResource(archive, encoding, (ZipArchiveEntry) entry);
+    }
 
     /**
      * Fills the file and directory maps with resources read from the
@@ -68,17 +70,32 @@ public abstract class CommonsCompressArchiveScanner extends ArchiveScanner {
     protected void fillMapsFromArchive(Resource src, String encoding,
                                        Map fileEntries, Map matchFileEntries,
                                        Map dirEntries, Map matchDirEntries) {
-        ArchiveEntry entry = null;
-        ArchiveInputStream ai = null;
+        ZipArchiveEntry entry = null;
+        ZipFile zf = null;
+
+        File srcFile = null;
+        FileProvider fp = (FileProvider) src.as(FileProvider.class);
+        if (fp != null) {
+            srcFile = fp.getFile();
+        } else {
+            super.fillMapsFromArchive(src, encoding, fileEntries,
+                                      matchFileEntries, dirEntries,
+                                      matchDirEntries);
+            return;
+        }
 
         try {
             try {
-                ai = getArchiveStream(src.getInputStream(), encoding);
+                zf = new ZipFile(srcFile, encoding);
+            } catch (ZipException ex) {
+                throw new BuildException("Problem reading " + srcFile, ex);
             } catch (IOException ex) {
-                throw new BuildException("problem opening " + src, ex);
+                throw new BuildException("Problem opening " + srcFile, ex);
             }
-            while ((entry = ai.getNextEntry()) != null) {
-                Resource r = getResource(src, encoding, entry);
+            Enumeration e = zf.getEntries();
+            while (e.hasMoreElements()) {
+                entry = (ZipArchiveEntry) e.nextElement();
+                Resource r = new ZipResource(srcFile, encoding, entry);
                 String name = entry.getName();
                 if (entry.isDirectory()) {
                     name = trimSeparator(name);
@@ -93,10 +110,8 @@ public abstract class CommonsCompressArchiveScanner extends ArchiveScanner {
                     }
                 }
             }
-        } catch (IOException ex) {
-            throw new BuildException("problem reading " + src, ex);
         } finally {
-            FileUtils.close(ai);
+            ZipFile.closeQuietly(zf);
         }
     }
 }

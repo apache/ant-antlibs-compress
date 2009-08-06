@@ -32,7 +32,8 @@ import org.apache.commons.compress.archivers.cpio.CpioArchiveInputStream;
  */
 public class CpioScanner extends CommonsCompressArchiveScanner {
 
-    protected ArchiveInputStream getArchiveStream(InputStream is)
+    protected ArchiveInputStream getArchiveStream(InputStream is,
+                                                  String encoding)
         throws IOException {
         return new CpioArchiveInputStream(is);
     }

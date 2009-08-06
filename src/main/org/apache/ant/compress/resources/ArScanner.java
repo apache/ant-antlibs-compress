@@ -32,7 +32,8 @@ import org.apache.commons.compress.archivers.ar.ArArchiveInputStream;
  */
 public class ArScanner extends CommonsCompressArchiveScanner {
 
-    protected ArchiveInputStream getArchiveStream(InputStream is)
+    protected ArchiveInputStream getArchiveStream(InputStream is,
+                                                  String encoding)
         throws IOException {
         return new ArArchiveInputStream(is);
     }

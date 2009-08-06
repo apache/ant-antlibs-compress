@@ -62,4 +62,8 @@
     name="cpiofileset"
     classname="org.apache.ant.compress.resources.CpioFileSet"
     />
+  <typedef
+    name="zipfileset"
+    classname="org.apache.ant.compress.resources.ZipFileSet"
+    />
 </antlib>
