@@ -49,4 +49,9 @@
     name="zipentry"
     classname="org.apache.ant.compress.resources.ZipResource"
     />
+
+  <typedef
+    name="tarfileset"
+    classname="org.apache.ant.compress.resources.TarFileSet"
+    />
 </antlib>
