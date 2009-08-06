@@ -54,4 +54,8 @@
     name="tarfileset"
     classname="org.apache.ant.compress.resources.TarFileSet"
     />
+  <typedef
+    name="arfileset"
+    classname="org.apache.ant.compress.resources.ArFileSet"
+    />
 </antlib>
