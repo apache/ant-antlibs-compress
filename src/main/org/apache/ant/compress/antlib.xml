@@ -58,4 +58,8 @@
     name="arfileset"
     classname="org.apache.ant.compress.resources.ArFileSet"
     />
+  <typedef
+    name="cpiofileset"
+    classname="org.apache.ant.compress.resources.CpioFileSet"
+    />
 </antlib>
