@@ -18,6 +18,7 @@
 
 package org.apache.ant.compress.resources;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -73,7 +74,9 @@ public abstract class CommonsCompressArchiveScanner extends ArchiveScanner {
 
         try {
             try {
-                ai = getArchiveStream(src.getInputStream(), encoding);
+                ai = getArchiveStream(new BufferedInputStream(src
+                                                              .getInputStream()),
+                                      encoding);
             } catch (IOException ex) {
                 throw new BuildException("problem opening " + src, ex);
             }

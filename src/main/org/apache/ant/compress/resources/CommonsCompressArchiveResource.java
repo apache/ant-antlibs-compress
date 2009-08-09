@@ -17,6 +17,7 @@
  */
 package org.apache.ant.compress.resources;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -81,7 +82,8 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
             return ((Resource) getCheckedRef()).getInputStream();
         }
         Resource archive = getArchive();
-        final ArchiveInputStream i = getArchiveStream(archive.getInputStream());
+        final ArchiveInputStream i =
+            getArchiveStream(new BufferedInputStream(archive.getInputStream()));
         ArchiveEntry ae = null;
         while ((ae = i.getNextEntry()) != null) {
             if (ae.getName().equals(getName())) {
