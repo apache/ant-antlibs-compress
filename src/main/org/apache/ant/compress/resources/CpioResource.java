@@ -23,10 +23,9 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.tools.ant.types.Resource;
+import org.apache.ant.compress.util.CpioStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
-import org.apache.commons.compress.archivers.cpio.CpioArchiveInputStream;
 
 /**
  * A Resource representation of an entry in a cpio archive.
@@ -40,6 +39,7 @@ public class CpioResource extends CommonsCompressArchiveResource {
      * Default constructor.
      */
     public CpioResource() {
+        super(new CpioStreamFactory());
     }
 
     /**
@@ -49,7 +49,7 @@ public class CpioResource extends CommonsCompressArchiveResource {
      * @param e the CpioEntry.
      */
     public CpioResource(File a, CpioArchiveEntry e) {
-        super(a, e);
+        super(new CpioStreamFactory(), a, e);
     }
 
     /**
@@ -59,7 +59,7 @@ public class CpioResource extends CommonsCompressArchiveResource {
      * @param e the CpioEntry.
      */
     public CpioResource(Resource a, CpioArchiveEntry e) {
-        super(a, e);
+        super(new CpioStreamFactory(), a, e);
     }
 
     /**
@@ -89,15 +89,6 @@ public class CpioResource extends CommonsCompressArchiveResource {
             uid = ce.getUID();
             gid = ce.getGID();
         }
-    }
-
-    protected ArchiveInputStream getArchiveStream(InputStream is)
-        throws IOException {
-        return new CpioArchiveInputStream(is);
-    }
-
-    protected Date getLastModified(ArchiveEntry entry) {
-        return new Date(((CpioArchiveEntry) entry).getTime() * 1000);
     }
 
     protected int getMode(ArchiveEntry e) {

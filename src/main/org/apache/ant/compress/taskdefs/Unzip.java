@@ -24,10 +24,9 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Enumeration;
 
-import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.ant.compress.util.ZipStreamFactory;
+
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
 import org.apache.tools.ant.BuildException;
@@ -40,11 +39,12 @@ import org.apache.tools.ant.util.FileUtils;
  */
 public class Unzip extends ExpandBase {
 
+    public Unzip() {
+        super(new ZipStreamFactory());
+    }
+
     public void setEncoding(String encoding) {
         internalSetEncoding(encoding);
-    }
-    public void setScanForUnicodeExtraFields(boolean b) {
-        internalSetScanForUnicodeExtraFields(b);
     }
 
     // overridden in order to take advantage of ZipFile
@@ -58,8 +58,7 @@ public class Unzip extends ExpandBase {
                                      getLocation());
         }
         try {
-            zf = new ZipFile(srcF, getEncoding(),
-                             getScanForUnicodeExtraFields());
+            zf = new ZipFile(srcF, getEncoding(), true);
             boolean empty = true;
             Enumeration e = zf.getEntries();
             while (e.hasMoreElements()) {
@@ -81,16 +80,6 @@ public class Unzip extends ExpandBase {
         } finally {
             ZipFile.closeQuietly(zf);
         }
-    }
-
-    protected ArchiveInputStream getArchiveStream(InputStream is)
-        throws IOException {
-        return new ZipArchiveInputStream(is, getEncoding(),
-                                         getScanForUnicodeExtraFields());
-    }
-
-    protected Date getLastModified(ArchiveEntry entry) {
-        return new Date(((ZipArchiveEntry) entry).getTime());
     }
 
 }

@@ -23,10 +23,9 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.tools.ant.types.Resource;
+import org.apache.ant.compress.util.ArStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
-import org.apache.commons.compress.archivers.ar.ArArchiveInputStream;
 
 /**
  * A Resource representation of an entry in a ar archive.
@@ -40,6 +39,7 @@ public class ArResource extends CommonsCompressArchiveResource {
      * Default constructor.
      */
     public ArResource() {
+        super(new ArStreamFactory());
     }
 
     /**
@@ -49,7 +49,7 @@ public class ArResource extends CommonsCompressArchiveResource {
      * @param e the ArEntry.
      */
     public ArResource(File a, ArArchiveEntry e) {
-        super(a, e);
+        super(new ArStreamFactory(), a, e);
     }
 
     /**
@@ -59,7 +59,7 @@ public class ArResource extends CommonsCompressArchiveResource {
      * @param e the ArEntry.
      */
     public ArResource(Resource a, ArArchiveEntry e) {
-        super(a, e);
+        super(new ArStreamFactory(), a, e);
     }
 
     /**
@@ -89,15 +89,6 @@ public class ArResource extends CommonsCompressArchiveResource {
             uid = ae.getUserId();
             gid = ae.getGroupId();
         }
-    }
-
-    protected ArchiveInputStream getArchiveStream(InputStream is)
-        throws IOException {
-        return new ArArchiveInputStream(is);
-    }
-
-    protected Date getLastModified(ArchiveEntry entry) {
-        return new Date(((ArArchiveEntry) entry).getLastModified() * 1000);
     }
 
     protected int getMode(ArchiveEntry e) {

@@ -23,10 +23,9 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.tools.ant.types.Resource;
+import org.apache.ant.compress.util.TarStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
 /**
  * A Resource representation of an entry in a tar archive.
@@ -42,6 +41,7 @@ public class TarResource extends CommonsCompressArchiveResource {
      * Default constructor.
      */
     public TarResource() {
+        super(new TarStreamFactory());
     }
 
     /**
@@ -51,7 +51,7 @@ public class TarResource extends CommonsCompressArchiveResource {
      * @param e the TarEntry.
      */
     public TarResource(File a, TarArchiveEntry e) {
-        super(a, e);
+        super(new TarStreamFactory(), a, e);
     }
 
     /**
@@ -61,7 +61,7 @@ public class TarResource extends CommonsCompressArchiveResource {
      * @param e the TarEntry.
      */
     public TarResource(Resource a, TarArchiveEntry e) {
-        super(a, e);
+        super(new TarStreamFactory(), a, e);
     }
 
     /**
@@ -113,15 +113,6 @@ public class TarResource extends CommonsCompressArchiveResource {
             uid = te.getUserId();
             gid = te.getGroupId();
         }
-    }
-
-    protected ArchiveInputStream getArchiveStream(InputStream is)
-        throws IOException {
-        return new TarArchiveInputStream(is);
-    }
-
-    protected Date getLastModified(ArchiveEntry entry) {
-        return ((TarArchiveEntry) entry).getModTime();
     }
 
     protected int getMode(ArchiveEntry e) {

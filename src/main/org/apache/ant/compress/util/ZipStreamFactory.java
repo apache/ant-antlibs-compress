@@ -16,15 +16,24 @@
  *
  */
 
-package org.apache.ant.compress.taskdefs;
+package org.apache.ant.compress.util;
 
-import org.apache.ant.compress.util.TarStreamFactory;
+import java.io.InputStream;
+import java.io.IOException;
 
-/**
- * Untar a file.
- */
-public class Untar extends ExpandBase {
-    public Untar() {
-        super(new TarStreamFactory());
+import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+
+public class ZipStreamFactory implements StreamFactory {
+
+    /**
+     * @param stream the stream to read from, should be buffered
+     * @param encoding the encoding of the entry names
+     */
+    public ArchiveInputStream getArchiveStream(InputStream stream,
+                                               String encoding)
+        throws IOException {
+        return new ZipArchiveInputStream(stream, encoding, true);
     }
+
 }

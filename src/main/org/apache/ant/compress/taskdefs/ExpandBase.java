@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import org.apache.ant.compress.util.EntryHelper;
+import org.apache.ant.compress.util.StreamFactory;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Expand;
@@ -46,6 +49,12 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
  * <p>File permissions will not be restored on extracted files.</p>
  */
 public abstract class ExpandBase extends Expand {
+    private final StreamFactory factory;
+
+    protected ExpandBase(StreamFactory factory) {
+        this.factory = factory;
+    }
+
     /**
      * No encoding support in general.
      * @param encoding not used
@@ -105,24 +114,20 @@ public abstract class ExpandBase extends Expand {
         }
     }
 
-    protected abstract ArchiveInputStream getArchiveStream(InputStream is)
-        throws IOException;
-
-    protected abstract Date getLastModified(ArchiveEntry entry);
-
     private void expandStream(String name, InputStream stream, File dir)
         throws IOException {
         ArchiveInputStream is = null;
         try {
             FileNameMapper mapper = getMapper();
             log("Expanding: " + name + " into " + dir, Project.MSG_INFO);
-            is = getArchiveStream(new BufferedInputStream(stream));
+            is = factory.getArchiveStream(new BufferedInputStream(stream),
+                                          getEncoding());
             boolean empty = true;
             ArchiveEntry ent = null;
             while ((ent = is.getNextEntry()) != null) {
                 empty = false;
                 extractFile(FileUtils.getFileUtils(), null, dir, is,
-                            ent.getName(), getLastModified(ent),
+                            ent.getName(), EntryHelper.getLastModified(ent),
                             ent.isDirectory(), mapper);
             }
             if (empty && getFailOnEmptyArchive()) {

@@ -18,27 +18,13 @@
 
 package org.apache.ant.compress.taskdefs;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
-
-import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
-import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
-import org.apache.commons.compress.archivers.ar.ArArchiveInputStream;
+import org.apache.ant.compress.util.ArStreamFactory;
 
 /**
  * Unar a file.
  */
 public class Unar extends ExpandBase {
-    protected ArchiveInputStream getArchiveStream(InputStream is)
-        throws IOException {
-        return new ArArchiveInputStream(is);
+    public Unar() {
+        super(new ArStreamFactory());
     }
-
-    protected Date getLastModified(ArchiveEntry entry) {
-        /* TODO - revisit */
-        return new Date(((ArArchiveEntry) entry).getLastModified() * 1000);
-    }
-
 }

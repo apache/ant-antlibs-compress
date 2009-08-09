@@ -30,10 +30,10 @@ import org.apache.tools.ant.types.resources.FileProvider;
 import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.util.FileUtils;
 
+import org.apache.ant.compress.util.ZipStreamFactory;
+
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipExtraField;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
@@ -42,13 +42,13 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
  */
 public class ZipResource extends CommonsCompressArchiveResource {
 
-    private String encoding;
     private ZipExtraField[] extras;
 
     /**
      * Default constructor.
      */
     public ZipResource() {
+        super(new ZipStreamFactory());
     }
 
     /**
@@ -59,7 +59,7 @@ public class ZipResource extends CommonsCompressArchiveResource {
      * @param e the ZipEntry.
      */
     public ZipResource(File z, String enc, ZipArchiveEntry e) {
-        super(z, e);
+        super(new ZipStreamFactory(), z, e);
         setEncoding(enc);
     }
 
@@ -71,7 +71,7 @@ public class ZipResource extends CommonsCompressArchiveResource {
      * @param e the ZipEntry.
      */
     public ZipResource(Resource z, String enc, ZipArchiveEntry e) {
-        super(z, e);
+        super(new ZipStreamFactory(), z, e);
         setEncoding(enc);
     }
 
@@ -87,7 +87,7 @@ public class ZipResource extends CommonsCompressArchiveResource {
      * Set the zipfile that holds this ZipResource.
      * @param z the zipfile as a Resource.
      */
-    public void setZipfile(Resource z) {
+    public void setZipResource(Resource z) {
         addConfigured(z);
     }
 
@@ -101,29 +101,11 @@ public class ZipResource extends CommonsCompressArchiveResource {
     }
 
     /**
-     * Set the encoding to use with the zipfile.
-     * @param enc the String encoding.
-     */
-    public void setEncoding(String enc) {
-        checkAttributesAllowed();
-        encoding = enc;
-    }
-
-    /**
-     * Get the encoding to use with the zipfile.
-     * @return String encoding.
-     */
-    public String getEncoding() {
-        return isReference()
-            ? ((ZipResource) getCheckedRef()).getEncoding() : encoding;
-    }
-
-    /**
      * Overrides the super version.
      * @param r the Reference to set.
      */
     public void setRefid(Reference r) {
-        if (encoding != null) {
+        if (getEncoding() != null) {
             throw tooManyAttributes();
         }
         super.setRefid(r);
@@ -204,15 +186,6 @@ public class ZipResource extends CommonsCompressArchiveResource {
         if (e != null) {
             extras = ((ZipArchiveEntry) e).getExtraFields();
         }
-    }
-
-    protected ArchiveInputStream getArchiveStream(InputStream is)
-        throws IOException {
-        return new ZipArchiveInputStream(is, getEncoding(), true);
-    }
-
-    protected Date getLastModified(ArchiveEntry entry) {
-        return new Date(((ZipArchiveEntry) entry).getTime());
     }
 
     protected int getMode(ArchiveEntry e) {

@@ -29,6 +29,8 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.ArchiveResource;
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.ant.compress.util.EntryHelper;
+import org.apache.ant.compress.util.StreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 
@@ -37,10 +39,14 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
  */
 public abstract class CommonsCompressArchiveResource extends ArchiveResource {
 
+    private String encoding;
+    private final StreamFactory factory;
+
     /**
      * Default constructor.
      */
-    public CommonsCompressArchiveResource() {
+    protected CommonsCompressArchiveResource(StreamFactory factory) {
+        this.factory = factory;
     }
 
     /**
@@ -49,8 +55,10 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * @param a the archive as File.
      * @param e the ArchiveEntry.
      */
-    public CommonsCompressArchiveResource(File a, ArchiveEntry e) {
+    protected CommonsCompressArchiveResource(StreamFactory factory, File a,
+                                             ArchiveEntry e) {
         super(a, true);
+        this.factory = factory;
         setEntry(e);
     }
 
@@ -60,16 +68,31 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * @param a the archive as Resource.
      * @param e the ArchiveEntry.
      */
-    public CommonsCompressArchiveResource(Resource a, ArchiveEntry e) {
+    protected CommonsCompressArchiveResource(StreamFactory factory, Resource a,
+                                             ArchiveEntry e) {
         super(a, true);
+        this.factory = factory;
         setEntry(e);
     }
 
     /**
-     * Provides an ArchiveInputStream to a given archive.
+     * Set the encoding to use with the zipfile.
+     * @param enc the String encoding.
      */
-    protected abstract ArchiveInputStream getArchiveStream(InputStream is)
-        throws IOException;
+    public void setEncoding(String enc) {
+        checkAttributesAllowed();
+        encoding = enc;
+    }
+
+    /**
+     * Get the encoding to use with the zipfile.
+     * @return String encoding.
+     */
+    public String getEncoding() {
+        return isReference()
+            ? ((CommonsCompressArchiveResource) getCheckedRef()).getEncoding()
+            : encoding;
+    }
 
     /**
      * Return an InputStream for reading the contents of this Resource.
@@ -83,7 +106,8 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         }
         Resource archive = getArchive();
         final ArchiveInputStream i =
-            getArchiveStream(new BufferedInputStream(archive.getInputStream()));
+            factory.getArchiveStream(new BufferedInputStream(archive.getInputStream()),
+                                     getEncoding());
         ArchiveEntry ae = null;
         while ((ae = i.getNextEntry()) != null) {
             if (ae.getName().equals(getName())) {
@@ -126,7 +150,8 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         Resource archive = getArchive();
         ArchiveInputStream i = null;
         try {
-            i = getArchiveStream(archive.getInputStream());
+            i = factory.getArchiveStream(archive.getInputStream(),
+                                         getEncoding());
             ArchiveEntry ae = null;
             while ((ae = i.getNextEntry()) != null) {
                 if (ae.getName().equals(getName())) {
@@ -150,11 +175,6 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      */
     protected abstract int getMode(ArchiveEntry e);
 
-    /**
-     * Determines the last modified time for the given entry.
-     */
-    protected abstract Date getLastModified(ArchiveEntry entry);
-
     protected void setEntry(ArchiveEntry e) {
         if (e == null) {
             setExists(false);
@@ -162,7 +182,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         }
         setName(e.getName());
         setExists(true);
-        setLastModified(getLastModified(e).getTime());
+        setLastModified(EntryHelper.getLastModified(e).getTime());
         setDirectory(e.isDirectory());
         setSize(e.getSize());
         setMode(getMode(e));
