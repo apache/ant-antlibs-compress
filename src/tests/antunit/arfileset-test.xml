@@ -20,6 +20,11 @@
          xmlns:cmp="antlib:org.apache.ant.compress">
   <import file="antunit-base.xml"/>
 
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+    <mkdir dir="${input}"/>
+  </target>
+
   <target name="testMissingArchive">
     <mkdir dir="${output}"/>
     <au:expectfailure expectedMessage="The archive foo.ar doesn't exist">
@@ -36,4 +41,30 @@
     </copy>
   </target>
 
+  <target name="testArSource" depends="setUp">
+    <copy todir="${output}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                      includes="*.gif"/>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+  <target name="fails-testUncompressSource" depends="setUp">
+    <gzip destfile="${input}/asf-logo.gif.ar.gz"
+          src="../resources/asf-logo.gif.ar"/>
+    <copy todir="${output}">
+      <cmp:arfileset includes="*.gif">
+        <gzipresource>
+          <file file="${input}/asf-logo.gif.ar.gz"/>
+        </gzipresource>
+      </cmp:arfileset>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
 </project>

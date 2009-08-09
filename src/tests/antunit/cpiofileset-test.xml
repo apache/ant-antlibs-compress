@@ -20,6 +20,11 @@
          xmlns:cmp="antlib:org.apache.ant.compress">
   <import file="antunit-base.xml"/>
 
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+    <mkdir dir="${input}"/>
+  </target>
+
   <target name="testMissingArchive">
     <mkdir dir="${output}"/>
     <au:expectfailure expectedMessage="The archive foo.cpio doesn't exist">
@@ -36,4 +41,30 @@
     </copy>
   </target>
 
+  <target name="testCpioSource" depends="setUp">
+    <copy todir="${output}">
+      <cmp:cpiofileset src="../resources/asf-logo.gif.cpio"
+                      includes="*.gif"/>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+  <target name="testUncompressSource" depends="setUp">
+    <gzip destfile="${input}/asf-logo.gif.cpio.gz"
+          src="../resources/asf-logo.gif.cpio"/>
+    <copy todir="${output}">
+      <cmp:cpiofileset includes="*.gif">
+        <gzipresource>
+          <file file="${input}/asf-logo.gif.cpio.gz"/>
+        </gzipresource>
+      </cmp:cpiofileset>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
 </project>

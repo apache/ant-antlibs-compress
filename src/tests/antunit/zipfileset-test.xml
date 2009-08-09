@@ -20,6 +20,11 @@
          xmlns:cmp="antlib:org.apache.ant.compress">
   <import file="antunit-base.xml"/>
 
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+    <mkdir dir="${input}"/>
+  </target>
+
   <target name="test-refid-modify">
     <fileset id="modify-refid-1"
              dir="${basedir}"
@@ -66,8 +71,7 @@
     </au:expectfailure>
   </target>
 
-  <target name="testMissingArchive">
-    <mkdir dir="${output}"/>
+  <target name="testMissingArchive" depends="setUp">
     <au:expectfailure expectedMessage="The archive foo.zip doesn't exist">
       <copy todir="${output}">
         <cmp:zipfileset src="foo.zip"/>
@@ -75,11 +79,36 @@
     </au:expectfailure>
   </target>
 
-  <target name="testMissingArchiveDoesntMatter">
-    <mkdir dir="${output}"/>
+  <target name="testMissingArchiveDoesntMatter" depends="setUp">
     <copy todir="${output}">
       <cmp:zipfileset src="foo.zip" errorOnMissingArchive="false"/>
     </copy>
   </target>
 
+  <target name="testZipSource" depends="setUp">
+    <copy todir="${output}">
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"
+                      includes="*.gif"/>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+  <target name="testUncompressSource" depends="setUp">
+    <gzip destfile="${input}/asf-logo.gif.zip.gz"
+          src="../resources/asf-logo.gif.zip"/>
+    <copy todir="${output}">
+      <cmp:zipfileset includes="*.gif">
+        <gzipresource>
+          <file file="${input}/asf-logo.gif.zip.gz"/>
+        </gzipresource>
+      </cmp:zipfileset>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
 </project>
