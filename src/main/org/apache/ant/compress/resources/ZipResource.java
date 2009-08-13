@@ -21,13 +21,11 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.FilterInputStream;
-import java.util.Date;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.FileProvider;
-import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.util.FileUtils;
 
 import org.apache.ant.compress.util.ZipStreamFactory;
@@ -48,7 +46,7 @@ public class ZipResource extends CommonsCompressArchiveResource {
      * Default constructor.
      */
     public ZipResource() {
-        super(new ZipStreamFactory());
+        super(new ZipStreamFactory(), "zip");
     }
 
     /**
@@ -59,7 +57,7 @@ public class ZipResource extends CommonsCompressArchiveResource {
      * @param e the ZipEntry.
      */
     public ZipResource(File z, String enc, ZipArchiveEntry e) {
-        super(new ZipStreamFactory(), z, e);
+        super(new ZipStreamFactory(), "zip", z, e);
         setEncoding(enc);
     }
 
@@ -71,7 +69,7 @@ public class ZipResource extends CommonsCompressArchiveResource {
      * @param e the ZipEntry.
      */
     public ZipResource(Resource z, String enc, ZipArchiveEntry e) {
-        super(new ZipStreamFactory(), z, e);
+        super(new ZipStreamFactory(), "zip", z, e);
         setEncoding(enc);
     }
 
@@ -98,17 +96,6 @@ public class ZipResource extends CommonsCompressArchiveResource {
     public File getZipfile() {
         FileProvider fp = (FileProvider) getArchive().as(FileProvider.class);
         return fp != null ? fp.getFile() : null;
-    }
-
-    /**
-     * Overrides the super version.
-     * @param r the Reference to set.
-     */
-    public void setRefid(Reference r) {
-        if (getEncoding() != null) {
-            throw tooManyAttributes();
-        }
-        super.setRefid(r);
     }
 
     /**
@@ -188,11 +175,4 @@ public class ZipResource extends CommonsCompressArchiveResource {
         }
     }
 
-    protected int getMode(ArchiveEntry e) {
-        return ((ZipArchiveEntry) e).getUnixMode();
-    }
-
-    protected String getArchiveType() {
-        return "zip";
-    }
 }

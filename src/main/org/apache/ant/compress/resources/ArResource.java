@@ -18,13 +18,9 @@
 package org.apache.ant.compress.resources;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Date;
 
 import org.apache.tools.ant.types.Resource;
 import org.apache.ant.compress.util.ArStreamFactory;
-import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 
 /**
@@ -32,14 +28,11 @@ import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
  */
 public class ArResource extends CommonsCompressArchiveResource {
 
-    private int    uid;
-    private int    gid;
-
     /**
      * Default constructor.
      */
     public ArResource() {
-        super(new ArStreamFactory());
+        super(new ArStreamFactory(), "ar");
     }
 
     /**
@@ -49,7 +42,7 @@ public class ArResource extends CommonsCompressArchiveResource {
      * @param e the ArEntry.
      */
     public ArResource(File a, ArArchiveEntry e) {
-        super(new ArStreamFactory(), a, e);
+        super(new ArStreamFactory(), "ar", a, e);
     }
 
     /**
@@ -59,43 +52,7 @@ public class ArResource extends CommonsCompressArchiveResource {
      * @param e the ArEntry.
      */
     public ArResource(Resource a, ArArchiveEntry e) {
-        super(new ArStreamFactory(), a, e);
+        super(new ArStreamFactory(), "ar", a, e);
     }
 
-    /**
-     * @return the uid for the ar entry
-     */
-    public int getUid() {
-        if (isReference()) {
-            return ((ArResource) getCheckedRef()).getUid();
-        }
-        return uid;
-    }
-
-    /**
-     * @return the uid for the ar entry
-     */
-    public int getGid() {
-        if (isReference()) {
-            return ((ArResource) getCheckedRef()).getGid();
-        }
-        return uid;
-    }
-
-    protected void setEntry(ArchiveEntry e) {
-        super.setEntry(e);
-        if (e != null) {
-            ArArchiveEntry ae = (ArArchiveEntry) e;
-            uid = ae.getUserId();
-            gid = ae.getGroupId();
-        }
-    }
-
-    protected int getMode(ArchiveEntry e) {
-        return ((ArArchiveEntry) e).getMode();
-    }
-
-    protected String getArchiveType() {
-        return "ar";
-    }
 }

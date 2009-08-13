@@ -18,13 +18,9 @@
 package org.apache.ant.compress.resources;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Date;
 
 import org.apache.tools.ant.types.Resource;
 import org.apache.ant.compress.util.CpioStreamFactory;
-import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
 
 /**
@@ -32,14 +28,11 @@ import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
  */
 public class CpioResource extends CommonsCompressArchiveResource {
 
-    private long    uid;
-    private long    gid;
-
     /**
      * Default constructor.
      */
     public CpioResource() {
-        super(new CpioStreamFactory());
+        super(new CpioStreamFactory(), "cpio");
     }
 
     /**
@@ -49,7 +42,7 @@ public class CpioResource extends CommonsCompressArchiveResource {
      * @param e the CpioEntry.
      */
     public CpioResource(File a, CpioArchiveEntry e) {
-        super(new CpioStreamFactory(), a, e);
+        super(new CpioStreamFactory(), "cpio", a, e);
     }
 
     /**
@@ -59,43 +52,7 @@ public class CpioResource extends CommonsCompressArchiveResource {
      * @param e the CpioEntry.
      */
     public CpioResource(Resource a, CpioArchiveEntry e) {
-        super(new CpioStreamFactory(), a, e);
+        super(new CpioStreamFactory(), "cpio", a, e);
     }
 
-    /**
-     * @return the uid for the cpio entry
-     */
-    public long getUid() {
-        if (isReference()) {
-            return ((CpioResource) getCheckedRef()).getUid();
-        }
-        return uid;
-    }
-
-    /**
-     * @return the uid for the cpio entry
-     */
-    public long getGid() {
-        if (isReference()) {
-            return ((CpioResource) getCheckedRef()).getGid();
-        }
-        return uid;
-    }
-
-    protected void setEntry(ArchiveEntry e) {
-        super.setEntry(e);
-        if (e != null) {
-            CpioArchiveEntry ce = (CpioArchiveEntry) e;
-            uid = ce.getUID();
-            gid = ce.getGID();
-        }
-    }
-
-    protected int getMode(ArchiveEntry e) {
-        return (int) ((CpioArchiveEntry) e).getMode();
-    }
-
-    protected String getArchiveType() {
-        return "cpio";
-    }
 }

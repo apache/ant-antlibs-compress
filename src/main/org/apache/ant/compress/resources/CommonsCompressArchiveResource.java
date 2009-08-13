@@ -22,10 +22,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
-import java.util.Date;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.ArchiveResource;
 import org.apache.tools.ant.util.FileUtils;
@@ -41,12 +41,18 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
 
     private String encoding;
     private final StreamFactory factory;
+    private final String archiveType;
+
+    // not supported for zip
+    private int gid, uid;
 
     /**
      * Default constructor.
      */
-    protected CommonsCompressArchiveResource(StreamFactory factory) {
+    protected CommonsCompressArchiveResource(StreamFactory factory,
+                                             String archiveType) {
         this.factory = factory;
+        this.archiveType = archiveType;
     }
 
     /**
@@ -55,10 +61,12 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * @param a the archive as File.
      * @param e the ArchiveEntry.
      */
-    protected CommonsCompressArchiveResource(StreamFactory factory, File a,
-                                             ArchiveEntry e) {
+    protected CommonsCompressArchiveResource(StreamFactory factory,
+                                             String archiveType,
+                                             File a, ArchiveEntry e) {
         super(a, true);
         this.factory = factory;
+        this.archiveType = archiveType;
         setEntry(e);
     }
 
@@ -68,10 +76,12 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * @param a the archive as Resource.
      * @param e the ArchiveEntry.
      */
-    protected CommonsCompressArchiveResource(StreamFactory factory, Resource a,
-                                             ArchiveEntry e) {
+    protected CommonsCompressArchiveResource(StreamFactory factory,
+                                             String archiveType,
+                                             Resource a, ArchiveEntry e) {
         super(a, true);
         this.factory = factory;
+        this.archiveType = archiveType;
         setEntry(e);
     }
 
@@ -92,6 +102,17 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         return isReference()
             ? ((CommonsCompressArchiveResource) getCheckedRef()).getEncoding()
             : encoding;
+    }
+
+    /**
+     * Overrides the super version.
+     * @param r the Reference to set.
+     */
+    public void setRefid(Reference r) {
+        if (getEncoding() != null) {
+            throw tooManyAttributes();
+        }
+        super.setRefid(r);
     }
 
     /**
@@ -121,11 +142,6 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
     }
 
     /**
-     * The name of the archive type.
-     */
-    protected abstract String getArchiveType();
-
-    /**
      * Get an OutputStream for the Resource.
      * @return an OutputStream to which content can be written.
      * @throws IOException if unable to provide the content of this
@@ -137,10 +153,30 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         if (isReference()) {
             return ((Resource) getCheckedRef()).getOutputStream();
         }
-        throw new UnsupportedOperationException("Use the " + getArchiveType()
+        throw new UnsupportedOperationException("Use the " + archiveType
                                                 + " task for "
-                                                + getArchiveType()
+                                                + archiveType
                                                 + " output.");
+    }
+
+    /**
+     * @return the uid for the entry
+     */
+    public int getUid() {
+        if (isReference()) {
+            return ((CommonsCompressArchiveResource) getCheckedRef()).getUid();
+        }
+        return uid;
+    }
+
+    /**
+     * @return the gid for the entry
+     */
+    public int getGid() {
+        if (isReference()) {
+            return ((CommonsCompressArchiveResource) getCheckedRef()).getGid();
+        }
+        return uid;
     }
 
     /**
@@ -170,11 +206,6 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         setEntry(null);
     }
 
-    /**
-     * Determines the mode for the given entry.
-     */
-    protected abstract int getMode(ArchiveEntry e);
-
     protected void setEntry(ArchiveEntry e) {
         if (e == null) {
             setExists(false);
@@ -185,7 +216,9 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         setLastModified(EntryHelper.getLastModified(e).getTime());
         setDirectory(e.isDirectory());
         setSize(e.getSize());
-        setMode(getMode(e));
+        setMode(EntryHelper.getMode(e));
+        uid = EntryHelper.getUserId(e);
+        gid = EntryHelper.getGroupId(e);
     }
 
 }

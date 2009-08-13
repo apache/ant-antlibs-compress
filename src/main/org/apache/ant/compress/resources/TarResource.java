@@ -18,9 +18,6 @@
 package org.apache.ant.compress.resources;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Date;
 
 import org.apache.tools.ant.types.Resource;
 import org.apache.ant.compress.util.TarStreamFactory;
@@ -34,14 +31,12 @@ public class TarResource extends CommonsCompressArchiveResource {
 
     private String userName = "";
     private String groupName = "";
-    private int    uid;
-    private int    gid;
 
     /**
      * Default constructor.
      */
     public TarResource() {
-        super(new TarStreamFactory());
+        super(new TarStreamFactory(), "tar");
     }
 
     /**
@@ -51,7 +46,7 @@ public class TarResource extends CommonsCompressArchiveResource {
      * @param e the TarEntry.
      */
     public TarResource(File a, TarArchiveEntry e) {
-        super(new TarStreamFactory(), a, e);
+        super(new TarStreamFactory(), "tar", a, e);
     }
 
     /**
@@ -61,7 +56,7 @@ public class TarResource extends CommonsCompressArchiveResource {
      * @param e the TarEntry.
      */
     public TarResource(Resource a, TarArchiveEntry e) {
-        super(new TarStreamFactory(), a, e);
+        super(new TarStreamFactory(), "tar", a, e);
     }
 
     /**
@@ -84,42 +79,13 @@ public class TarResource extends CommonsCompressArchiveResource {
         return groupName;
     }
 
-    /**
-     * @return the uid for the tar entry
-     */
-    public int getUid() {
-        if (isReference()) {
-            return ((TarResource) getCheckedRef()).getUid();
-        }
-        return uid;
-    }
-
-    /**
-     * @return the uid for the tar entry
-     */
-    public int getGid() {
-        if (isReference()) {
-            return ((TarResource) getCheckedRef()).getGid();
-        }
-        return uid;
-    }
-
     protected void setEntry(ArchiveEntry e) {
         super.setEntry(e);
         if (e != null) {
             TarArchiveEntry te = (TarArchiveEntry) e;
             userName = te.getUserName();
             groupName = te.getGroupName();
-            uid = te.getUserId();
-            gid = te.getGroupId();
         }
     }
 
-    protected int getMode(ArchiveEntry e) {
-        return ((TarArchiveEntry) e).getMode();
-    }
-
-    protected String getArchiveType() {
-        return "tar";
-    }
 }

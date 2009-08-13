@@ -58,4 +58,79 @@ public class EntryHelper {
         throw new BuildException("archive entry " + entry.getClass()
                                  + " is not supported.");
     }
+
+    // REVISIT: are the "mode" formats really compatible with each other?
+    /**
+     * Extracts the permission bits from an entry.
+     */
+    public static int getMode(ArchiveEntry entry) {
+        if (entry == null) {
+            throw new IllegalArgumentException("entry must not be null.");
+        }
+
+        if (entry instanceof ArArchiveEntry) {
+            return ((ArArchiveEntry) entry).getMode();
+        }
+        if (entry instanceof CpioArchiveEntry) {
+            return (int) ((CpioArchiveEntry) entry).getMode();
+        }
+        if (entry instanceof TarArchiveEntry) {
+            return ((TarArchiveEntry) entry).getMode();
+        }
+        if (entry instanceof ZipArchiveEntry) {
+            return ((ZipArchiveEntry) entry).getUnixMode();
+        }
+        throw new BuildException("archive entry " + entry.getClass()
+                                 + " is not supported.");
+    }
+
+    public static int UNKNOWN_ID = Integer.MIN_VALUE;
+
+    /**
+     * Extracts the user id an entry.
+     */
+    public static int getUserId(ArchiveEntry entry) {
+        if (entry == null) {
+            throw new IllegalArgumentException("entry must not be null.");
+        }
+
+        if (entry instanceof ArArchiveEntry) {
+            return ((ArArchiveEntry) entry).getUserId();
+        }
+        if (entry instanceof CpioArchiveEntry) {
+            return (int) ((CpioArchiveEntry) entry).getUID();
+        }
+        if (entry instanceof TarArchiveEntry) {
+            return ((TarArchiveEntry) entry).getUserId();
+        }
+        if (entry instanceof ZipArchiveEntry) {
+            return UNKNOWN_ID;
+        }
+        throw new BuildException("archive entry " + entry.getClass()
+                                 + " is not supported.");
+    }
+
+    /**
+     * Extracts the group id an entry.
+     */
+    public static int getGroupId(ArchiveEntry entry) {
+        if (entry == null) {
+            throw new IllegalArgumentException("entry must not be null.");
+        }
+
+        if (entry instanceof ArArchiveEntry) {
+            return ((ArArchiveEntry) entry).getGroupId();
+        }
+        if (entry instanceof CpioArchiveEntry) {
+            return (int) ((CpioArchiveEntry) entry).getGID();
+        }
+        if (entry instanceof TarArchiveEntry) {
+            return ((TarArchiveEntry) entry).getGroupId();
+        }
+        if (entry instanceof ZipArchiveEntry) {
+            return UNKNOWN_ID;
+        }
+        throw new BuildException("archive entry " + entry.getClass()
+                                 + " is not supported.");
+    }
 }
