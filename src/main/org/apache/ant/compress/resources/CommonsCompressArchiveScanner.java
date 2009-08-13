@@ -19,10 +19,10 @@
 package org.apache.ant.compress.resources;
 
 import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.ant.compress.util.StreamFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.Resource;
@@ -33,21 +33,17 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
 /**
  * Scans tar archives for resources.
  */
-public abstract class CommonsCompressArchiveScanner extends ArchiveScanner {
+public class CommonsCompressArchiveScanner extends ArchiveScanner {
 
-    /**
-     * Provides an ArchiveInputStream to a given archive.
-     */
-    protected abstract ArchiveInputStream getArchiveStream(InputStream is,
-                                                           String encoding)
-        throws IOException;
+    private final StreamFactory factory;
+    private final ResourceBuilder builder;
 
-    /**
-     * Creates the matching archive entry resource.
-     */
-    protected abstract Resource getResource(Resource archive,
-                                            String encoding,
-                                            ArchiveEntry entry);
+    public CommonsCompressArchiveScanner(StreamFactory factory,
+                                         ResourceBuilder builder) {
+        this.factory = factory;
+        this.builder = builder;
+    }
+
 
     /**
      * Fills the file and directory maps with resources read from the
@@ -74,14 +70,15 @@ public abstract class CommonsCompressArchiveScanner extends ArchiveScanner {
 
         try {
             try {
-                ai = getArchiveStream(new BufferedInputStream(src
-                                                              .getInputStream()),
-                                      encoding);
+                ai =
+                    factory.getArchiveStream(new BufferedInputStream(src
+                                                                     .getInputStream()),
+                                             encoding);
             } catch (IOException ex) {
                 throw new BuildException("problem opening " + src, ex);
             }
             while ((entry = ai.getNextEntry()) != null) {
-                Resource r = getResource(src, encoding, entry);
+                Resource r = builder.buildResource(src, encoding, entry);
                 String name = entry.getName();
                 if (entry.isDirectory()) {
                     name = trimSeparator(name);
@@ -101,5 +98,13 @@ public abstract class CommonsCompressArchiveScanner extends ArchiveScanner {
         } finally {
             FileUtils.close(ai);
         }
+    }
+
+    public static interface ResourceBuilder {
+        /**
+         * Creates the matching archive entry resource.
+         */
+        Resource buildResource(Resource archive, String encoding,
+                               ArchiveEntry entry);
     }
 }

@@ -17,6 +17,10 @@
  */
 package org.apache.ant.compress.resources;
 
+import org.apache.ant.compress.util.TarStreamFactory;
+
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.AbstractFileSet;
@@ -24,6 +28,7 @@ import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Reference;
+import org.apache.tools.ant.types.Resource;
 
 /**
  * A TarFileSet is a FileSet with extra attributes useful in the context of
@@ -184,8 +189,13 @@ public class TarFileSet extends ArchiveFileSet {
      * @return the created scanner.
      */
     protected ArchiveScanner newArchiveScanner() {
-        TarScanner zs = new TarScanner();
-        return zs;
+        return new CommonsCompressArchiveScanner(new TarStreamFactory(),
+                                                 new CommonsCompressArchiveScanner.ResourceBuilder() {
+                public Resource buildResource(Resource archive, String encoding,
+                                              ArchiveEntry entry) {
+                    return new TarResource(archive, (TarArchiveEntry) entry);
+                }
+            });
     }
 
     /**

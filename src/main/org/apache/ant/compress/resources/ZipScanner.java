@@ -19,16 +19,15 @@
 package org.apache.ant.compress.resources;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.zip.ZipException;
 
+import org.apache.ant.compress.util.ZipStreamFactory;
+
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Resource;
@@ -39,15 +38,15 @@ import org.apache.tools.ant.types.resources.FileProvider;
  */
 public class ZipScanner extends CommonsCompressArchiveScanner {
 
-    protected ArchiveInputStream getArchiveStream(InputStream is,
-                                                  String encoding)
-        throws IOException {
-        return new ZipArchiveInputStream(is, encoding, true);
-    }
-
-    protected Resource getResource(Resource archive, String encoding,
-                                   ArchiveEntry entry) {
-        return new ZipResource(archive, encoding, (ZipArchiveEntry) entry);
+    public ZipScanner() {
+        super(new ZipStreamFactory(),
+              new CommonsCompressArchiveScanner.ResourceBuilder() {
+                public Resource buildResource(Resource archive, String encoding,
+                                            ArchiveEntry entry) {
+                    return new ZipResource(archive, encoding,
+                                           (ZipArchiveEntry) entry);
+                }
+            });
     }
 
     /**
@@ -70,19 +69,18 @@ public class ZipScanner extends CommonsCompressArchiveScanner {
     protected void fillMapsFromArchive(Resource src, String encoding,
                                        Map fileEntries, Map matchFileEntries,
                                        Map dirEntries, Map matchDirEntries) {
-        ZipArchiveEntry entry = null;
-        ZipFile zf = null;
 
-        File srcFile = null;
         FileProvider fp = (FileProvider) src.as(FileProvider.class);
-        if (fp != null) {
-            srcFile = fp.getFile();
-        } else {
+        if (fp == null) {
             super.fillMapsFromArchive(src, encoding, fileEntries,
                                       matchFileEntries, dirEntries,
                                       matchDirEntries);
             return;
         }
+
+        File srcFile = fp.getFile();
+        ZipArchiveEntry entry = null;
+        ZipFile zf = null;
 
         try {
             try {

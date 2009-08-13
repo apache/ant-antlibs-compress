@@ -17,6 +17,10 @@
  */
 package org.apache.ant.compress.resources;
 
+import org.apache.ant.compress.util.ArStreamFactory;
+
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.AbstractFileSet;
@@ -24,6 +28,7 @@ import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Reference;
+import org.apache.tools.ant.types.Resource;
 
 /**
  * A ArFileSet is a FileSet with extra attributes useful in the context of
@@ -124,8 +129,13 @@ public class ArFileSet extends ArchiveFileSet {
      * @return the created scanner.
      */
     protected ArchiveScanner newArchiveScanner() {
-        ArScanner zs = new ArScanner();
-        return zs;
+        return new CommonsCompressArchiveScanner(new ArStreamFactory(),
+                                                 new CommonsCompressArchiveScanner.ResourceBuilder() {
+                public Resource buildResource(Resource archive, String encoding,
+                                              ArchiveEntry entry) {
+                    return new ArResource(archive, (ArArchiveEntry) entry);
+                }
+            });
     }
 
     /**
