@@ -20,11 +20,13 @@ package org.apache.ant.compress.util;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 
 /**
- * Creates input streams for the supported archive formats.
+ * Creates streams for the supported archive formats.
  */
 public interface StreamFactory {
 
@@ -35,6 +37,16 @@ public interface StreamFactory {
      */
     public ArchiveInputStream getArchiveStream(InputStream stream,
                                                String encoding)
+        throws IOException;
+
+
+    /**
+     * @param stream the stream to write to, should be buffered
+     * @param encoding the encoding of the entry names, ignored by all
+     * formats except zip
+     */
+    public ArchiveOutputStream getArchiveStream(OutputStream stream,
+                                                String encoding)
         throws IOException;
 
 }

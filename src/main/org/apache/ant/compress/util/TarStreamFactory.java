@@ -20,9 +20,12 @@ package org.apache.ant.compress.util;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 
 public class TarStreamFactory implements StreamFactory {
 
@@ -36,4 +39,13 @@ public class TarStreamFactory implements StreamFactory {
         return new TarArchiveInputStream(stream);
     }
 
+    /**
+     * @param stream the stream to write to, should be buffered
+     * @param encoding the encoding of the entry names, ignored
+     */
+    public ArchiveOutputStream getArchiveStream(OutputStream stream,
+                                                String encoding)
+        throws IOException {
+        return new TarArchiveOutputStream(stream);
+    }
 }

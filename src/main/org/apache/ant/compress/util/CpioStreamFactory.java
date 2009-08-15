@@ -20,9 +20,12 @@ package org.apache.ant.compress.util;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveInputStream;
+import org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream;
 
 public class CpioStreamFactory implements StreamFactory {
 
@@ -36,4 +39,13 @@ public class CpioStreamFactory implements StreamFactory {
         return new CpioArchiveInputStream(stream);
     }
 
+    /**
+     * @param stream the stream to write to, should be buffered
+     * @param encoding the encoding of the entry names, ignored
+     */
+    public ArchiveOutputStream getArchiveStream(OutputStream stream,
+                                                String encoding)
+        throws IOException {
+        return new CpioArchiveOutputStream(stream);
+    }
 }

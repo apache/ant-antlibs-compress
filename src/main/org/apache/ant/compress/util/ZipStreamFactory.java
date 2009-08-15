@@ -20,9 +20,12 @@ package org.apache.ant.compress.util;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
 public class ZipStreamFactory implements StreamFactory {
 
@@ -36,4 +39,15 @@ public class ZipStreamFactory implements StreamFactory {
         return new ZipArchiveInputStream(stream, encoding, true);
     }
 
+    /**
+     * @param stream the stream to write to, should be buffered
+     * @param encoding the encoding of the entry names
+     */
+    public ArchiveOutputStream getArchiveStream(OutputStream stream,
+                                                String encoding)
+        throws IOException {
+        ZipArchiveOutputStream o = new ZipArchiveOutputStream(stream);
+        o.setEncoding(encoding);
+        return o;
+    }
 }

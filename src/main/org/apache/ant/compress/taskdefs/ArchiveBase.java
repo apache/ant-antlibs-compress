@@ -18,8 +18,12 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipException;
 
@@ -33,32 +37,39 @@ import org.apache.ant.compress.resources.ZipResource;
 import org.apache.ant.compress.util.EntryHelper;
 import org.apache.ant.compress.util.StreamFactory;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ExtraFieldUtils;
 import org.apache.commons.compress.archivers.zip.ZipExtraField;
 import org.apache.commons.compress.archivers.zip.ZipShort;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.taskdefs.Expand;
 import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.ArchiveResource;
 import org.apache.tools.ant.types.resources.FileResource;
+import org.apache.tools.ant.util.FileUtils;
 
 /**
  * Base implementation of tasks creating archives.
  */
 public abstract class ArchiveBase extends Task {
     private final StreamFactory factory;
+    private final EntryBuilder builder;
 
     private Resource dest;
     private List/*<ResourceCollection>*/ sources = new ArrayList();
     private Mode mode = new Mode();
     private String encoding;
 
-    protected ArchiveBase(StreamFactory factory) {
+    protected ArchiveBase(StreamFactory factory, EntryBuilder builder) {
         this.factory = factory;
+        this.builder = builder;
     }
 
     /**
@@ -106,6 +117,21 @@ public abstract class ArchiveBase extends Task {
             // create mode
             mode = new Mode();
         }
+        ResourceWithFlags[] toAdd;
+        try {
+            toAdd = findSources();
+        } catch (IOException ioex) {
+            throw new BuildException("Failed to read sources", ioex);
+        }
+        if (toAdd.length == 0) {
+            log("No sources, nothing to do", Project.MSG_WARN);
+        } else {
+            try {
+                writeArchive(dest, toAdd);
+            } catch (IOException ioex) {
+                throw new BuildException("Failed to write archive", ioex);
+            }
+        }
     }
 
     /**
@@ -121,14 +147,77 @@ public abstract class ArchiveBase extends Task {
     }
 
     /**
+     * Find all the resources with their flags that should be added to
+     * the archive.
+     */
+    protected ResourceWithFlags[] findSources() throws IOException {
+        ArrayList l = new ArrayList();
+        for (Iterator rcs = sources.iterator(); rcs.hasNext(); ) {
+            ResourceCollection rc = (ResourceCollection) rcs.next();
+            ResourceCollectionFlags rcFlags = getFlags(rc);
+            for (Iterator rs = rc.iterator(); rs.hasNext(); ) {
+                Resource r = (Resource) rs.next();
+                l.add(new ResourceWithFlags(r, rcFlags, getFlags(r)));
+            }
+        }
+        return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
+    }
+
+    protected void writeArchive(Resource dest, ResourceWithFlags[] src)
+        throws IOException {
+        FileUtils fu = FileUtils.getFileUtils();
+        ArchiveOutputStream out = null;
+        try {
+            out =
+                factory.getArchiveStream(new BufferedOutputStream(dest
+                                                                  .getOutputStream()),
+                                         Expand.NATIVE_ENCODING.equals(encoding)
+                                         ? null : encoding);
+            for (int i = 0; i < src.length; i++) {
+                String name = src[i].getResource().getName();
+                if (src[i].getCollectionFlags().hasFullpath()) {
+                    name = src[i].getCollectionFlags().getFullpath();
+                } else if (src[i].getCollectionFlags().hasPrefix()) {
+                    String prefix = src[i].getCollectionFlags().getPrefix();
+                    if (!prefix.endsWith("/")) {
+                        prefix = prefix + "/";
+                    }
+                    name = prefix + name;
+                }
+
+                ArchiveEntry ent = builder.buildEntry(name, src[i]);
+                out.putArchiveEntry(ent);
+                if (!src[i].getResource().isDirectory()) {
+                    InputStream in = null;
+                    try {
+                        in = src[i].getResource().getInputStream();
+
+                        byte[] buffer = new byte[8192];
+                        int count = 0;
+                        do {
+                            out.write(buffer, 0, count);
+                            count = in.read(buffer, 0, buffer.length);
+                        } while (count != -1);
+                    } finally {
+                        fu.close(in);
+                    }
+                }
+                out.closeArchiveEntry();
+
+            }
+        } finally {
+            fu.close(out);
+        }
+    }
+
+    /**
      * Extracts flags from a resource.
      *
-     * <p>All those exceptions are only here for the code that
-     * translates Ant's ZipExtraFields to CC ZipExtraFields and should
-     * never actually be thrown.</p>
+     * <p>ZipExceptions are only here for the code that translates
+     * Ant's ZipExtraFields to CC ZipExtraFields and should never
+     * actually be thrown.</p>
      */
-    protected ResourceFlags getFlags(Resource r)
-        throws ZipException, InstantiationException, IllegalAccessException {
+    protected ResourceFlags getFlags(Resource r) throws ZipException {
         if (r instanceof ArchiveResource) {
             if (r instanceof CommonsCompressArchiveResource) {
                 if (r instanceof TarResource) {
@@ -162,9 +251,16 @@ public abstract class ArchiveBase extends Task {
                     new ZipExtraField[extra == null ? 0 : extra.length];
                 if (extra != null && extra.length > 0) {
                     for (int i = 0; i < extra.length; i++) {
-                        ex[i] = ExtraFieldUtils
-                            .createExtraField(new ZipShort(extra[i].getHeaderId()
-                                                           .getValue()));
+                        try {
+                            ex[i] = ExtraFieldUtils
+                                .createExtraField(new ZipShort(extra[i]
+                                                               .getHeaderId()
+                                                               .getValue()));
+                        } catch (InstantiationException e) {
+                            throw new BuildException(e);
+                        } catch (IllegalAccessException e) {
+                            throw new BuildException(e);
+                        }
                         byte[] b = extra[i].getCentralDirectoryData();
                         ex[i].parseFromCentralDirectoryData(b, 0, b.length);
                         b = extra[i].getLocalFileDataData();
@@ -437,5 +533,9 @@ public abstract class ArchiveBase extends Task {
         public Resource getResource() { return r; }
         public ResourceCollectionFlags getCollectionFlags() { return rcFlags; }
         public ResourceFlags getResourceFlags() { return rFlags; }
+    }
+
+    public static interface EntryBuilder {
+        ArchiveEntry buildEntry(String name, ResourceWithFlags resource);
     }
 }
