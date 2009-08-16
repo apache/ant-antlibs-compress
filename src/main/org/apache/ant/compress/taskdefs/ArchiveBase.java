@@ -127,7 +127,7 @@ public abstract class ArchiveBase extends Task {
             log("No sources, nothing to do", Project.MSG_WARN);
         } else {
             try {
-                writeArchive(dest, toAdd);
+                writeArchive(toAdd);
             } catch (IOException ioex) {
                 throw new BuildException("Failed to write archive", ioex);
             }
@@ -163,7 +163,10 @@ public abstract class ArchiveBase extends Task {
         return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
     }
 
-    protected void writeArchive(Resource dest, ResourceWithFlags[] src)
+    /**
+     * Creates the archive archiving the given resources.
+     */
+    protected void writeArchive(ResourceWithFlags[] src)
         throws IOException {
         FileUtils fu = FileUtils.getFileUtils();
         ArchiveOutputStream out = null;
@@ -174,18 +177,8 @@ public abstract class ArchiveBase extends Task {
                                          Expand.NATIVE_ENCODING.equals(encoding)
                                          ? null : encoding);
             for (int i = 0; i < src.length; i++) {
-                String name = src[i].getResource().getName();
-                if (src[i].getCollectionFlags().hasFullpath()) {
-                    name = src[i].getCollectionFlags().getFullpath();
-                } else if (src[i].getCollectionFlags().hasPrefix()) {
-                    String prefix = src[i].getCollectionFlags().getPrefix();
-                    if (!prefix.endsWith("/")) {
-                        prefix = prefix + "/";
-                    }
-                    name = prefix + name;
-                }
 
-                ArchiveEntry ent = builder.buildEntry(name, src[i]);
+                ArchiveEntry ent = builder.buildEntry(src[i]);
                 out.putArchiveEntry(ent);
                 if (!src[i].getResource().isDirectory()) {
                     InputStream in = null;
@@ -533,9 +526,39 @@ public abstract class ArchiveBase extends Task {
         public Resource getResource() { return r; }
         public ResourceCollectionFlags getCollectionFlags() { return rcFlags; }
         public ResourceFlags getResourceFlags() { return rFlags; }
+
+        /**
+         * The name the target entry will have.
+         *
+         * <p>Already takes fullpath and prefix into account.</p>
+         *
+         * <p>Ensures directory names end in slashes while file names
+         * never will.</p>
+         */
+        public String getName() {
+            String name = r.getName();
+            if (rcFlags.hasFullpath()) {
+                name = rcFlags.getFullpath();
+            } else if (rcFlags.hasPrefix()) {
+                String prefix = rcFlags.getPrefix();
+                if (!prefix.endsWith("/")) {
+                    prefix = prefix + "/";
+                }
+                name = prefix + name;
+            }
+            if (r.isDirectory() && !name.endsWith("/")) {
+                name += "/";
+            } else if (r.isDirectory() && name.endsWith("/")) {
+                name = name.substring(0, name.length() - 1);
+            }
+            return name;
+        }
     }
 
+    /**
+     * Creates an archive entry for the concrete format.
+     */
     public static interface EntryBuilder {
-        ArchiveEntry buildEntry(String name, ResourceWithFlags resource);
+        ArchiveEntry buildEntry(ResourceWithFlags resource);
     }
 }

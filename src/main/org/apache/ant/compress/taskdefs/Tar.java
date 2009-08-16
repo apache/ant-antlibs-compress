@@ -30,11 +30,10 @@ public class Tar extends ArchiveBase {
     public Tar() {
         super(new TarStreamFactory(),
               new ArchiveBase.EntryBuilder() {
-                public ArchiveEntry buildEntry(String name,
-                                               ArchiveBase.ResourceWithFlags r) {
+                public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
                     TarArchiveEntry ent =
-                        new TarArchiveEntry(name,
+                        new TarArchiveEntry(r.getName(),
                                             isDir ? TarConstants.LF_DIR
                                             : TarConstants.LF_NORMAL);
                     ent.setModTime(r.getResource().getLastModified());

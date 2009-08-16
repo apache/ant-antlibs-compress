@@ -26,6 +26,18 @@
     <mkdir dir="${input}"/>
   </target>
 
+  <target name="testAgainstAntlibArTask" depends="setUp">
+    <cmp:ar destfile="${input}/test.ar">
+      <fileset dir="." includes="unar-test.xml"/>
+    </cmp:ar>
+    <cmp:unar src="${input}/test.ar" dest="${output}"/>
+    <au:assertFileExists file="${output}/unar-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/unar-test.xml"
+       expected="unar-test.xml"
+       />
+  </target>
+
   <target name="testAgainstNativeAr" depends="setUp">
     <cmp:unar src="../resources/asf-logo.gif.ar" dest="${output}" />
     <au:assertFileExists file="${output}/asf-logo.gif"/>

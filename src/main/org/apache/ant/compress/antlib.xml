@@ -33,6 +33,10 @@
     classname="org.apache.ant.compress.taskdefs.Unzip"
     />
   <taskdef
+    name="ar"
+    classname="org.apache.ant.compress.taskdefs.Ar"
+    />
+  <taskdef
     name="tar"
     classname="org.apache.ant.compress.taskdefs.Tar"
     />
