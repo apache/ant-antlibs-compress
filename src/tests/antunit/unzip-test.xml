@@ -38,7 +38,19 @@
        />
   </target>
 
-  <target name="testAgainstNativeTar" depends="setUp">
+  <target name="testAgainstAntlibZipTask" depends="setUp">
+    <cmp:zip destfile="${input}/test.zip">
+      <fileset dir="."/>
+    </cmp:zip>
+    <cmp:unzip src="${input}/test.zip" dest="${output}"/>
+    <au:assertFileExists file="${output}/untar-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/untar-test.xml"
+       expected="untar-test.xml"
+       />
+  </target>
+
+  <target name="testAgainstNativeZip" depends="setUp">
     <cmp:unzip src="../resources/asf-logo.gif.zip" dest="${output}" />
     <au:assertFileExists file="${output}/asf-logo.gif"/>
     <au:assertFilesMatch
