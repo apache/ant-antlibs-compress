@@ -18,59 +18,53 @@
 
 package org.apache.ant.compress.taskdefs;
 
-import org.apache.ant.compress.util.ArStreamFactory;
+import org.apache.ant.compress.util.CpioStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
-import org.apache.tools.ant.BuildException;
+import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
+import org.apache.commons.compress.archivers.cpio.CpioConstants;
 
 /**
- * Creates ar archives.
+ * Creates cpio archives.
  */
-public class Ar extends ArchiveBase {
-    /** stolen from ArEntry */
-    private static final int DEFAULT_MODE = 33188;
-
-    public Ar() {
-        super(new ArStreamFactory(),
+public class Cpio extends ArchiveBase {
+    public Cpio() {
+        super(new CpioStreamFactory(),
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
-                    if (isDir) {
-                        // REVISIT
-                        throw new BuildException("ar archives cannot store"
-                                                 + " directory entries");
-                    }
+                    CpioArchiveEntry ent =
+                        new CpioArchiveEntry(r.getName(),
+                                             isDir
+                                             ? 0 : r.getResource().getSize());
+                    ent.setTime(r.getResource().getLastModified() / 1000);
 
-                    int mode = DEFAULT_MODE;
+                    int mode =
+                        isDir ? CpioConstants.C_ISDIR : CpioConstants.C_ISREG;
                     if (r.getResourceFlags().hasModeBeenSet()) {
-                        mode = r.getResourceFlags().getMode();
+                        ent.setMode(mode | r.getResourceFlags().getMode());
                     } else if (!isDir
                                && r.getCollectionFlags().hasModeBeenSet()) {
-                        mode = r.getCollectionFlags().getMode();
+                        ent.setMode(mode | r.getCollectionFlags().getMode());
                     } else if (isDir
                                && r.getCollectionFlags().hasDirModeBeenSet()) {
-                        mode = r.getCollectionFlags().getDirMode();
+                        ent.setMode(mode | r.getCollectionFlags().getDirMode());
+                    } else {
+                        ent.setMode(mode);
                     }
 
-                    int uid = 0;
                     if (r.getResourceFlags().hasUserIdBeenSet()) {
-                        uid = r.getResourceFlags().getUserId();
+                        ent.setUID(r.getResourceFlags().getUserId());
                     } else if (r.getCollectionFlags().hasUserIdBeenSet()) {
-                        uid = r.getCollectionFlags().getUserId();
+                        ent.setUID(r.getCollectionFlags().getUserId());
                     }
 
-                    int gid = 0;
                     if (r.getResourceFlags().hasGroupIdBeenSet()) {
-                        gid = r.getResourceFlags().getGroupId();
+                        ent.setGID(r.getResourceFlags().getGroupId());
                     } else if (r.getCollectionFlags().hasGroupIdBeenSet()) {
-                        gid = r.getCollectionFlags().getGroupId();
+                        ent.setGID(r.getCollectionFlags().getGroupId());
                     }
-
-                    return new ArArchiveEntry(r.getName(),
-                                              r.getResource().getSize(),
-                                              uid, gid, mode,
-                                              r.getResource().getLastModified()
-                                              / 1000);
+ 
+                    return ent;
                 }
             });
     }

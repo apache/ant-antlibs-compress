@@ -26,7 +26,19 @@
     <mkdir dir="${input}"/>
   </target>
 
-  <target name="testAgainstNativeTar" depends="setUp">
+  <target name="testAgainstAntlibCpioTask" depends="setUp">
+    <cmp:cpio destfile="${input}/test.cpio">
+      <fileset dir="."/>
+    </cmp:cpio>
+    <cmp:uncpio src="${input}/test.cpio" dest="${output}"/>
+    <au:assertFileExists file="${output}/uncpio-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/uncpio-test.xml"
+       expected="uncpio-test.xml"
+       />
+  </target>
+
+  <target name="testAgainstNativeCpio" depends="setUp">
     <cmp:uncpio src="../resources/asf-logo.gif.cpio" dest="${output}" />
     <au:assertFileExists file="${output}/asf-logo.gif"/>
     <au:assertFilesMatch

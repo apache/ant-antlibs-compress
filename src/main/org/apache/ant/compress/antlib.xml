@@ -37,6 +37,10 @@
     classname="org.apache.ant.compress.taskdefs.Ar"
     />
   <taskdef
+    name="cpio"
+    classname="org.apache.ant.compress.taskdefs.Cpio"
+    />
+  <taskdef
     name="tar"
     classname="org.apache.ant.compress.taskdefs.Tar"
     />
