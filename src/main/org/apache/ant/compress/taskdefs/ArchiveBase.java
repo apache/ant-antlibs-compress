@@ -66,6 +66,7 @@ public abstract class ArchiveBase extends Task {
     private List/*<ResourceCollection>*/ sources = new ArrayList();
     private Mode mode = new Mode();
     private String encoding;
+    private boolean filesOnly = true;
 
     protected ArchiveBase(StreamFactory factory, EntryBuilder builder) {
         this.factory = factory;
@@ -109,6 +110,13 @@ public abstract class ArchiveBase extends Task {
      */
     public void setEncoding(String e) {
         encoding = e;
+    }
+
+    /**
+     * Whether only file entries should be added to the archive.
+     */
+    public void setFilesOnly(boolean b) {
+        filesOnly = b;
     }
 
     public void execute() {
@@ -157,7 +165,9 @@ public abstract class ArchiveBase extends Task {
             ResourceCollectionFlags rcFlags = getFlags(rc);
             for (Iterator rs = rc.iterator(); rs.hasNext(); ) {
                 Resource r = (Resource) rs.next();
-                l.add(new ResourceWithFlags(r, rcFlags, getFlags(r)));
+                if (!filesOnly || !r.isDirectory()) {
+                    l.add(new ResourceWithFlags(r, rcFlags, getFlags(r)));
+                }
             }
         }
         return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
