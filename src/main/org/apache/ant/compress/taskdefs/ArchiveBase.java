@@ -25,8 +25,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipException;
 
 import org.apache.ant.compress.resources.ArFileSet;
@@ -189,6 +191,7 @@ public abstract class ArchiveBase extends Task {
         throws IOException {
         FileUtils fu = FileUtils.getFileUtils();
         ArchiveOutputStream out = null;
+        Set addedDirectories = new HashSet();
         try {
             out =
                 factory.getArchiveStream(new BufferedOutputStream(dest
@@ -196,6 +199,10 @@ public abstract class ArchiveBase extends Task {
                                          Expand.NATIVE_ENCODING.equals(encoding)
                                          ? null : encoding);
             for (int i = 0; i < src.length; i++) {
+
+                if (!filesOnly) {
+                    ensureParentDirs(out, src[i], addedDirectories);
+                }
 
                 ArchiveEntry ent = builder.buildEntry(src[i]);
                 out.putArchiveEntry(ent);
@@ -219,6 +226,37 @@ public abstract class ArchiveBase extends Task {
             }
         } finally {
             fu.close(out);
+        }
+    }
+
+    /**
+     * Adds records for all parent directories of the given resource
+     * that haven't already been added.
+     *
+     * <p>Flags for the "missing" directories will be taken from the
+     * ResourceCollection that contains the resource to be added.</p>
+     */
+    protected void ensureParentDirs(ArchiveOutputStream out,
+                                    ResourceWithFlags r,
+                                    Set directoriesAdded)
+        throws IOException {
+
+        String[] parentStack = FileUtils.getPathStack(r.getName());
+        String currentParent = "";
+        for (int i = 0; i < parentStack.length - 1; i++) {
+            currentParent += parentStack[i] + "/";
+            if (directoriesAdded.add(currentParent)) {
+                Resource dir = new Resource(currentParent, true,
+                                            System.currentTimeMillis(),
+                                            true);
+                ResourceWithFlags artifical =
+                    new ResourceWithFlags(currentParent,
+                                          dir, r.getCollectionFlags(),
+                                          new ResourceFlags());
+                ArchiveEntry ent = builder.buildEntry(artifical);
+                out.putArchiveEntry(ent);
+                out.closeArchiveEntry();
+            }
         }
     }
 
@@ -534,12 +572,39 @@ public abstract class ArchiveBase extends Task {
         private final Resource r;
         private final ResourceCollectionFlags rcFlags;
         private final ResourceFlags rFlags;
+        private final String name;
 
         public ResourceWithFlags(Resource r, ResourceCollectionFlags rcFlags,
+                                 ResourceFlags rFlags) {
+            this(null, r, rcFlags, rFlags);
+        }
+
+        public ResourceWithFlags(String name, Resource r,
+                                 ResourceCollectionFlags rcFlags,
                                  ResourceFlags rFlags) {
             this.r = r;
             this.rcFlags = rcFlags;
             this.rFlags = rFlags;
+
+            if (name == null) {
+                name = r.getName();
+                if (rcFlags.hasFullpath()) {
+                    name = rcFlags.getFullpath();
+                } else if (rcFlags.hasPrefix()) {
+                    String prefix = rcFlags.getPrefix();
+                    if (!prefix.endsWith("/")) {
+                        prefix = prefix + "/";
+                    }
+                    name = prefix + name;
+                }
+            }
+            if (r.isDirectory() && !name.endsWith("/")) {
+                name += "/";
+            } else if (r.isDirectory() && name.endsWith("/")) {
+                name = name.substring(0, name.length() - 1);
+            }
+
+            this.name = name;
         }
 
         public Resource getResource() { return r; }
@@ -555,21 +620,6 @@ public abstract class ArchiveBase extends Task {
          * never will.</p>
          */
         public String getName() {
-            String name = r.getName();
-            if (rcFlags.hasFullpath()) {
-                name = rcFlags.getFullpath();
-            } else if (rcFlags.hasPrefix()) {
-                String prefix = rcFlags.getPrefix();
-                if (!prefix.endsWith("/")) {
-                    prefix = prefix + "/";
-                }
-                name = prefix + name;
-            }
-            if (r.isDirectory() && !name.endsWith("/")) {
-                name += "/";
-            } else if (r.isDirectory() && name.endsWith("/")) {
-                name = name.substring(0, name.length() - 1);
-            }
             return name;
         }
     }

@@ -39,13 +39,13 @@
   </target>
 
   <target name="testAgainstAntlibTarTask" depends="setUp">
-    <cmp:tar destfile="${input}/test.tar">
-      <fileset dir="."/>
+    <cmp:tar destfile="${input}/test.tar" filesonly="false">
+      <fileset dir=".." includes="**/*.xml"/>
     </cmp:tar>
     <cmp:untar src="${input}/test.tar" dest="${output}"/>
-    <au:assertFileExists file="${output}/untar-test.xml"/>
+    <au:assertFileExists file="${output}/antunit/untar-test.xml"/>
     <au:assertFilesMatch
-       actual="${output}/untar-test.xml"
+       actual="${output}/antunit/untar-test.xml"
        expected="untar-test.xml"
        />
   </target>
