@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipException;
@@ -170,6 +172,13 @@ public abstract class ArchiveBase extends Task {
                 }
             }
         }
+        Collections.sort(l, new Comparator/*<ResourceWithFlags>*/() {
+                public int compare(Object o1, Object o2) {
+                    ResourceWithFlags r1 = (ResourceWithFlags) o1;
+                    ResourceWithFlags r2 = (ResourceWithFlags) o2;
+                    return r1.getName().compareTo(r2.getName());
+                }
+            });
         return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
     }
 
