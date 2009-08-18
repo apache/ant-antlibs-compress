@@ -64,5 +64,21 @@
         </cmp:tarentry>
       </cond:islastmodified>
     </au:assertTrue>
+    <!--
+    <au:assertTrue>
+      <cmp:hasusername name="bodewig">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.tar"/>
+        </cmp:tarentry>
+      </cmp:hasusername>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasgroupname name="bodewig">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.tar"/>
+        </cmp:tarentry>
+      </cmp:hasgroupname>
+    </au:assertTrue>
+    -->
   </target>
 </project>

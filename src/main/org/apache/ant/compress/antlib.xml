@@ -82,4 +82,25 @@
     name="zipfileset"
     classname="org.apache.ant.compress.resources.ZipFileSet"
     />
+
+  <typedef
+     name="hasusername"
+    classname="org.apache.ant.compress.conditions.HasUserName"
+    />
+  <typedef
+     name="hasgroupname"
+     classname="org.apache.ant.compress.conditions.HasGroupName"
+    />
+  <typedef
+     name="hasuserid"
+     classname="org.apache.ant.compress.conditions.HasUserId"
+    />
+  <typedef
+     name="hasgroupid"
+     classname="org.apache.ant.compress.conditions.HasGroupId"
+    />
+  <typedef
+     name="hasmode"
+     classname="org.apache.ant.compress.conditions.HasMode"
+    />
 </antlib>
