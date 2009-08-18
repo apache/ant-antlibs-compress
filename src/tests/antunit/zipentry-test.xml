@@ -17,6 +17,7 @@
 -->
 <project default="antunit"
          xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
          xmlns:cmp="antlib:org.apache.ant.compress">
 
   <import file="antunit-base.xml" />
@@ -52,5 +53,16 @@
        actual="${output}/asf-logo.gif"
        expected="../resources/asf-logo.gif"
        />
+  </target>
+
+  <target name="testResourceProperties">
+    <au:assertTrue>
+      <cond:islastmodified datetime="2001-11-19-15:34:20"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
+        <cmp:zipentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.zip"/>
+        </cmp:zipentry>
+      </cond:islastmodified>
+    </au:assertTrue>
   </target>
 </project>
