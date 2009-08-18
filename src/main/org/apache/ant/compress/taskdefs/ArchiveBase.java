@@ -46,6 +46,7 @@ import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ExtraFieldUtils;
 import org.apache.commons.compress.archivers.zip.ZipExtraField;
 import org.apache.commons.compress.archivers.zip.ZipShort;
+import org.apache.commons.compress.utils.IOUtils;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -210,13 +211,7 @@ public abstract class ArchiveBase extends Task {
                     InputStream in = null;
                     try {
                         in = src[i].getResource().getInputStream();
-
-                        byte[] buffer = new byte[8192];
-                        int count = 0;
-                        do {
-                            out.write(buffer, 0, count);
-                            count = in.read(buffer, 0, buffer.length);
-                        } while (count != -1);
+                        IOUtils.copy(in, out);
                     } finally {
                         fu.close(in);
                     }
