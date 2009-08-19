@@ -104,6 +104,17 @@
     </au:assertTrue>
   </target>
 
+  <target name="testCoreTarIsLastModified" depends="setUp">
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-08-19-05:49:21"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
+        <tarentry name="asf-logo.gif">
+          <file file="${input}/test.tar"/>
+        </tarentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+
   <target name="fail-testAntlibTarHasUserName" depends="setUp">
     <au:assertTrue>
       <cmp:hasusername name="user">
@@ -154,6 +165,17 @@
     </au:assertTrue>
   </target>
 
+  <target name="testAntlibTarIsLastModified" depends="setUp">
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-08-19-05:49:21"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="${input}/test.tar"/>
+        </cmp:tarentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+
   <target name="fail-testArHasUserId" depends="setUp">
     <au:assertTrue>
       <cmp:hasuserid id="500">
@@ -181,6 +203,17 @@
           <file file="${input}/test.ar"/>
         </cmp:arentry>
       </cmp:hasmode>
+    </au:assertTrue>
+  </target>
+
+  <target name="testArIsLastModified" depends="setUp">
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-08-19-05:49:21"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
+        <cmp:arentry name="asf-logo.gif">
+          <file file="${input}/test.ar"/>
+        </cmp:arentry>
+      </cond:islastmodified>
     </au:assertTrue>
   </target>
 
@@ -214,6 +247,17 @@
     </au:assertTrue>
   </target>
 
+  <target name="testCpioIsLastModified" depends="setUp">
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-08-19-05:49:21"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
+        <cmp:cpioentry name="asf-logo.gif">
+          <file file="${input}/test.cpio"/>
+        </cmp:cpioentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+
   <target name="testCoreZipHasMode" depends="setUp">
     <au:assertTrue>
       <cmp:hasmode mode="33188">
@@ -224,6 +268,17 @@
     </au:assertTrue>
   </target>
 
+  <target name="testCoreZipIsLastModified" depends="setUp">
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-08-19-05:49:20"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
+        <zipentry name="asf-logo.gif">
+          <file file="${input}/test.zip"/>
+        </zipentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+
   <target name="testAntlibZipHasMode" depends="setUp">
     <au:assertTrue>
       <cmp:hasmode mode="33188">
@@ -231,6 +286,17 @@
           <file file="${input}/test.zip"/>
         </cmp:zipentry>
       </cmp:hasmode>
+    </au:assertTrue>
+  </target>
+
+  <target name="testAntlibZipIsLastModified" depends="setUp">
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-08-19-05:49:20"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
+        <cmp:zipentry name="asf-logo.gif">
+          <file file="${input}/test.zip"/>
+        </cmp:zipentry>
+      </cond:islastmodified>
     </au:assertTrue>
   </target>
 
