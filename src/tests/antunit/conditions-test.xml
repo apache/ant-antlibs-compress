@@ -22,52 +22,214 @@
 
   <import file="antunit-base.xml" />
 
-  <target name="fail-testHasUserName">
+  <target name="setUp">
+    <mkdir dir="${input}"/>
+    <copy todir="${input}" file="../resources/asf-logo.gif"/>
+    <touch datetime="2009-08-19-05:49:21"
+           pattern="yyyy-MM-dd-HH:mm:ss"
+           file="${input}/asf-logo.gif"/>
+    <cmp:tar destfile="${input}/test.tar">
+      <cmp:tarfileset dir="${input}"
+                      username="user" group="group"
+                      uid="500" gid="600"
+                      filemode="644"
+                      includes="asf-logo.gif"/>
+    </cmp:tar>
+    <cmp:ar destfile="${input}/test.ar">
+      <cmp:arfileset dir="${input}"
+                     uid="500" gid="600"
+                     filemode="644"
+                     includes="asf-logo.gif"/>
+    </cmp:ar>
+    <cmp:cpio destfile="${input}/test.cpio">
+      <cmp:cpiofileset dir="${input}"
+                       uid="500" gid="600"
+                       filemode="644"
+                       includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <cmp:zip destfile="${input}/test.zip">
+      <cmp:zipfileset dir="${input}"
+                      filemode="644"
+                      includes="asf-logo.gif"/>
+    </cmp:zip>
+  </target>
+
+  <target name="fail-testCoreTarHasUserName" depends="setUp">
     <au:assertTrue>
-      <cmp:hasusername name="bodewig">
+      <cmp:hasusername name="user">
         <tarentry name="asf-logo.gif">
-          <file file="../resources/asf-logo.gif.tar"/>
+          <file file="${input}/test.tar"/>
         </tarentry>
       </cmp:hasusername>
     </au:assertTrue>
   </target>
 
-  <target name="fail-testHasGroupName">
+  <target name="fail-testCoreTarHasGroupName" depends="setUp">
     <au:assertTrue>
-      <cmp:hasgroupname name="bodewig">
+      <cmp:hasgroupname name="group">
         <tarentry name="asf-logo.gif">
-          <file file="../resources/asf-logo.gif.tar"/>
+          <file file="${input}/test.tar"/>
         </tarentry>
       </cmp:hasgroupname>
     </au:assertTrue>
   </target>
 
-  <target name="fail-testHasUserId">
+  <target name="fail-testCoreTarHasUserId" depends="setUp">
     <au:assertTrue>
       <cmp:hasuserid id="500">
         <tarentry name="asf-logo.gif">
-          <file file="../resources/asf-logo.gif.tar"/>
+          <file file="${input}/test.tar"/>
         </tarentry>
       </cmp:hasuserid>
     </au:assertTrue>
   </target>
 
-  <target name="fail-testHasGroupId">
+  <target name="fail-testCoreTarHasGroupId" depends="setUp">
     <au:assertTrue>
-      <cmp:hasgroupid id="500">
+      <cmp:hasgroupid id="600">
         <tarentry name="asf-logo.gif">
-          <file file="../resources/asf-logo.gif.tar"/>
+          <file file="${input}/test.tar"/>
         </tarentry>
       </cmp:hasgroupid>
     </au:assertTrue>
   </target>
 
-  <target name="testHasMode">
+  <target name="testCoreTarHasMode" depends="setUp">
     <au:assertTrue>
       <cmp:hasmode mode="33188">
         <tarentry name="asf-logo.gif">
-          <file file="../resources/asf-logo.gif.tar"/>
+          <file file="${input}/test.tar"/>
         </tarentry>
+      </cmp:hasmode>
+    </au:assertTrue>
+  </target>
+
+  <target name="fail-testAntlibTarHasUserName" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasusername name="user">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="${input}/test.tar"/>
+        </cmp:tarentry>
+      </cmp:hasusername>
+    </au:assertTrue>
+  </target>
+
+  <target name="fail-testAntlibTarHasGroupName" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasgroupname name="group">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="${input}/test.tar"/>
+        </cmp:tarentry>
+      </cmp:hasgroupname>
+    </au:assertTrue>
+  </target>
+
+  <target name="fail-testAntlibTarHasUserId" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasuserid id="500">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="${input}/test.tar"/>
+        </cmp:tarentry>
+      </cmp:hasuserid>
+    </au:assertTrue>
+  </target>
+
+  <target name="fail-testAntlibTarHasGroupId" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasgroupid id="600">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="${input}/test.tar"/>
+        </cmp:tarentry>
+      </cmp:hasgroupid>
+    </au:assertTrue>
+  </target>
+
+  <target name="testAntlibTarHasMode" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasmode mode="33188">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="${input}/test.tar"/>
+        </cmp:tarentry>
+      </cmp:hasmode>
+    </au:assertTrue>
+  </target>
+
+  <target name="fail-testArHasUserId" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasuserid id="500">
+        <cmp:arentry name="asf-logo.gif">
+          <file file="${input}/test.ar"/>
+        </cmp:arentry>
+      </cmp:hasuserid>
+    </au:assertTrue>
+  </target>
+
+  <target name="fail-testArHasGroupId" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasgroupid id="600">
+        <cmp:arentry name="asf-logo.gif">
+          <file file="${input}/test.ar"/>
+        </cmp:arentry>
+      </cmp:hasgroupid>
+    </au:assertTrue>
+  </target>
+
+  <target name="testArHasMode" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasmode mode="100644">
+        <cmp:arentry name="asf-logo.gif">
+          <file file="${input}/test.ar"/>
+        </cmp:arentry>
+      </cmp:hasmode>
+    </au:assertTrue>
+  </target>
+
+  <target name="fail-testCpioHasUserId" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasuserid id="500">
+        <cmp:cpioentry name="asf-logo.gif">
+          <file file="${input}/test.cpio"/>
+        </cmp:cpioentry>
+      </cmp:hasuserid>
+    </au:assertTrue>
+  </target>
+
+  <target name="fail-testCpioHasGroupId" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasgroupid id="600">
+        <cmp:cpioentry name="asf-logo.gif">
+          <file file="${input}/test.cpio"/>
+        </cmp:cpioentry>
+      </cmp:hasgroupid>
+    </au:assertTrue>
+  </target>
+
+  <target name="testCpioHasMode" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasmode mode="33188">
+        <cmp:cpioentry name="asf-logo.gif">
+          <file file="${input}/test.cpio"/>
+        </cmp:cpioentry>
+      </cmp:hasmode>
+    </au:assertTrue>
+  </target>
+
+  <target name="testCoreZipHasMode" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasmode mode="33188">
+        <zipentry name="asf-logo.gif">
+          <file file="${input}/test.zip"/>
+        </zipentry>
+      </cmp:hasmode>
+    </au:assertTrue>
+  </target>
+
+  <target name="testAntlibZipHasMode" depends="setUp">
+    <au:assertTrue>
+      <cmp:hasmode mode="33188">
+        <cmp:zipentry name="asf-logo.gif">
+          <file file="${input}/test.zip"/>
+        </cmp:zipentry>
       </cmp:hasmode>
     </au:assertTrue>
   </target>
