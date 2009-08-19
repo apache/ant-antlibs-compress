@@ -553,10 +553,14 @@ public abstract class ArchiveBase extends Task {
         public boolean hasDirModeBeenSet() { return dirMode >= 0; }
         public int getDirMode() { return dirMode; }
 
-        public boolean hasPrefix() { return prefix != null; }
+        public boolean hasPrefix() {
+            return prefix != null && !"".equals(prefix);
+        }
         public String getPrefix() { return prefix; }
 
-        public boolean hasFullpath() { return fullpath != null; }
+        public boolean hasFullpath() {
+            return fullpath != null && !"".equals(fullpath);
+        }
         public String getFullpath() { return fullpath; }
     }
 
