@@ -47,5 +47,26 @@
         </cmp:cpioentry>
       </cond:islastmodified>
     </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasuserid id="1000">
+        <cmp:cpioentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.cpio"/>
+        </cmp:cpioentry>
+      </cmp:hasuserid>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasgroupid id="1000">
+        <cmp:cpioentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.cpio"/>
+        </cmp:cpioentry>
+      </cmp:hasgroupid>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasmode mode="33188">
+        <cmp:cpioentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.cpio"/>
+        </cmp:cpioentry>
+      </cmp:hasmode>
+    </au:assertTrue>
   </target>
 </project>

@@ -47,5 +47,26 @@
         </cmp:arentry>
       </cond:islastmodified>
     </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasuserid id="1000">
+        <cmp:arentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.ar"/>
+        </cmp:arentry>
+      </cmp:hasuserid>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasgroupid id="1000">
+        <cmp:arentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.ar"/>
+        </cmp:arentry>
+      </cmp:hasgroupid>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasmode mode="100644">
+        <cmp:arentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.ar"/>
+        </cmp:arentry>
+      </cmp:hasmode>
+    </au:assertTrue>
   </target>
 </project>

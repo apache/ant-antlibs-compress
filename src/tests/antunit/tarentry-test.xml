@@ -78,5 +78,26 @@
         </cmp:tarentry>
       </cmp:hasgroupname>
     </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasuserid id="500">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.tar"/>
+        </cmp:tarentry>
+      </cmp:hasuserid>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasgroupid id="500">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.tar"/>
+        </cmp:tarentry>
+      </cmp:hasgroupid>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasmode mode="33188">
+        <cmp:tarentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.tar"/>
+        </cmp:tarentry>
+      </cmp:hasmode>
+    </au:assertTrue>
   </target>
 </project>

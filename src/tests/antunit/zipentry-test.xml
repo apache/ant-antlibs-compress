@@ -64,5 +64,12 @@
         </cmp:zipentry>
       </cond:islastmodified>
     </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasmode mode="33188">
+        <cmp:zipentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.zip"/>
+        </cmp:zipentry>
+      </cmp:hasmode>
+    </au:assertTrue>
   </target>
 </project>
