@@ -40,8 +40,8 @@
 
   <target name="testResourceProperties">
     <au:assertTrue>
-      <cond:islastmodified datetime="2009-07-31-20:11:13"
-                           pattern="yyyy-MM-dd-HH:mm:ss">
+      <cond:islastmodified datetime="2009-07-31-20:11:13 +0200"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
         <cmp:arentry name="asf-logo.gif">
           <file file="../resources/asf-logo.gif.ar"/>
         </cmp:arentry>
