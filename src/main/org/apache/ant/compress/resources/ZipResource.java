@@ -140,6 +140,10 @@ public class ZipResource extends CommonsCompressArchiveResource {
      * @return an array of the extra fields
      */
     public ZipExtraField[] getExtraFields() {
+        if (isReference()) {
+            return ((ZipResource) getCheckedRef()).getExtraFields();
+        }
+        checkEntry();
         if (extras == null) {
             return new ZipExtraField[0];
         }

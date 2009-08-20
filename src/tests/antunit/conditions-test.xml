@@ -54,7 +54,7 @@
     </cmp:zip>
   </target>
 
-  <target name="fail-testCoreTarHasUserName" depends="setUp">
+  <target name="testCoreTarHasUserName" depends="setUp">
     <au:assertTrue>
       <cmp:hasusername name="user">
         <tarentry name="asf-logo.gif">
@@ -64,7 +64,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testCoreTarHasGroupName" depends="setUp">
+  <target name="testCoreTarHasGroupName" depends="setUp">
     <au:assertTrue>
       <cmp:hasgroupname name="group">
         <tarentry name="asf-logo.gif">
@@ -74,7 +74,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testCoreTarHasUserId" depends="setUp">
+  <target name="testCoreTarHasUserId" depends="setUp">
     <au:assertTrue>
       <cmp:hasuserid id="500">
         <tarentry name="asf-logo.gif">
@@ -84,7 +84,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testCoreTarHasGroupId" depends="setUp">
+  <target name="testCoreTarHasGroupId" depends="setUp">
     <au:assertTrue>
       <cmp:hasgroupid id="600">
         <tarentry name="asf-logo.gif">
@@ -115,7 +115,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testAntlibTarHasUserName" depends="setUp">
+  <target name="testAntlibTarHasUserName" depends="setUp">
     <au:assertTrue>
       <cmp:hasusername name="user">
         <cmp:tarentry name="asf-logo.gif">
@@ -125,7 +125,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testAntlibTarHasGroupName" depends="setUp">
+  <target name="testAntlibTarHasGroupName" depends="setUp">
     <au:assertTrue>
       <cmp:hasgroupname name="group">
         <cmp:tarentry name="asf-logo.gif">
@@ -135,7 +135,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testAntlibTarHasUserId" depends="setUp">
+  <target name="testAntlibTarHasUserId" depends="setUp">
     <au:assertTrue>
       <cmp:hasuserid id="500">
         <cmp:tarentry name="asf-logo.gif">
@@ -145,7 +145,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testAntlibTarHasGroupId" depends="setUp">
+  <target name="testAntlibTarHasGroupId" depends="setUp">
     <au:assertTrue>
       <cmp:hasgroupid id="600">
         <cmp:tarentry name="asf-logo.gif">
@@ -176,7 +176,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testArHasUserId" depends="setUp">
+  <target name="testArHasUserId" depends="setUp">
     <au:assertTrue>
       <cmp:hasuserid id="500">
         <cmp:arentry name="asf-logo.gif">
@@ -186,7 +186,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testArHasGroupId" depends="setUp">
+  <target name="testArHasGroupId" depends="setUp">
     <au:assertTrue>
       <cmp:hasgroupid id="600">
         <cmp:arentry name="asf-logo.gif">
@@ -217,7 +217,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testCpioHasUserId" depends="setUp">
+  <target name="testCpioHasUserId" depends="setUp">
     <au:assertTrue>
       <cmp:hasuserid id="500">
         <cmp:cpioentry name="asf-logo.gif">
@@ -227,7 +227,7 @@
     </au:assertTrue>
   </target>
 
-  <target name="fail-testCpioHasGroupId" depends="setUp">
+  <target name="testCpioHasGroupId" depends="setUp">
     <au:assertTrue>
       <cmp:hasgroupid id="600">
         <cmp:cpioentry name="asf-logo.gif">

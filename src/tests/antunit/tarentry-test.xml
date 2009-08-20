@@ -64,7 +64,6 @@
         </cmp:tarentry>
       </cond:islastmodified>
     </au:assertTrue>
-    <!--
     <au:assertTrue>
       <cmp:hasusername name="bodewig">
         <cmp:tarentry name="asf-logo.gif">
@@ -79,6 +78,5 @@
         </cmp:tarentry>
       </cmp:hasgroupname>
     </au:assertTrue>
-    -->
   </target>
 </project>

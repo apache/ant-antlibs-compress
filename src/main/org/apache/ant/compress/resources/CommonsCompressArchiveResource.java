@@ -166,6 +166,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         if (isReference()) {
             return ((CommonsCompressArchiveResource) getCheckedRef()).getUid();
         }
+        checkEntry();
         return uid;
     }
 
@@ -176,7 +177,8 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         if (isReference()) {
             return ((CommonsCompressArchiveResource) getCheckedRef()).getGid();
         }
-        return uid;
+        checkEntry();
+        return gid;
     }
 
     /**

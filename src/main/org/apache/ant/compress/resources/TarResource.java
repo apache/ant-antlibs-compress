@@ -66,6 +66,7 @@ public class TarResource extends CommonsCompressArchiveResource {
         if (isReference()) {
             return ((TarResource) getCheckedRef()).getUserName();
         }
+        checkEntry();
         return userName;
     }
 
@@ -76,6 +77,7 @@ public class TarResource extends CommonsCompressArchiveResource {
         if (isReference()) {
             return ((TarResource) getCheckedRef()).getGroup();
         }
+        checkEntry();
         return groupName;
     }
 
