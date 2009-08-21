@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project default="antunit"
+         xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
+         xmlns:cmp="antlib:org.apache.ant.compress">
+
+  <import file="antunit-base.xml" />
+
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+    <property name="dest" location="${output}/test.zip"/>
+    <macrodef name="checkProperties">
+      <attribute name="dateTime"/>
+      <!-- FIXME -->
+      <attribute name="mode" default="0"/>
+      <sequential>
+        <au:assertTrue>
+          <cond:islastmodified datetime="@{dateTime}"
+                               pattern="yyyy-MM-dd-HH:mm:ss Z">
+            <cmp:zipentry name="asf-logo.gif">
+              <file file="${dest}"/>
+            </cmp:zipentry>
+          </cond:islastmodified>
+        </au:assertTrue>
+        <au:assertTrue>
+          <cmp:hasmode mode="@{mode}">
+            <cmp:zipentry name="asf-logo.gif">
+              <file file="${dest}"/>
+            </cmp:zipentry>
+          </cmp:hasmode>
+        </au:assertTrue>
+      </sequential>
+    </macrodef>
+  </target>
+
+  <target name="testPlainFileSet" depends="setUp">
+    <mkdir dir="${input}"/>
+    <copy todir="${input}" file="../resources/asf-logo.gif"/>
+    <touch datetime="2009-08-19-05:49:21 +0200"
+           pattern="yyyy-MM-dd-HH:mm:ss Z"
+           file="${input}/asf-logo.gif"/>
+    <cmp:zip destfile="${dest}">
+      <fileset dir="${input}" includes="asf-logo.gif"/>
+    </cmp:zip>
+    <checkProperties dateTime="2009-08-19-05:49:20 +0200"/>
+  </target>
+
+  <target name="testCoreZipFileSet" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <zipfileset src="../resources/asf-logo.gif.zip"
+                  includes="asf-logo.gif"/>
+    </cmp:zip>
+    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"/>
+  </target>
+
+  <target name="testAntlibZipFileSet" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"
+                      includes="asf-logo.gif"/>
+    </cmp:zip>
+    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"/>
+  </target>
+
+  <target name="testCoreTarFileSet" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <tarfileset src="../resources/asf-logo.gif.tar"
+                  includes="asf-logo.gif"/>
+    </cmp:zip>
+    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"
+                     />
+  </target>
+
+  <target name="testAntlibTarFileSet" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:tarfileset src="../resources/asf-logo.gif.tar"
+                      includes="asf-logo.gif"/>
+    </cmp:zip>
+    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"
+                     />
+  </target>
+
+  <target name="testArFileSet" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     includes="asf-logo.gif"/>
+    </cmp:zip>
+    <checkProperties dateTime="2009-07-31-20:11:12 +0200" mode="35108"
+                     />
+  </target>
+
+  <target name="testCpioFileSet" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:cpiofileset src="../resources/asf-logo.gif.cpio"
+                       includes="asf-logo.gif"/>
+    </cmp:zip>
+    <checkProperties dateTime="2009-07-31-20:11:12 +0200" mode="33188"
+                     />
+  </target>
+</project>
