@@ -28,7 +28,7 @@
     <macrodef name="checkProperties">
       <attribute name="dateTime"/>
       <!-- FIXME -->
-      <attribute name="mode" default="0"/>
+      <attribute name="mode" default="33188"/>
       <sequential>
         <au:assertTrue>
           <cond:islastmodified datetime="@{dateTime}"
