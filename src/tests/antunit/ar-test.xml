@@ -29,7 +29,7 @@
       <attribute name="dateTime"/>
       <attribute name="uid" default="0"/>
       <attribute name="gid" default="0"/>
-      <attribute name="mode" default="100644"/>
+      <attribute name="mode" default="33188"/>
       <sequential>
         <au:assertTrue>
           <cond:islastmodified datetime="@{dateTime}"
@@ -53,13 +53,13 @@
             </cmp:arentry>
           </cmp:hasgroupid>
         </au:assertTrue>
-        <!--au:assertTrue>
+        <au:assertTrue>
           <cmp:hasmode mode="@{mode}">
             <cmp:arentry name="asf-logo.gif">
               <file file="${dest}"/>
             </cmp:arentry>
           </cmp:hasmode>
-        </au:assertTrue-->
+        </au:assertTrue>
       </sequential>
     </macrodef>
   </target>
@@ -115,7 +115,7 @@
       <cmp:arfileset src="../resources/asf-logo.gif.ar"
                      includes="asf-logo.gif"/>
     </cmp:ar>
-    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="100644"
+    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="33188"
                      uid="1000" gid="1000"/>
   </target>
 

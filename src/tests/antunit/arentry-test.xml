@@ -62,7 +62,7 @@
       </cmp:hasgroupid>
     </au:assertTrue>
     <au:assertTrue>
-      <cmp:hasmode mode="100644">
+      <cmp:hasmode mode="33188">
         <cmp:arentry name="asf-logo.gif">
           <file file="../resources/asf-logo.gif.ar"/>
         </cmp:arentry>

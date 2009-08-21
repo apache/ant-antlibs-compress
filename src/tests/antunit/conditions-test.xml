@@ -198,7 +198,7 @@
 
   <target name="testArHasMode" depends="setUp">
     <au:assertTrue>
-      <cmp:hasmode mode="100644">
+      <cmp:hasmode mode="33188">
         <cmp:arentry name="asf-logo.gif">
           <file file="${input}/test.ar"/>
         </cmp:arentry>
