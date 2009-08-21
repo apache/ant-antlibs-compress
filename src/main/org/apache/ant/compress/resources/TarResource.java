@@ -47,6 +47,7 @@ public class TarResource extends CommonsCompressArchiveResource {
      */
     public TarResource(File a, TarArchiveEntry e) {
         super(new TarStreamFactory(), "tar", a, e);
+        setEntry(e);
     }
 
     /**
@@ -57,6 +58,7 @@ public class TarResource extends CommonsCompressArchiveResource {
      */
     public TarResource(Resource a, TarArchiveEntry e) {
         super(new TarStreamFactory(), "tar", a, e);
+        setEntry(e);
     }
 
     /**

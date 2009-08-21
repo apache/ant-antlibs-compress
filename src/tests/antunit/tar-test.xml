@@ -117,14 +117,14 @@
                      uid="500" gid="500" user="bodewig" group="bodewig"/>
   </target>
 
-  <!--target name="testAntlibTarFileSet" depends="setUp">
+  <target name="testAntlibTarFileSet" depends="setUp">
     <cmp:tar destfile="${dest}">
       <cmp:tarfileset src="../resources/asf-logo.gif.tar"
                       includes="asf-logo.gif"/>
     </cmp:tar>
     <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"
                      uid="500" gid="500" user="bodewig" group="bodewig"/>
-  </target-->
+  </target>
 
   <target name="testArFileSet" depends="setUp">
     <cmp:tar destfile="${dest}">

@@ -27,7 +27,6 @@
     <property name="dest" location="${output}/test.zip"/>
     <macrodef name="checkProperties">
       <attribute name="dateTime"/>
-      <!-- FIXME -->
       <attribute name="mode" default="33188"/>
       <sequential>
         <au:assertTrue>
