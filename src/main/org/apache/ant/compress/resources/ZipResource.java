@@ -38,7 +38,7 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 /**
  * A Resource representation of an entry in a zipfile.
  */
-public class ZipResource extends CommonsCompressArchiveResource {
+public final class ZipResource extends CommonsCompressArchiveResource {
 
     private ZipExtraField[] extras;
 
@@ -59,6 +59,7 @@ public class ZipResource extends CommonsCompressArchiveResource {
     public ZipResource(File z, String enc, ZipArchiveEntry e) {
         super(new ZipStreamFactory(), "zip", z, e);
         setEncoding(enc);
+        setEntry(e);
     }
 
     /**
@@ -71,6 +72,7 @@ public class ZipResource extends CommonsCompressArchiveResource {
     public ZipResource(Resource z, String enc, ZipArchiveEntry e) {
         super(new ZipStreamFactory(), "zip", z, e);
         setEncoding(enc);
+        setEntry(e);
     }
 
     /**

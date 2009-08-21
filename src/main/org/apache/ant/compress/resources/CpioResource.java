@@ -26,7 +26,7 @@ import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
 /**
  * A Resource representation of an entry in a cpio archive.
  */
-public class CpioResource extends CommonsCompressArchiveResource {
+public final class CpioResource extends CommonsCompressArchiveResource {
 
     /**
      * Default constructor.
@@ -43,6 +43,7 @@ public class CpioResource extends CommonsCompressArchiveResource {
      */
     public CpioResource(File a, CpioArchiveEntry e) {
         super(new CpioStreamFactory(), "cpio", a, e);
+        setEntry(e);
     }
 
     /**
@@ -53,6 +54,7 @@ public class CpioResource extends CommonsCompressArchiveResource {
      */
     public CpioResource(Resource a, CpioArchiveEntry e) {
         super(new CpioStreamFactory(), "cpio", a, e);
+        setEntry(e);
     }
 
 }

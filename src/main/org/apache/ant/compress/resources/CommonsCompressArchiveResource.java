@@ -67,7 +67,6 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         super(a, true);
         this.factory = factory;
         this.archiveType = archiveType;
-        setEntry(e);
     }
 
     /**
@@ -82,7 +81,6 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         super(a, true);
         this.factory = factory;
         this.archiveType = archiveType;
-        setEntry(e);
     }
 
     /**

@@ -27,7 +27,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 /**
  * A Resource representation of an entry in a tar archive.
  */
-public class TarResource extends CommonsCompressArchiveResource {
+public final class TarResource extends CommonsCompressArchiveResource {
 
     private String userName = "";
     private String groupName = "";

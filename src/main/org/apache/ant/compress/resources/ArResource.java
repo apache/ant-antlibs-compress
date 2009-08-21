@@ -26,7 +26,7 @@ import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 /**
  * A Resource representation of an entry in a ar archive.
  */
-public class ArResource extends CommonsCompressArchiveResource {
+public final class ArResource extends CommonsCompressArchiveResource {
 
     /**
      * Default constructor.
@@ -43,6 +43,7 @@ public class ArResource extends CommonsCompressArchiveResource {
      */
     public ArResource(File a, ArArchiveEntry e) {
         super(new ArStreamFactory(), "ar", a, e);
+        setEntry(e);
     }
 
     /**
@@ -53,6 +54,7 @@ public class ArResource extends CommonsCompressArchiveResource {
      */
     public ArResource(Resource a, ArArchiveEntry e) {
         super(new ArStreamFactory(), "ar", a, e);
+        setEntry(e);
     }
 
 }
