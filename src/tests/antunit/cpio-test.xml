@@ -24,6 +24,8 @@
 
   <target name="setUp">
     <mkdir dir="${output}"/>
+    <mkdir dir="${input}/subdir"/>
+    <copy todir="${input}/subdir" file="../resources/asf-logo.gif"/>
     <property name="dest" location="${output}/test.cpio"/>
     <macrodef name="checkProperties">
       <attribute name="dateTime"/>
@@ -126,5 +128,54 @@
     </cmp:cpio>
     <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="33188"
                      uid="1000" gid="1000"/>
+  </target>
+
+  <target name="testNoDirectoriesByDefault" depends="setUp">
+    <cmp:cpio destfile="${dest}">
+      <fileset dir="${input}"/>
+      <dirset dir="${input}"/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="subdir/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testWithDirectories" depends="setUp">
+    <cmp:cpio destfile="${dest}" filesonly="false">
+      <dirset dir="${input}" excludes="."/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="subdir/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testWithImplicitDirectories" depends="setUp">
+    <cmp:cpio destfile="${dest}" filesonly="false">
+      <fileset dir="${input}"/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceExists>
+      <cmp:cpioentry name="subdir/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
   </target>
 </project>

@@ -15,7 +15,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project name="antunit-base">
+<project name="antunit-base"
+         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
+         xmlns:au="antlib:org.apache.ant.antunit">
 
   <property name="input" location="${java.io.tmpdir}/testinput"/>
   <property name="output" location="${java.io.tmpdir}/testoutput"/>
@@ -32,4 +34,25 @@
     </antunit>
   </target>
 
+  <!-- should go into AntUnit -->
+  <macrodef name="assertResourceExists">
+    <element name="resource" implicit="true"/>
+    <sequential>
+      <au:assertTrue>
+        <cond:resourceexists>
+          <resource/>
+        </cond:resourceexists>
+      </au:assertTrue>
+    </sequential>
+  </macrodef>
+  <macrodef name="assertResourceDoesntExist">
+    <element name="resource" implicit="true"/>
+    <sequential>
+      <au:assertFalse>
+        <cond:resourceexists>
+          <resource/>
+        </cond:resourceexists>
+      </au:assertFalse>
+    </sequential>
+  </macrodef>
 </project>

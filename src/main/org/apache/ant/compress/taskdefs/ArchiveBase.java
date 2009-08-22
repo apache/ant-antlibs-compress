@@ -170,8 +170,13 @@ public abstract class ArchiveBase extends Task {
             ResourceCollectionFlags rcFlags = getFlags(rc);
             for (Iterator rs = rc.iterator(); rs.hasNext(); ) {
                 Resource r = (Resource) rs.next();
-                if (!filesOnly || !r.isDirectory()) {
-                    l.add(new ResourceWithFlags(r, rcFlags, getFlags(r)));
+                if ((!filesOnly || !r.isDirectory())) {
+                    ResourceWithFlags rwf =
+                        new ResourceWithFlags(r, rcFlags, getFlags(r));
+                    if (!"".equals(rwf.getName())
+                        && !"/".equals(rwf.getName())) {
+                        l.add(rwf);
+                    }
                 }
             }
         }
@@ -215,6 +220,8 @@ public abstract class ArchiveBase extends Task {
                     } finally {
                         fu.close(in);
                     }
+                } else {
+                    addedDirectories.add(src[i].getName());
                 }
                 out.closeArchiveEntry();
 
@@ -238,7 +245,9 @@ public abstract class ArchiveBase extends Task {
 
         String[] parentStack = FileUtils.getPathStack(r.getName());
         String currentParent = "";
-        for (int i = 0; i < parentStack.length - 1; i++) {
+        int skip = r.getName().endsWith("/") ? 2 : 1;
+        for (int i = 0; i < parentStack.length - skip; i++) {
+            if ("".equals(parentStack[i])) continue;
             currentParent += parentStack[i] + "/";
             if (directoriesAdded.add(currentParent)) {
                 Resource dir = new Resource(currentParent, true,
@@ -599,7 +608,7 @@ public abstract class ArchiveBase extends Task {
             }
             if (r.isDirectory() && !name.endsWith("/")) {
                 name += "/";
-            } else if (r.isDirectory() && name.endsWith("/")) {
+            } else if (!r.isDirectory() && name.endsWith("/")) {
                 name = name.substring(0, name.length() - 1);
             }
 
