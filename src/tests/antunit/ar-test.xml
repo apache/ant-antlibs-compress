@@ -25,6 +25,8 @@
   <target name="setUp">
     <mkdir dir="${output}"/>
     <property name="dest" location="${output}/test.ar"/>
+    <mkdir dir="${input}/s"/>
+    <copy todir="${input}/s" file="../resources/asf-logo.gif"/>
     <macrodef name="checkProperties">
       <attribute name="pattern" default="yyyy-MM-dd-HH:mm:ss Z"/>
       <attribute name="dateTime"/>
@@ -131,5 +133,38 @@
     </cmp:ar>
     <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="33188"
                      uid="1000" gid="1000"/>
+  </target>
+
+  <target name="testNoDirectoriesByDefault" depends="setUp">
+    <cmp:ar destfile="${dest}">
+      <fileset dir="${input}"/>
+      <dirset dir="${input}"/>
+    </cmp:ar>
+    <assertResourceExists>
+      <cmp:arentry name="s/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:arentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:arentry name="s/">
+        <file file="${dest}"/>
+      </cmp:arentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testWithDirectories" depends="setUp">
+    <au:expectfailure>
+      <cmp:ar destfile="${dest}" filesonly="false">
+        <dirset dir="${input}" excludes="."/>
+      </cmp:ar>
+    </au:expectfailure>
+  </target>
+
+  <target name="testWithImplicitDirectories" depends="setUp">
+    <au:expectfailure>
+      <cmp:ar destfile="${dest}" filesonly="false">
+        <fileset dir="${input}"/>
+      </cmp:ar>
+    </au:expectfailure>
   </target>
 </project>

@@ -25,6 +25,8 @@
   <target name="setUp">
     <mkdir dir="${output}"/>
     <property name="dest" location="${output}/test.zip"/>
+    <mkdir dir="${input}/subdir"/>
+    <copy todir="${input}/subdir" file="../resources/asf-logo.gif"/>
     <macrodef name="checkProperties">
       <attribute name="dateTime"/>
       <attribute name="mode" default="33188"/>
@@ -110,5 +112,54 @@
     </cmp:zip>
     <checkProperties dateTime="2009-07-31-20:11:12 +0200" mode="33188"
                      />
+  </target>
+
+  <target name="testNoDirectoriesByDefault" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <fileset dir="${input}"/>
+      <dirset dir="${input}"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="subdir/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:zipentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testWithDirectories" depends="setUp">
+    <cmp:zip destfile="${dest}" filesonly="false">
+      <dirset dir="${input}" excludes="."/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:zipentry name="subdir/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testWithImplicitDirectories" depends="setUp">
+    <cmp:zip destfile="${dest}" filesonly="false">
+      <fileset dir="${input}"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceExists>
+      <cmp:zipentry name="subdir/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
   </target>
 </project>
