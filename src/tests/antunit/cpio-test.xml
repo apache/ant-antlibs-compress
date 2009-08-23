@@ -161,6 +161,13 @@
         <file file="${dest}"/>
       </cmp:cpioentry>
     </assertResourceExists>
+    <au:assertTrue>
+      <cmp:hasmode mode="755">
+        <cmp:cpioentry name="subdir/">
+          <file file="${dest}"/>
+        </cmp:cpioentry>
+      </cmp:hasmode>
+    </au:assertTrue>
     <assertResourceDoesntExist>
       <cmp:cpioentry name="subdir/asf-logo.gif">
         <file file="${dest}"/>
@@ -177,10 +184,30 @@
         <file file="${dest}"/>
       </cmp:cpioentry>
     </assertResourceExists>
+    <au:assertTrue>
+      <cmp:hasmode mode="755">
+        <cmp:cpioentry name="subdir/">
+          <file file="${dest}"/>
+        </cmp:cpioentry>
+      </cmp:hasmode>
+    </au:assertTrue>
     <assertResourceExists>
       <cmp:cpioentry name="subdir/asf-logo.gif">
         <file file="${dest}"/>
       </cmp:cpioentry>
     </assertResourceExists>
+  </target>
+
+  <target name="testImplicitDirectoriesUsePermissions" depends="setUp">
+    <cmp:cpio destfile="${dest}" filesonly="false">
+      <zipfileset dir="${input}" dirmode="750"/>
+    </cmp:cpio>
+    <au:assertTrue>
+      <cmp:hasmode mode="750">
+        <cmp:cpioentry name="subdir/">
+          <file file="${dest}"/>
+        </cmp:cpioentry>
+      </cmp:hasmode>
+    </au:assertTrue>
   </target>
 </project>

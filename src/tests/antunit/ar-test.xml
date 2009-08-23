@@ -153,7 +153,8 @@
   </target>
 
   <target name="testWithDirectories" depends="setUp">
-    <au:expectfailure>
+    <au:expectfailure
+       message="ar archives cannot store directory entries">
       <cmp:ar destfile="${dest}" filesonly="false">
         <dirset dir="${input}" excludes="."/>
       </cmp:ar>
@@ -161,7 +162,17 @@
   </target>
 
   <target name="testWithImplicitDirectories" depends="setUp">
-    <au:expectfailure>
+    <au:expectfailure
+       message="ar archives cannot store directory entries">
+      <cmp:ar destfile="${dest}" filesonly="false">
+        <fileset dir="${input}"/>
+      </cmp:ar>
+    </au:expectfailure>
+  </target>
+
+  <target name="testImplicitDirectoriesUsePermissions" depends="setUp">
+    <au:expectfailure
+       message="ar archives cannot store directory entries">
       <cmp:ar destfile="${dest}" filesonly="false">
         <fileset dir="${input}"/>
       </cmp:ar>

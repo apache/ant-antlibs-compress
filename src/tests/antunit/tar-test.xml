@@ -177,6 +177,13 @@
         <file file="${dest}"/>
       </cmp:tarentry>
     </assertResourceExists>
+    <au:assertTrue>
+      <cmp:hasmode mode="755">
+        <cmp:tarentry name="subdir/">
+          <file file="${dest}"/>
+        </cmp:tarentry>
+      </cmp:hasmode>
+    </au:assertTrue>
     <assertResourceDoesntExist>
       <cmp:tarentry name="subdir/asf-logo.gif">
         <file file="${dest}"/>
@@ -193,10 +200,30 @@
         <file file="${dest}"/>
       </cmp:tarentry>
     </assertResourceExists>
+    <au:assertTrue>
+      <cmp:hasmode mode="755">
+        <cmp:tarentry name="subdir/">
+          <file file="${dest}"/>
+        </cmp:tarentry>
+      </cmp:hasmode>
+    </au:assertTrue>
     <assertResourceExists>
       <cmp:tarentry name="subdir/asf-logo.gif">
         <file file="${dest}"/>
       </cmp:tarentry>
     </assertResourceExists>
+  </target>
+
+  <target name="testImplicitDirectoriesUsePermissions" depends="setUp">
+    <cmp:tar destfile="${dest}" filesonly="false">
+      <zipfileset dir="${input}" dirmode="750"/>
+    </cmp:tar>
+    <au:assertTrue>
+      <cmp:hasmode mode="750">
+        <cmp:tarentry name="subdir/">
+          <file file="${dest}"/>
+        </cmp:tarentry>
+      </cmp:hasmode>
+    </au:assertTrue>
   </target>
 </project>
