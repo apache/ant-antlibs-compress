@@ -36,14 +36,13 @@ public class Zip extends ArchiveBase {
                     ent.setTime(r.getResource().getLastModified());
                     ent.setSize(isDir ? 0 : r.getResource().getSize());
 
-                    if (r.getResourceFlags().hasModeBeenSet()) {
-                        ent.setUnixMode(r.getResourceFlags().getMode());
-                    } else if (!isDir
-                               && r.getCollectionFlags().hasModeBeenSet()) {
+                    if (!isDir && r.getCollectionFlags().hasModeBeenSet()) {
                         ent.setUnixMode(r.getCollectionFlags().getMode());
                     } else if (isDir
                                && r.getCollectionFlags().hasDirModeBeenSet()) {
                         ent.setUnixMode(r.getCollectionFlags().getDirMode());
+                    } else if (r.getResourceFlags().hasModeBeenSet()) {
+                        ent.setUnixMode(r.getResourceFlags().getMode());
                     } else {
                         ent.setUnixMode(isDir
                                         ? ArchiveFileSet.DEFAULT_DIR_MODE

@@ -41,14 +41,13 @@ public class Cpio extends ArchiveBase {
                     int mode = isDir
                         ? ArchiveFileSet.DEFAULT_DIR_MODE
                         : ArchiveFileSet.DEFAULT_FILE_MODE;
-                    if (r.getResourceFlags().hasModeBeenSet()) {
-                        ent.setMode(r.getResourceFlags().getMode());
-                    } else if (!isDir
-                               && r.getCollectionFlags().hasModeBeenSet()) {
+                    if (!isDir && r.getCollectionFlags().hasModeBeenSet()) {
                         ent.setMode(r.getCollectionFlags().getMode());
                     } else if (isDir
                                && r.getCollectionFlags().hasDirModeBeenSet()) {
                         ent.setMode(r.getCollectionFlags().getDirMode());
+                    } else if (r.getResourceFlags().hasModeBeenSet()) {
+                        ent.setMode(r.getResourceFlags().getMode());
                     } else {
                         ent.setMode(mode);
                     }

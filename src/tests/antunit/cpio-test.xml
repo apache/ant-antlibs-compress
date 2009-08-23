@@ -210,4 +210,15 @@
       </cmp:hasmode>
     </au:assertTrue>
   </target>
+
+  <target name="testFileSetPermissionsWin" depends="setUp">
+    <cmp:cpio destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     filemode="600"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="600"
+                     uid="1000" gid="1000"/>
+  </target>
+
 </project>

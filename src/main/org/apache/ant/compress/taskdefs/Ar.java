@@ -43,14 +43,13 @@ public class Ar extends ArchiveBase {
                     }
 
                     int mode = ArchiveFileSet.DEFAULT_FILE_MODE;
-                    if (r.getResourceFlags().hasModeBeenSet()) {
-                        mode = r.getResourceFlags().getMode();
-                    } else if (!isDir
-                               && r.getCollectionFlags().hasModeBeenSet()) {
+                    if (!isDir && r.getCollectionFlags().hasModeBeenSet()) {
                         mode = r.getCollectionFlags().getMode();
                     } else if (isDir
                                && r.getCollectionFlags().hasDirModeBeenSet()) {
                         mode = r.getCollectionFlags().getDirMode();
+                    } else if (r.getResourceFlags().hasModeBeenSet()) {
+                        mode = r.getResourceFlags().getMode();
                     }
 
                     int uid = 0;
