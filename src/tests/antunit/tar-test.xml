@@ -32,7 +32,7 @@
       <attribute name="dateTime"/>
       <attribute name="uid" default="0"/>
       <attribute name="gid" default="0"/>
-      <attribute name="mode" default="33188"/>
+      <attribute name="mode" default="644"/>
       <attribute name="user" default=""/>
       <attribute name="group" default=""/>
       <sequential>
@@ -102,7 +102,7 @@
     </cmp:tar>
     <checkProperties dateTime="2001-11-19-15:34:20"
                      pattern="yyyy-MM-dd-HH:mm:ss"
-                     mode="33188"/>
+                     mode="644"/>
   </target>
 
   <target name="testAntlibZipFileSet" depends="setUp">
@@ -112,7 +112,7 @@
     </cmp:tar>
     <checkProperties dateTime="2001-11-19-15:34:20"
                      pattern="yyyy-MM-dd-HH:mm:ss"
-                     mode="33188"/>
+                     mode="644"/>
   </target>
 
   <target name="testCoreTarFileSet" depends="setUp">
@@ -120,7 +120,7 @@
       <tarfileset src="../resources/asf-logo.gif.tar"
                   includes="asf-logo.gif"/>
     </cmp:tar>
-    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"
+    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="644"
                      uid="500" gid="500" user="bodewig" group="bodewig"/>
   </target>
 
@@ -129,7 +129,7 @@
       <cmp:tarfileset src="../resources/asf-logo.gif.tar"
                       includes="asf-logo.gif"/>
     </cmp:tar>
-    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"
+    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="644"
                      uid="500" gid="500" user="bodewig" group="bodewig"/>
   </target>
 
@@ -138,7 +138,7 @@
       <cmp:arfileset src="../resources/asf-logo.gif.ar"
                      includes="asf-logo.gif"/>
     </cmp:tar>
-    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="33188"
+    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="644"
                      uid="1000" gid="1000"/>
   </target>
 
@@ -147,7 +147,7 @@
       <cmp:cpiofileset src="../resources/asf-logo.gif.cpio"
                        includes="asf-logo.gif"/>
     </cmp:tar>
-    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="33188"
+    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="644"
                      uid="1000" gid="1000"/>
   </target>
 

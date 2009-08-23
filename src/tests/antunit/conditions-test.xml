@@ -32,24 +32,24 @@
       <cmp:tarfileset dir="${input}"
                       username="user" group="group"
                       uid="500" gid="600"
-                      filemode="644"
+                      filemode="664"
                       includes="asf-logo.gif"/>
     </cmp:tar>
     <cmp:ar destfile="${input}/test.ar">
       <cmp:arfileset dir="${input}"
                      uid="500" gid="600"
-                     filemode="644"
+                     filemode="664"
                      includes="asf-logo.gif"/>
     </cmp:ar>
     <cmp:cpio destfile="${input}/test.cpio">
       <cmp:cpiofileset dir="${input}"
                        uid="500" gid="600"
-                       filemode="644"
+                       filemode="664"
                        includes="asf-logo.gif"/>
     </cmp:cpio>
     <cmp:zip destfile="${input}/test.zip">
       <cmp:zipfileset dir="${input}"
-                      filemode="644"
+                      filemode="664"
                       includes="asf-logo.gif"/>
     </cmp:zip>
   </target>
@@ -96,7 +96,7 @@
 
   <target name="testCoreTarHasMode" depends="setUp">
     <au:assertTrue>
-      <cmp:hasmode mode="33188">
+      <cmp:hasmode mode="664">
         <tarentry name="asf-logo.gif">
           <file file="${input}/test.tar"/>
         </tarentry>
@@ -157,7 +157,7 @@
 
   <target name="testAntlibTarHasMode" depends="setUp">
     <au:assertTrue>
-      <cmp:hasmode mode="33188">
+      <cmp:hasmode mode="664">
         <cmp:tarentry name="asf-logo.gif">
           <file file="${input}/test.tar"/>
         </cmp:tarentry>
@@ -198,7 +198,7 @@
 
   <target name="testArHasMode" depends="setUp">
     <au:assertTrue>
-      <cmp:hasmode mode="33188">
+      <cmp:hasmode mode="664">
         <cmp:arentry name="asf-logo.gif">
           <file file="${input}/test.ar"/>
         </cmp:arentry>
@@ -239,7 +239,7 @@
 
   <target name="testCpioHasMode" depends="setUp">
     <au:assertTrue>
-      <cmp:hasmode mode="33188">
+      <cmp:hasmode mode="664">
         <cmp:cpioentry name="asf-logo.gif">
           <file file="${input}/test.cpio"/>
         </cmp:cpioentry>
@@ -260,7 +260,7 @@
 
   <target name="testCoreZipHasMode" depends="setUp">
     <au:assertTrue>
-      <cmp:hasmode mode="33188">
+      <cmp:hasmode mode="664">
         <zipentry name="asf-logo.gif">
           <file file="${input}/test.zip"/>
         </zipentry>
@@ -281,7 +281,7 @@
 
   <target name="testAntlibZipHasMode" depends="setUp">
     <au:assertTrue>
-      <cmp:hasmode mode="33188">
+      <cmp:hasmode mode="664">
         <cmp:zipentry name="asf-logo.gif">
           <file file="${input}/test.zip"/>
         </cmp:zipentry>

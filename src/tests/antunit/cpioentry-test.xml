@@ -62,7 +62,7 @@
       </cmp:hasgroupid>
     </au:assertTrue>
     <au:assertTrue>
-      <cmp:hasmode mode="33188">
+      <cmp:hasmode mode="644">
         <cmp:cpioentry name="asf-logo.gif">
           <file file="../resources/asf-logo.gif.cpio"/>
         </cmp:cpioentry>

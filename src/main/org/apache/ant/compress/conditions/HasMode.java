@@ -39,8 +39,8 @@ public class HasMode extends ProjectComponent implements Condition {
         resource = r;
     }
 
-    public void setMode(int i) {
-        mode = i;
+    public void setMode(String octalString) {
+        mode = Integer.parseInt(octalString, 8);
     }
 
     protected void validate() throws BuildException {
