@@ -29,6 +29,9 @@ import org.apache.tools.ant.types.ArchiveFileSet;
  */
 public class Ar extends ArchiveBase {
 
+    private static final String NO_DIRS_MESSAGE = "ar archives cannot store"
+        + " directory entries";
+
     public Ar() {
         super(new ArStreamFactory(),
               new ArchiveBase.EntryBuilder() {
@@ -36,8 +39,7 @@ public class Ar extends ArchiveBase {
                     boolean isDir = r.getResource().isDirectory();
                     if (isDir) {
                         // REVISIT
-                        throw new BuildException("ar archives cannot store"
-                                                 + " directory entries");
+                        throw new BuildException(NO_DIRS_MESSAGE);
                     }
 
                     int mode = ArchiveFileSet.DEFAULT_FILE_MODE;
@@ -74,4 +76,9 @@ public class Ar extends ArchiveBase {
             });
     }
 
+    public void setFilesOnly(boolean b) {
+        if (!b) {
+            throw new BuildException(NO_DIRS_MESSAGE);
+        }
+    }
 }
