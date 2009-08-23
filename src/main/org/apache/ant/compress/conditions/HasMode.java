@@ -23,6 +23,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectComponent;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.types.resources.ArchiveResource;
+import org.apache.tools.zip.UnixStat;
 
 /**
  * Tests the mode of an archive entry.
@@ -54,6 +55,9 @@ public class HasMode extends ProjectComponent implements Condition {
     public boolean eval() throws BuildException {
         validate();
         int actual = resource.getMode();
+        if (mode <= UnixStat.PERM_MASK) {
+            actual &= UnixStat.PERM_MASK;
+        }
         log("expected: " + mode + ", actual: " + actual, Project.MSG_VERBOSE);
         return mode == actual;
     }
