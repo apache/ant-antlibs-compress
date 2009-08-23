@@ -28,6 +28,7 @@
     <copy todir="${input}/subdir" file="../resources/asf-logo.gif"/>
     <property name="dest" location="${output}/test.cpio"/>
     <macrodef name="checkProperties">
+      <attribute name="pattern" default="yyyy-MM-dd-HH:mm:ss Z"/>
       <attribute name="dateTime"/>
       <attribute name="uid" default="0"/>
       <attribute name="gid" default="0"/>
@@ -35,7 +36,7 @@
       <sequential>
         <au:assertTrue>
           <cond:islastmodified datetime="@{dateTime}"
-                               pattern="yyyy-MM-dd-HH:mm:ss Z">
+                               pattern="@{pattern}">
             <cmp:cpioentry name="asf-logo.gif">
               <file file="${dest}"/>
             </cmp:cpioentry>
@@ -83,7 +84,9 @@
       <zipfileset src="../resources/asf-logo.gif.zip"
                   includes="asf-logo.gif"/>
     </cmp:cpio>
-    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"/>
+    <checkProperties dateTime="2001-11-19-15:34:20"
+                     pattern="yyyy-MM-dd-HH:mm:ss"
+                     mode="33188"/>
   </target>
 
   <target name="testAntlibZipFileSet" depends="setUp">
@@ -91,7 +94,9 @@
       <cmp:zipfileset src="../resources/asf-logo.gif.zip"
                       includes="asf-logo.gif"/>
     </cmp:cpio>
-    <checkProperties dateTime="2001-11-19-15:34:20 +0100" mode="33188"/>
+    <checkProperties dateTime="2001-11-19-15:34:20"
+                     pattern="yyyy-MM-dd-HH:mm:ss"
+                     mode="33188"/>
   </target>
 
   <target name="testCoreTarFileSet" depends="setUp">
