@@ -21,7 +21,7 @@ package org.apache.ant.compress.taskdefs;
 import org.apache.ant.compress.util.CpioStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
-import org.apache.commons.compress.archivers.cpio.CpioConstants;
+import org.apache.tools.ant.types.ArchiveFileSet;
 
 /**
  * Creates cpio archives.
@@ -38,16 +38,17 @@ public class Cpio extends ArchiveBase {
                                              ? 0 : r.getResource().getSize());
                     ent.setTime(r.getResource().getLastModified() / 1000);
 
-                    int mode =
-                        isDir ? CpioConstants.C_ISDIR : CpioConstants.C_ISREG;
+                    int mode = isDir
+                        ? ArchiveFileSet.DEFAULT_DIR_MODE
+                        : ArchiveFileSet.DEFAULT_FILE_MODE;
                     if (r.getResourceFlags().hasModeBeenSet()) {
-                        ent.setMode(mode | r.getResourceFlags().getMode());
+                        ent.setMode(r.getResourceFlags().getMode());
                     } else if (!isDir
                                && r.getCollectionFlags().hasModeBeenSet()) {
-                        ent.setMode(mode | r.getCollectionFlags().getMode());
+                        ent.setMode(r.getCollectionFlags().getMode());
                     } else if (isDir
                                && r.getCollectionFlags().hasDirModeBeenSet()) {
-                        ent.setMode(mode | r.getCollectionFlags().getDirMode());
+                        ent.setMode(r.getCollectionFlags().getDirMode());
                     } else {
                         ent.setMode(mode);
                     }

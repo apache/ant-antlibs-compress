@@ -20,8 +20,8 @@ package org.apache.ant.compress.taskdefs;
 
 import org.apache.ant.compress.util.ZipStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.zip.UnixStat;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.tools.ant.types.ArchiveFileSet;
 
 /**
  * Creates zip archives.
@@ -44,12 +44,10 @@ public class Zip extends ArchiveBase {
                     } else if (isDir
                                && r.getCollectionFlags().hasDirModeBeenSet()) {
                         ent.setUnixMode(r.getCollectionFlags().getDirMode());
-                    } else if (isDir) {
-                        ent.setUnixMode(UnixStat.DIR_FLAG
-                                        | UnixStat.DEFAULT_DIR_PERM);
                     } else {
-                        ent.setUnixMode(UnixStat.FILE_FLAG
-                                        | UnixStat.DEFAULT_FILE_PERM);
+                        ent.setUnixMode(isDir
+                                        ? ArchiveFileSet.DEFAULT_DIR_MODE
+                                        : ArchiveFileSet.DEFAULT_FILE_MODE);
                     }
 
                     if (r.getResourceFlags().getZipExtraFields() != null) {

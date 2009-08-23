@@ -31,7 +31,7 @@
       <attribute name="dateTime"/>
       <attribute name="uid" default="0"/>
       <attribute name="gid" default="0"/>
-      <attribute name="mode" default="32768"/>
+      <attribute name="mode" default="33188"/>
       <sequential>
         <au:assertTrue>
           <cond:islastmodified datetime="@{dateTime}"

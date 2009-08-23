@@ -22,13 +22,12 @@ import org.apache.ant.compress.util.ArStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.ArchiveFileSet;
 
 /**
  * Creates ar archives.
  */
 public class Ar extends ArchiveBase {
-    /** stolen from ArEntry */
-    private static final int DEFAULT_MODE = 33188;
 
     public Ar() {
         super(new ArStreamFactory(),
@@ -41,7 +40,7 @@ public class Ar extends ArchiveBase {
                                                  + " directory entries");
                     }
 
-                    int mode = DEFAULT_MODE;
+                    int mode = ArchiveFileSet.DEFAULT_FILE_MODE;
                     if (r.getResourceFlags().hasModeBeenSet()) {
                         mode = r.getResourceFlags().getMode();
                     } else if (!isDir

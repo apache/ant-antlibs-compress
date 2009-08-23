@@ -22,6 +22,7 @@ import org.apache.ant.compress.util.TarStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarConstants;
+import org.apache.tools.ant.types.ArchiveFileSet;
 
 /**
  * Creates tar archives.
@@ -47,6 +48,10 @@ public class Tar extends ArchiveBase {
                     } else if (isDir
                                && r.getCollectionFlags().hasDirModeBeenSet()) {
                         ent.setMode(r.getCollectionFlags().getDirMode());
+                    } else {
+                        ent.setMode(isDir
+                                    ? ArchiveFileSet.DEFAULT_DIR_MODE
+                                    : ArchiveFileSet.DEFAULT_FILE_MODE);
                     }
 
                     if (r.getResourceFlags().hasUserIdBeenSet()) {
