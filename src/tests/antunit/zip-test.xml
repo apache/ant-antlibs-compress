@@ -201,8 +201,7 @@
                      filemode="600"
                      includes="asf-logo.gif"/>
     </cmp:zip>
-    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="600"
-                     uid="1000" gid="1000"/>
+    <checkProperties dateTime="2009-07-31-20:11:12 +0200" mode="600"/>
   </target>
 
 </project>
