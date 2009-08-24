@@ -221,4 +221,76 @@
                      uid="1000" gid="1000"/>
   </target>
 
+  <target name="testFullpath" depends="setUp">
+    <cmp:cpio destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithSlash" depends="setUp">
+    <cmp:cpio destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x/"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithBackslash" depends="setUp">
+    <cmp:cpio destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x\"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithoutSlash" depends="setUp">
+    <cmp:cpio destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
+
 </project>

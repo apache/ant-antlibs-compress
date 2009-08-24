@@ -204,4 +204,76 @@
     <checkProperties dateTime="2009-07-31-20:11:12 +0200" mode="600"/>
   </target>
 
+  <target name="testFullpath" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:zipentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithSlash" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x/"
+                     includes="asf-logo.gif"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:zipentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithBackslash" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x\"
+                     includes="asf-logo.gif"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:zipentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithoutSlash" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x"
+                     includes="asf-logo.gif"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:zipentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceDoesntExist>
+  </target>
+
 </project>

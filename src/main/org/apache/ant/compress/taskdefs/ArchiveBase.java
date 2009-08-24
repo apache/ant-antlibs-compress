@@ -170,7 +170,7 @@ public abstract class ArchiveBase extends Task {
             ResourceCollectionFlags rcFlags = getFlags(rc);
             for (Iterator rs = rc.iterator(); rs.hasNext(); ) {
                 Resource r = (Resource) rs.next();
-                if ((!filesOnly || !r.isDirectory())) {
+                if (!filesOnly || !r.isDirectory()) {
                     ResourceWithFlags rwf =
                         new ResourceWithFlags(r, rcFlags, getFlags(r));
                     if (!"".equals(rwf.getName())
@@ -426,6 +426,19 @@ public abstract class ArchiveBase extends Task {
     }
 
     /**
+     * Ensures a forward slash is used as file separator.
+     */
+    protected static String bendSlashesForward(String s) {
+        if (s != null) {
+            s = s.replace('\\', '/');
+            if (File.separatorChar != '/' && File.separatorChar != '\\') { 
+                s = s.replace(File.separatorChar, '/');
+            }
+        }
+        return s;
+    }
+
+    /**
      * Valid Modes for create/update/replace.
      */
     public static final class Mode extends EnumeratedAttribute {
@@ -555,8 +568,8 @@ public abstract class ArchiveBase extends Task {
                                        String userName, String groupName) {
             super(fileMode, uid, gid, userName, groupName);
             this.dirMode = dirMode;
-            this.prefix = prefix;
-            this.fullpath = fullpath;
+            this.prefix = bendSlashesForward(prefix);
+            this.fullpath = bendSlashesForward(fullpath);
         }
 
         public boolean hasDirModeBeenSet() { return dirMode >= 0; }
@@ -605,6 +618,7 @@ public abstract class ArchiveBase extends Task {
                     }
                     name = prefix + name;
                 }
+                name = bendSlashesForward(name);
             }
             if (r.isDirectory() && !name.endsWith("/")) {
                 name += "/";
