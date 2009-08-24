@@ -57,8 +57,8 @@
 
   <target name="testResourceProperties">
     <au:assertTrue>
-      <cond:islastmodified datetime="2001-11-19-15:34:20 +0100"
-                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+      <cond:islastmodified datetime="2001-11-19-15:34:20"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
         <cmp:zipentry name="asf-logo.gif">
           <file file="../resources/asf-logo.gif.zip"/>
         </cmp:zipentry>
