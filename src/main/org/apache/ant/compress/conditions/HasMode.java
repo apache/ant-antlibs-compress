@@ -58,7 +58,9 @@ public class HasMode extends ProjectComponent implements Condition {
         if (mode <= UnixStat.PERM_MASK) {
             actual &= UnixStat.PERM_MASK;
         }
-        log("expected: " + mode + ", actual: " + actual, Project.MSG_VERBOSE);
+        log("expected: " + mode + " (octal " + Integer.toString(mode, 8)
+            + "), actual: " + actual + " (octal " + Integer.toString(actual, 8)
+            + ")", Project.MSG_VERBOSE);
         return mode == actual;
     }
 }
