@@ -65,7 +65,7 @@ import org.apache.tools.zip.UnixStat;
  * Base implementation of tasks creating archives.
  */
 public abstract class ArchiveBase extends Task {
-    private final StreamFactory factory;
+    private StreamFactory factory;
     private EntryBuilder builder;
 
     private Resource dest;
@@ -77,7 +77,9 @@ public abstract class ArchiveBase extends Task {
     private boolean roundUp = true;
     private boolean preserveLeadingSlashes = false;
 
-    protected ArchiveBase(StreamFactory factory) {
+    protected ArchiveBase() {}
+
+    protected final void setFactory(StreamFactory factory) {
         this.factory = factory;
     }
 
@@ -196,6 +198,10 @@ public abstract class ArchiveBase extends Task {
      * Argument validation.
      */
     protected void validate() throws BuildException {
+        if (factory == null) {
+            throw new BuildException("subclass didn't provide a factory"
+                                     + " instance");
+        }
         if (builder == null) {
             throw new BuildException("subclass didn't provide a builder"
                                      + " instance");

@@ -354,4 +354,26 @@
       </cmp:zipentry>
     </assertResourceDoesntExist>
   </target>
+
+  <target name="testLevel" depends="setUp">
+    <cmp:zip destfile="${output}/compressed.zip">
+      <file file="${ant.file}"/>
+    </cmp:zip>
+    <cmp:zip destfile="${output}/uncompressed.zip" level="0">
+      <file file="${ant.file}"/>
+    </cmp:zip>
+    <au:assertTrue>
+      <resourcecount count="2">
+        <fileset dir="${output}"/>
+      </resourcecount>
+    </au:assertTrue>
+    <au:assertTrue>
+      <resourcecount count="1">
+        <fileset dir="${output}">
+          <size value="5" units="Ki" when="less"/>
+        </fileset>
+      </resourcecount>
+    </au:assertTrue>
+  </target>
+
 </project>

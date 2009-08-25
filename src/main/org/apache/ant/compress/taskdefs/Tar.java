@@ -29,7 +29,7 @@ import org.apache.tools.ant.types.ArchiveFileSet;
  */
 public class Tar extends ArchiveBase {
     public Tar() {
-        super(new TarStreamFactory());
+        setFactory(new TarStreamFactory());
         setBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {

@@ -18,17 +18,35 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.Deflater;
+
 import org.apache.ant.compress.util.ZipStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.tools.ant.types.ArchiveFileSet;
 
 /**
  * Creates zip archives.
  */
 public class Zip extends ArchiveBase {
+    private int level = Deflater.DEFAULT_COMPRESSION;
+
     public Zip() {
-        super(new ZipStreamFactory());
+        setFactory(new ZipStreamFactory() {
+                public ArchiveOutputStream getArchiveStream(OutputStream stream,
+                                                            String encoding)
+        throws IOException {
+                    ZipArchiveOutputStream o =
+                        (ZipArchiveOutputStream) super.getArchiveStream(stream,
+                                                                        encoding);
+                    o.setLevel(level);
+                    return o;
+                }
+            });
         setBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
@@ -60,4 +78,12 @@ public class Zip extends ArchiveBase {
             });
     }
 
+    /**
+     * Set the compression level to use.  Default is
+     * Deflater.DEFAULT_COMPRESSION.
+     * @param level compression level.
+     */
+    public void setLevel(int level) {
+        this.level = level;
+    }
 }

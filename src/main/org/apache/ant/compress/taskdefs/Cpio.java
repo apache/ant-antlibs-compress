@@ -28,7 +28,7 @@ import org.apache.tools.ant.types.ArchiveFileSet;
  */
 public class Cpio extends ArchiveBase {
     public Cpio() {
-        super(new CpioStreamFactory());
+        setFactory(new CpioStreamFactory());
         setBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {

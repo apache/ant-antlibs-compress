@@ -33,7 +33,7 @@ public class Ar extends ArchiveBase {
         + " directory entries";
 
     public Ar() {
-        super(new ArStreamFactory());
+        setFactory(new ArStreamFactory());
         setBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
