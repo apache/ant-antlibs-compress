@@ -376,4 +376,12 @@
     </au:assertTrue>
   </target>
 
+  <target name="testComment" depends="setUp">
+    <cmp:zip destfile="${output}/test.zip" comment="This is a comment">
+      <file file="${ant.file}"/>
+    </cmp:zip>
+    <!-- not sure how to test this without a new condition, checked
+         with command line zip -->
+  </target>
+
 </project>

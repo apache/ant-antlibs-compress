@@ -34,6 +34,7 @@ import org.apache.tools.ant.types.ArchiveFileSet;
  */
 public class Zip extends ArchiveBase {
     private int level = Deflater.DEFAULT_COMPRESSION;
+    private String comment = "";
 
     public Zip() {
         setFactory(new ZipStreamFactory() {
@@ -44,6 +45,7 @@ public class Zip extends ArchiveBase {
                         (ZipArchiveOutputStream) super.getArchiveStream(stream,
                                                                         encoding);
                     o.setLevel(level);
+                    o.setComment(comment);
                     return o;
                 }
             });
@@ -85,5 +87,14 @@ public class Zip extends ArchiveBase {
      */
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    /**
+     * Comment to use for archive.
+     *
+     * @param comment The content of the comment.
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
