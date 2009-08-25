@@ -293,4 +293,32 @@
     </assertResourceDoesntExist>
   </target>
 
+  <target name="-setUp0Permissions" depends="setUp">
+    <property name="src" location="${input}/src.ar"/>
+    <cmp:ar destfile="${src}" preserve0permissions="true">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     filemode="0"
+                     includes="asf-logo.gif"/>
+    </cmp:ar>
+  </target>
+
+  <target name="test0PermissionsGetReplaced"
+                     depends="-setUp0Permissions">
+    <cmp:cpio destfile="${dest}">
+      <cmp:arfileset src="${src}"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="644"
+                     uid="1000" gid="1000"/>
+  </target>
+
+  <target name="testPreserve0Permissions"
+                     depends="-setUp0Permissions">
+    <cmp:cpio destfile="${dest}" preserve0permissions="true">
+      <cmp:arfileset src="${src}"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="0"
+                     uid="1000" gid="1000"/>
+  </target>
 </project>

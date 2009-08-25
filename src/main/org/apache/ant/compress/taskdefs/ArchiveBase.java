@@ -59,6 +59,7 @@ import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.ArchiveResource;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.tools.zip.UnixStat;
 
 /**
  * Base implementation of tasks creating archives.
@@ -72,6 +73,7 @@ public abstract class ArchiveBase extends Task {
     private Mode mode = new Mode();
     private String encoding;
     private boolean filesOnly = true;
+    private boolean preserve0permissions = false;
 
     protected ArchiveBase(StreamFactory factory, EntryBuilder builder) {
         this.factory = factory;
@@ -122,6 +124,15 @@ public abstract class ArchiveBase extends Task {
      */
     public void setFilesOnly(boolean b) {
         filesOnly = b;
+    }
+
+    /**
+     * Whether 0 permissions read from an archive should be considered
+     * real permissions (that should be preserved) or missing
+     * permissions (which is the default).
+     */
+    public void setPreserve0permissions(boolean b) {
+        preserve0permissions = b;
     }
 
     public void execute() {
@@ -428,7 +439,7 @@ public abstract class ArchiveBase extends Task {
     /**
      * Ensures a forward slash is used as file separator.
      */
-    protected static String bendSlashesForward(String s) {
+    protected String bendSlashesForward(String s) {
         if (s != null) {
             s = s.replace('\\', '/');
             if (File.separatorChar != '/' && File.separatorChar != '\\') { 
@@ -472,8 +483,9 @@ public abstract class ArchiveBase extends Task {
      * Various flags a (archive) resource may hold in addition to
      * being a plain resource.
      */
-    public static class ResourceFlags {
+    public class ResourceFlags {
         private final int mode;
+        private final boolean modeSet;
         private final int gid;
         private final int uid;
         private final ZipExtraField[] extraFields;
@@ -511,9 +523,11 @@ public abstract class ArchiveBase extends Task {
             this.uid = uid;
             this.userName = userName;
             this.groupName = groupName;
+            int m = mode & UnixStat.PERM_MASK;
+            modeSet = mode >= 0 && (m > 0 || (m == 0 && preserve0permissions));
         }
 
-        public boolean hasModeBeenSet() { return mode >= 0; }
+        public boolean hasModeBeenSet() { return modeSet; }
         public int getMode() { return mode; }
 
         public ZipExtraField[] getZipExtraFields() { return extraFields; }
@@ -538,7 +552,7 @@ public abstract class ArchiveBase extends Task {
     /**
      * Various flags a (archive) resource collection may hold.
      */
-    public static class ResourceCollectionFlags extends ResourceFlags {
+    public class ResourceCollectionFlags extends ResourceFlags {
         private final String prefix, fullpath;
         private final int dirMode;
 
@@ -589,7 +603,7 @@ public abstract class ArchiveBase extends Task {
     /**
      * Binds a resource to additional data that may be present.
      */
-    public static class ResourceWithFlags {
+    public class ResourceWithFlags {
         private final Resource r;
         private final ResourceCollectionFlags rcFlags;
         private final ResourceFlags rFlags;
