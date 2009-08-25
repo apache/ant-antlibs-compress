@@ -66,7 +66,7 @@ import org.apache.tools.zip.UnixStat;
  */
 public abstract class ArchiveBase extends Task {
     private final StreamFactory factory;
-    private final EntryBuilder builder;
+    private EntryBuilder builder;
 
     private Resource dest;
     private List/*<ResourceCollection>*/ sources = new ArrayList();
@@ -74,9 +74,13 @@ public abstract class ArchiveBase extends Task {
     private String encoding;
     private boolean filesOnly = true;
     private boolean preserve0permissions = false;
+    private boolean roundUp = true;
 
-    protected ArchiveBase(StreamFactory factory, EntryBuilder builder) {
+    protected ArchiveBase(StreamFactory factory) {
         this.factory = factory;
+    }
+
+    protected final void setBuilder(EntryBuilder builder) {
         this.builder = builder;
     }
 
@@ -135,6 +139,25 @@ public abstract class ArchiveBase extends Task {
         preserve0permissions = b;
     }
 
+    /**
+     * Whether the file modification times will be rounded up to the
+     * next timestamp (second or even second depending on the archive
+     * format).
+     *
+     * <p>Zip archives store file modification times with a
+     * granularity of two seconds, ar, tar and cpio use a granularity
+     * of one second.  Times will either be rounded up or down.  If
+     * you round down, the archive will always seem out-of-date when
+     * you rerun the task, so the default is to round up.  Rounding up
+     * may lead to a different type of problems like JSPs inside a web
+     * archive that seem to be slightly more recent than precompiled
+     * pages, rendering precompilation useless.</p>
+     * @param r a <code>boolean</code> value
+     */
+    public void setRoundUp(boolean r) {
+        roundUp = r;
+    }
+
     public void execute() {
         validate();
         if (!dest.isExists()) {
@@ -162,6 +185,10 @@ public abstract class ArchiveBase extends Task {
      * Argument validation.
      */
     protected void validate() throws BuildException {
+        if (builder == null) {
+            throw new BuildException("subclass didn't provide a builder"
+                                     + " instance");
+        }
         if (dest == null) {
             throw new BuildException("must provide a destination resource");
         }
@@ -447,6 +474,17 @@ public abstract class ArchiveBase extends Task {
             }
         }
         return s;
+    }
+
+    /**
+     * Modify last modified timestamp based on the roundup attribute.
+     *
+     * @param millis the timestamp
+     * @param granularity the granularity of timestamps in the archive
+     * format in millis
+     */
+    protected long round(long millis, long granularity) {
+        return roundUp ? millis + granularity - 1 : millis;
     }
 
     /**

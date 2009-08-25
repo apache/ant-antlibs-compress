@@ -29,7 +29,8 @@ import org.apache.tools.ant.types.ArchiveFileSet;
  */
 public class Tar extends ArchiveBase {
     public Tar() {
-        super(new TarStreamFactory(),
+        super(new TarStreamFactory());
+        setBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
@@ -37,7 +38,8 @@ public class Tar extends ArchiveBase {
                         new TarArchiveEntry(r.getName(),
                                             isDir ? TarConstants.LF_DIR
                                             : TarConstants.LF_NORMAL);
-                    ent.setModTime(r.getResource().getLastModified());
+                    ent.setModTime(round(r.getResource().getLastModified(),
+                                         1000));
                     ent.setSize(isDir ? 0 : r.getResource().getSize());
 
                     if (!isDir && r.getCollectionFlags().hasModeBeenSet()) {

@@ -28,7 +28,8 @@ import org.apache.tools.ant.types.ArchiveFileSet;
  */
 public class Cpio extends ArchiveBase {
     public Cpio() {
-        super(new CpioStreamFactory(),
+        super(new CpioStreamFactory());
+        setBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
@@ -36,7 +37,8 @@ public class Cpio extends ArchiveBase {
                         new CpioArchiveEntry(r.getName(),
                                              isDir
                                              ? 0 : r.getResource().getSize());
-                    ent.setTime(r.getResource().getLastModified() / 1000);
+                    ent.setTime(round(r.getResource().getLastModified(), 1000)
+                                / 1000);
 
                     int mode = isDir
                         ? ArchiveFileSet.DEFAULT_DIR_MODE

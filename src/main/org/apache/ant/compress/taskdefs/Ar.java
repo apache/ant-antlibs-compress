@@ -33,7 +33,8 @@ public class Ar extends ArchiveBase {
         + " directory entries";
 
     public Ar() {
-        super(new ArStreamFactory(),
+        super(new ArStreamFactory());
+        setBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
@@ -69,7 +70,8 @@ public class Ar extends ArchiveBase {
                     return new ArArchiveEntry(r.getName(),
                                               r.getResource().getSize(),
                                               uid, gid, mode,
-                                              r.getResource().getLastModified()
+                                              round(r.getResource()
+                                                    .getLastModified(), 1000)
                                               / 1000);
                 }
             });

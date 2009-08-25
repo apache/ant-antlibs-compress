@@ -270,7 +270,7 @@
 
   <target name="testCoreZipIsLastModified" depends="setUp">
     <au:assertTrue>
-      <cond:islastmodified datetime="2009-08-19-05:49:20"
+      <cond:islastmodified datetime="2009-08-19-05:49:22"
                            pattern="yyyy-MM-dd-HH:mm:ss">
         <zipentry name="asf-logo.gif">
           <file file="${input}/test.zip"/>
@@ -291,7 +291,7 @@
 
   <target name="testAntlibZipIsLastModified" depends="setUp">
     <au:assertTrue>
-      <cond:islastmodified datetime="2009-08-19-05:49:20"
+      <cond:islastmodified datetime="2009-08-19-05:49:22"
                            pattern="yyyy-MM-dd-HH:mm:ss">
         <cmp:zipentry name="asf-logo.gif">
           <file file="${input}/test.zip"/>

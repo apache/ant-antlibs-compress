@@ -28,12 +28,13 @@ import org.apache.tools.ant.types.ArchiveFileSet;
  */
 public class Zip extends ArchiveBase {
     public Zip() {
-        super(new ZipStreamFactory(),
+        super(new ZipStreamFactory());
+        setBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
                     ZipArchiveEntry ent = new ZipArchiveEntry(r.getName());
-                    ent.setTime(r.getResource().getLastModified());
+                    ent.setTime(round(r.getResource().getLastModified(), 2000));
                     ent.setSize(isDir ? 0 : r.getResource().getSize());
 
                     if (!isDir && r.getCollectionFlags().hasModeBeenSet()) {
