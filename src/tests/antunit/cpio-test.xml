@@ -321,4 +321,40 @@
     <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="0"
                      uid="1000" gid="1000"/>
   </target>
+
+  <target name="testRemoveLeadingSlashes" depends="setUp">
+    <cmp:cpio destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="/logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="/logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPreserveLeadingSlashes" depends="setUp">
+    <cmp:cpio destfile="${dest}" preserveleadingslashes="true">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="/logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:cpio>
+    <assertResourceExists>
+      <cmp:cpioentry name="/logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
 </project>

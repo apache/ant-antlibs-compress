@@ -75,6 +75,7 @@ public abstract class ArchiveBase extends Task {
     private boolean filesOnly = true;
     private boolean preserve0permissions = false;
     private boolean roundUp = true;
+    private boolean preserveLeadingSlashes = false;
 
     protected ArchiveBase(StreamFactory factory) {
         this.factory = factory;
@@ -156,6 +157,16 @@ public abstract class ArchiveBase extends Task {
      */
     public void setRoundUp(boolean r) {
         roundUp = r;
+    }
+
+    /**
+     * Flag to indicates whether leading `/'s should
+     * be preserved in the file names.
+     * Optional, default is <code>false</code>.
+     * @param b the leading slashes flag.
+     */
+    public void setPreserveLeadingSlashes(boolean b) {
+        this.preserveLeadingSlashes = b;
     }
 
     public void execute() {
@@ -464,13 +475,17 @@ public abstract class ArchiveBase extends Task {
     }
 
     /**
-     * Ensures a forward slash is used as file separator.
+     * Ensures a forward slash is used as file separator and strips
+     * leading slashes if preserveLeadingSlashes is false.
      */
     protected String bendSlashesForward(String s) {
         if (s != null) {
             s = s.replace('\\', '/');
             if (File.separatorChar != '/' && File.separatorChar != '\\') { 
                 s = s.replace(File.separatorChar, '/');
+            }
+            while (!preserveLeadingSlashes && s.startsWith("/")) {
+                s = s.substring(1);
             }
         }
         return s;

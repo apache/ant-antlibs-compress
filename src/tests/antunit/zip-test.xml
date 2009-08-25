@@ -319,4 +319,39 @@
                      />
   </target>
 
+  <target name="testRemoveLeadingSlashes" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="/logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:zipentry name="/logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPreserveLeadingSlashes" depends="setUp">
+    <cmp:zip destfile="${dest}" preserveleadingslashes="true">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="/logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="/logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:zipentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceDoesntExist>
+  </target>
 </project>

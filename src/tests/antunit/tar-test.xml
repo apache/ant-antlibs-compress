@@ -337,4 +337,42 @@
     <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="0"
                      uid="1000" gid="1000"/>
   </target>
+
+  <target name="testRemoveLeadingSlashes" depends="setUp">
+    <cmp:tar destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="/logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:tar>
+    <assertResourceExists>
+      <cmp:tarentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:tarentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:tarentry name="/logo.gif">
+        <file file="${dest}"/>
+      </cmp:tarentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <!-- doesn't work because TarEntry strips leading slashes, will be
+       fixed for Apache Commons Compress 1.1 -->
+  <target name="fail-testPreserveLeadingSlashes" depends="setUp">
+    <cmp:tar destfile="${dest}" preserveleadingslashes="true">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="/logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:tar>
+    <assertResourceExists>
+      <cmp:tarentry name="/logo.gif">
+        <file file="${dest}"/>
+      </cmp:tarentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:tarentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:tarentry>
+    </assertResourceDoesntExist>
+  </target>
 </project>
