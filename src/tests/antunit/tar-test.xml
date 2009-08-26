@@ -375,4 +375,32 @@
       </cmp:tarentry>
     </assertResourceDoesntExist>
   </target>
+
+  <target name="testAddDuplicates" depends="setUp">
+    <cmp:tar destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+    </cmp:tar>
+    <au:assertLogContains text="duplicate entry asf-logo.gif found, adding."
+                          level="verbose"/>
+  </target>
+
+  <target name="testPreserveDuplicates" depends="setUp">
+    <cmp:tar destfile="${dest}" duplicate="preserve">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+    </cmp:tar>
+    <au:assertLogContains text="asf-logo.gif already added, skipping."
+                          level="verbose"/>
+  </target>
+
+  <target name="testFailDuplicates" depends="setUp">
+    <au:expectfailure
+       message="Duplicate entry asf-logo.gif was found and the duplicate attribute is 'fail'.">
+      <cmp:tar destfile="${dest}" duplicate="fail">
+        <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+        <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+      </cmp:tar>
+    </au:expectfailure>
+  </target>
 </project>

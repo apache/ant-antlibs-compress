@@ -357,4 +357,33 @@
       </cmp:cpioentry>
     </assertResourceDoesntExist>
   </target>
+
+  <!-- ACC 1.0 CPIO prevents duplicate entries -->
+  <target name="fail-testAddDuplicates" depends="setUp">
+    <cmp:cpio destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+    </cmp:cpio>
+    <au:assertLogContains text="duplicate entry asf-logo.gif found, adding."
+                          level="verbose"/>
+  </target>
+
+  <target name="testPreserveDuplicates" depends="setUp">
+    <cmp:cpio destfile="${dest}" duplicate="preserve">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+    </cmp:cpio>
+    <au:assertLogContains text="asf-logo.gif already added, skipping."
+                          level="verbose"/>
+  </target>
+
+  <target name="testFailDuplicates" depends="setUp">
+    <au:expectfailure
+       message="Duplicate entry asf-logo.gif was found and the duplicate attribute is 'fail'.">
+      <cmp:cpio destfile="${dest}" duplicate="fail">
+        <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+        <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+      </cmp:cpio>
+    </au:expectfailure>
+  </target>
 </project>

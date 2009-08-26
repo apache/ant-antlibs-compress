@@ -384,4 +384,31 @@
          with command line zip -->
   </target>
 
+  <target name="testAddDuplicates" depends="setUp">
+    <cmp:zip destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+    </cmp:zip>
+    <au:assertLogContains text="duplicate entry asf-logo.gif found, adding."
+                          level="verbose"/>
+  </target>
+
+  <target name="testPreserveDuplicates" depends="setUp">
+    <cmp:zip destfile="${dest}" duplicate="preserve">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+    </cmp:zip>
+    <au:assertLogContains text="asf-logo.gif already added, skipping."
+                          level="verbose"/>
+  </target>
+
+  <target name="testFailDuplicates" depends="setUp">
+    <au:expectfailure
+       message="Duplicate entry asf-logo.gif was found and the duplicate attribute is 'fail'.">
+      <cmp:zip destfile="${dest}" duplicate="fail">
+        <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+        <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+      </cmp:zip>
+    </au:expectfailure>
+  </target>
 </project>

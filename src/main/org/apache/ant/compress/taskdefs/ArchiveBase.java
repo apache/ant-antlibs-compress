@@ -76,6 +76,7 @@ public abstract class ArchiveBase extends Task {
     private boolean preserve0permissions = false;
     private boolean roundUp = true;
     private boolean preserveLeadingSlashes = false;
+    private Duplicate duplicate = new Duplicate();
 
     protected ArchiveBase() {}
 
@@ -171,6 +172,19 @@ public abstract class ArchiveBase extends Task {
         this.preserveLeadingSlashes = b;
     }
 
+    /**
+     * Sets behavior for when a duplicate file is about to be added -
+     * one of <code>add</code>, <code>preserve</code> or <code>fail</code>.
+     * Possible values are: <code>add</code> (keep both
+     * of the files); <code>preserve</code> (keep the first version
+     * of the file found); <code>fail</code> halt a problem
+     * Default for is <code>add</code>
+     * @param df a <code>Duplicate</code> enumerated value
+     */
+    public void setDuplicate(Duplicate df) {
+        duplicate = df;
+    }
+
     public void execute() {
         validate();
         if (!dest.isExists()) {
@@ -219,7 +233,8 @@ public abstract class ArchiveBase extends Task {
      * the archive.
      */
     protected ResourceWithFlags[] findSources() throws IOException {
-        ArrayList l = new ArrayList();
+        List/*<ResourceWithFlags>*/ l = new ArrayList/*<ResourceWithFlags>*/();
+        Set/*<String>*/ addedNames = new HashSet/*<String>*/();
         for (Iterator rcs = sources.iterator(); rcs.hasNext(); ) {
             ResourceCollection rc = (ResourceCollection) rcs.next();
             ResourceCollectionFlags rcFlags = getFlags(rc);
@@ -228,9 +243,12 @@ public abstract class ArchiveBase extends Task {
                 if (!filesOnly || !r.isDirectory()) {
                     ResourceWithFlags rwf =
                         new ResourceWithFlags(r, rcFlags, getFlags(r));
-                    if (!"".equals(rwf.getName())
-                        && !"/".equals(rwf.getName())) {
-                        l.add(rwf);
+                    String name = rwf.getName();
+                    if (!"".equals(name) && !"/".equals(name)) {
+                        boolean isDup = !addedNames.add(name);
+                        if (!isDup || addDuplicate(name)) {
+                            l.add(rwf);
+                        }
                     }
                 }
             }
@@ -509,6 +527,24 @@ public abstract class ArchiveBase extends Task {
     }
 
     /**
+     * Is invoked if a duplicate entry is found, decides whether the
+     * entry shall be added regardless.
+     */
+    protected boolean addDuplicate(String name) {
+        if (duplicate.getValue().equals(Duplicate.PRESERVE)) {
+            log(name + " already added, skipping.", Project.MSG_INFO);
+            return false;
+        } else if (duplicate.getValue().equals(Duplicate.FAIL)) {
+            throw new BuildException("Duplicate entry " + name
+                                     + " was found and the duplicate "
+                                     + "attribute is 'fail'.");
+        }
+        // duplicate equal to add, so we continue
+        log("duplicate entry " + name + " found, adding.", Project.MSG_VERBOSE);
+        return true;
+    }
+
+    /**
      * Valid Modes for create/update/replace.
      */
     public static final class Mode extends EnumeratedAttribute {
@@ -536,6 +572,28 @@ public abstract class ArchiveBase extends Task {
             return new String[] {CREATE, UPDATE, REPLACE};
         }
 
+    }
+
+    /**
+     * Possible behaviors when a duplicate file is added:
+     * "add", "preserve" or "fail"
+     */
+    public static class Duplicate extends EnumeratedAttribute {
+        private static String ADD = "add";
+        private static String PRESERVE = "preserve";
+        private static String FAIL = "fail";
+
+        public Duplicate() {
+            setValue(ADD);
+        }
+
+        /**
+         * @see EnumeratedAttribute#getValues()
+         */
+        /** {@inheritDoc} */
+        public String[] getValues() {
+            return new String[] {ADD, PRESERVE, FAIL};
+        }
     }
 
     /**
