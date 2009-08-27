@@ -41,6 +41,7 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 public final class ZipResource extends CommonsCompressArchiveResource {
 
     private ZipExtraField[] extras;
+    private int method;
 
     /**
      * Default constructor.
@@ -153,6 +154,13 @@ public final class ZipResource extends CommonsCompressArchiveResource {
     }
 
     /**
+     * The compression method that has been used.
+     */
+    public int getMethod() {
+        return method;
+    }
+
+    /**
      * fetches information from the named entry inside the archive.
      */
     protected void fetchEntry() {
@@ -177,7 +185,9 @@ public final class ZipResource extends CommonsCompressArchiveResource {
     protected void setEntry(ArchiveEntry e) {
         super.setEntry(e);
         if (e != null) {
-            extras = ((ZipArchiveEntry) e).getExtraFields();
+            ZipArchiveEntry ze = (ZipArchiveEntry) e;
+            extras = ze.getExtraFields();
+            method = ze.getMethod();
         }
     }
 

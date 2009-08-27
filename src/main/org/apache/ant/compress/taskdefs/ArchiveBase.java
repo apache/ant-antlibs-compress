@@ -373,7 +373,8 @@ public abstract class ArchiveBase extends Task {
                                              tr.getGroup());
                 } else if (r instanceof ZipResource) {
                     ZipResource zr = (ZipResource) r;
-                    return new ResourceFlags(zr.getMode(), zr.getExtraFields());
+                    return new ResourceFlags(zr.getMode(), zr.getExtraFields(),
+                                             zr.getMethod());
                 } else {
                     CommonsCompressArchiveResource cr =
                         (CommonsCompressArchiveResource) r;
@@ -414,7 +415,7 @@ public abstract class ArchiveBase extends Task {
                     }
                 }
 
-                return new ResourceFlags(zr.getMode(), ex);
+                return new ResourceFlags(zr.getMode(), ex, zr.getMethod());
             } else {
                 ArchiveResource ar = (ArchiveResource) r;
                 return new ResourceFlags(ar.getMode());
@@ -648,32 +649,36 @@ public abstract class ArchiveBase extends Task {
         private final ZipExtraField[] extraFields;
         private final String userName;
         private final String groupName;
+        private final int compressionMethod;
 
         public ResourceFlags() {
             this(-1);
         }
 
         public ResourceFlags(int mode) {
-            this(mode, new ZipExtraField[0]);
+            this(mode, new ZipExtraField[0], -1);
         }
 
-        public ResourceFlags(int mode, ZipExtraField[] extraFields) {
+        public ResourceFlags(int mode, ZipExtraField[] extraFields,
+                             int compressionMethod) {
             this(mode, extraFields, EntryHelper.UNKNOWN_ID,
-                 EntryHelper.UNKNOWN_ID, null, null);
+                 EntryHelper.UNKNOWN_ID, null, null,
+                 compressionMethod);
         }
 
         public ResourceFlags(int mode, int uid, int gid) {
-            this(mode, new ZipExtraField[0], uid, gid, null, null);
+            this(mode, new ZipExtraField[0], uid, gid, null, null, -1);
         }
 
         public ResourceFlags(int mode, int uid, int gid, String userName,
                              String groupName) {
-            this(mode, new ZipExtraField[0], uid, gid, userName, groupName);
+            this(mode, new ZipExtraField[0], uid, gid, userName, groupName, -1);
         }
 
         private ResourceFlags(int mode, ZipExtraField[] extraFields,
                               int uid, int gid,
-                              String userName, String groupName) {
+                              String userName, String groupName,
+                              int compressionMethod) {
             this.mode = mode;
             this.extraFields = extraFields;
             this.gid = gid;
@@ -682,6 +687,7 @@ public abstract class ArchiveBase extends Task {
             this.groupName = groupName;
             int m = mode & UnixStat.PERM_MASK;
             modeSet = mode >= 0 && (m > 0 || (m == 0 && preserve0permissions));
+            this.compressionMethod = compressionMethod;
         }
 
         public boolean hasModeBeenSet() { return modeSet; }
@@ -704,6 +710,9 @@ public abstract class ArchiveBase extends Task {
 
         public boolean hasGroupNameBeenSet() { return groupName != null; }
         public String getGroupName() { return groupName; }
+
+        public boolean hasCompressionMethod() { return compressionMethod >= 0; }
+        public int getCompressionMethod() { return compressionMethod; }
     }
 
     /**

@@ -35,6 +35,7 @@ import org.apache.tools.ant.types.ArchiveFileSet;
 public class Zip extends ArchiveBase {
     private int level = Deflater.DEFAULT_COMPRESSION;
     private String comment = "";
+    private boolean keepCompression = false;
 
     public Zip() {
         setFactory(new ZipStreamFactory() {
@@ -75,6 +76,12 @@ public class Zip extends ArchiveBase {
                                            .getZipExtraFields());
                     }
  
+                    if (keepCompression
+                        && r.getResourceFlags().hasCompressionMethod()) {
+                        ent.setMethod(r.getResourceFlags()
+                                      .getCompressionMethod());
+                    }
+
                     return ent;
                 }
             });
@@ -96,5 +103,15 @@ public class Zip extends ArchiveBase {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    /**
+     * Whether the original compression of entries coming from a ZIP
+     * archive should be kept (for example when updating an archive).
+     * Default is false.
+     * @param keep if true, keep the original compression
+     */
+    public void setKeepCompression(boolean keep) {
+        keepCompression = keep;
     }
 }
