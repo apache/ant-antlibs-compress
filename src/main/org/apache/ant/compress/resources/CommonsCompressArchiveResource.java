@@ -29,8 +29,8 @@ import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.ArchiveResource;
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
-import org.apache.ant.compress.util.StreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 
@@ -40,7 +40,7 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
 public abstract class CommonsCompressArchiveResource extends ArchiveResource {
 
     private String encoding;
-    private final StreamFactory factory;
+    private final ArchiveStreamFactory factory;
     private final String archiveType;
 
     // not supported for zip
@@ -49,7 +49,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
     /**
      * Default constructor.
      */
-    protected CommonsCompressArchiveResource(StreamFactory factory,
+    protected CommonsCompressArchiveResource(ArchiveStreamFactory factory,
                                              String archiveType) {
         this.factory = factory;
         this.archiveType = archiveType;
@@ -61,7 +61,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * @param a the archive as File.
      * @param e the ArchiveEntry.
      */
-    protected CommonsCompressArchiveResource(StreamFactory factory,
+    protected CommonsCompressArchiveResource(ArchiveStreamFactory factory,
                                              String archiveType,
                                              File a, ArchiveEntry e) {
         super(a, true);
@@ -75,7 +75,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * @param a the archive as Resource.
      * @param e the ArchiveEntry.
      */
-    protected CommonsCompressArchiveResource(StreamFactory factory,
+    protected CommonsCompressArchiveResource(ArchiveStreamFactory factory,
                                              String archiveType,
                                              Resource a, ArchiveEntry e) {
         super(a, true);

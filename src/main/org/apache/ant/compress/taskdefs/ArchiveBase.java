@@ -38,8 +38,8 @@ import org.apache.ant.compress.resources.TarFileSet;
 import org.apache.ant.compress.resources.TarResource;
 import org.apache.ant.compress.resources.ZipFileSet;
 import org.apache.ant.compress.resources.ZipResource;
+import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
-import org.apache.ant.compress.util.StreamFactory;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
@@ -65,7 +65,7 @@ import org.apache.tools.zip.UnixStat;
  * Base implementation of tasks creating archives.
  */
 public abstract class ArchiveBase extends Task {
-    private StreamFactory factory;
+    private ArchiveStreamFactory factory;
     private EntryBuilder builder;
 
     private Resource dest;
@@ -83,7 +83,7 @@ public abstract class ArchiveBase extends Task {
 
     protected ArchiveBase() {}
 
-    protected final void setFactory(StreamFactory factory) {
+    protected final void setFactory(ArchiveStreamFactory factory) {
         this.factory = factory;
     }
 

@@ -27,7 +27,7 @@ import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveInputStream;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream;
 
-public class CpioStreamFactory implements StreamFactory {
+public class CpioStreamFactory implements ArchiveStreamFactory {
 
     /**
      * @param stream the stream to read from, should be buffered

@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
+import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
-import org.apache.ant.compress.util.StreamFactory;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -49,9 +49,9 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
  * <p>File permissions will not be restored on extracted files.</p>
  */
 public abstract class ExpandBase extends Expand {
-    private final StreamFactory factory;
+    private final ArchiveStreamFactory factory;
 
-    protected ExpandBase(StreamFactory factory) {
+    protected ExpandBase(ArchiveStreamFactory factory) {
         this.factory = factory;
     }
 

@@ -27,7 +27,7 @@ import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
-public class ZipStreamFactory implements StreamFactory {
+public class ZipStreamFactory implements ArchiveStreamFactory {
 
     /**
      * @param stream the stream to read from, should be buffered

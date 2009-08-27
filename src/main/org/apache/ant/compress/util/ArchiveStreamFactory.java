@@ -28,7 +28,7 @@ import org.apache.commons.compress.archivers.ArchiveOutputStream;
 /**
  * Creates streams for the supported archive formats.
  */
-public interface StreamFactory {
+public interface ArchiveStreamFactory {
 
     /**
      * @param stream the stream to read from, should be buffered

@@ -22,7 +22,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.ant.compress.util.StreamFactory;
+import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.Resource;
@@ -35,10 +35,10 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
  */
 public class CommonsCompressArchiveScanner extends ArchiveScanner {
 
-    private final StreamFactory factory;
+    private final ArchiveStreamFactory factory;
     private final ResourceBuilder builder;
 
-    public CommonsCompressArchiveScanner(StreamFactory factory,
+    public CommonsCompressArchiveScanner(ArchiveStreamFactory factory,
                                          ResourceBuilder builder) {
         this.factory = factory;
         this.builder = builder;
