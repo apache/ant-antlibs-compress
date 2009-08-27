@@ -327,7 +327,7 @@
   </target>
 
   <target name="testAddDuplicates" depends="setUp">
-    <cmp:ar destfile="${dest}">
+    <cmp:ar destfile="${dest}" duplicate="add">
       <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
       <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
     </cmp:ar>
@@ -347,7 +347,7 @@
   <target name="testFailDuplicates" depends="setUp">
     <au:expectfailure
        message="Duplicate entry asf-logo.gif was found and the duplicate attribute is 'fail'.">
-      <cmp:ar destfile="${dest}" duplicate="fail">
+      <cmp:ar destfile="${dest}">
         <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
         <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
       </cmp:ar>

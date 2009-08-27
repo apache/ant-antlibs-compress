@@ -360,7 +360,7 @@
 
   <!-- ACC 1.0 CPIO prevents duplicate entries -->
   <target name="fail-testAddDuplicates" depends="setUp">
-    <cmp:cpio destfile="${dest}">
+    <cmp:cpio destfile="${dest}" duplicate="add">
       <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
       <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
     </cmp:cpio>
@@ -380,7 +380,7 @@
   <target name="testFailDuplicates" depends="setUp">
     <au:expectfailure
        message="Duplicate entry asf-logo.gif was found and the duplicate attribute is 'fail'.">
-      <cmp:cpio destfile="${dest}" duplicate="fail">
+      <cmp:cpio destfile="${dest}">
         <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
         <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
       </cmp:cpio>

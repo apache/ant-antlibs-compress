@@ -178,7 +178,7 @@ public abstract class ArchiveBase extends Task {
      * Possible values are: <code>add</code> (keep both
      * of the files); <code>preserve</code> (keep the first version
      * of the file found); <code>fail</code> halt a problem
-     * Default for is <code>add</code>
+     * Default for is <code>fail</code>
      * @param df a <code>Duplicate</code> enumerated value
      */
     public void setDuplicate(Duplicate df) {
@@ -584,7 +584,7 @@ public abstract class ArchiveBase extends Task {
         private static String FAIL = "fail";
 
         public Duplicate() {
-            setValue(ADD);
+            setValue(FAIL);
         }
 
         /**
