@@ -77,6 +77,9 @@ public abstract class ArchiveBase extends Task {
     private boolean roundUp = true;
     private boolean preserveLeadingSlashes = false;
     private Duplicate duplicate = new Duplicate();
+    private WhenEmpty emptyBehavior = new WhenEmpty();
+
+    private static final String NO_SOURCES_MSG = "No sources, nothing to do.";
 
     protected ArchiveBase() {}
 
@@ -178,11 +181,23 @@ public abstract class ArchiveBase extends Task {
      * Possible values are: <code>add</code> (keep both
      * of the files); <code>preserve</code> (keep the first version
      * of the file found); <code>fail</code> halt a problem
-     * Default for is <code>fail</code>
+     * Default is <code>fail</code>
      * @param df a <code>Duplicate</code> enumerated value
      */
     public void setDuplicate(Duplicate df) {
         duplicate = df;
+    }
+
+    /**
+     * Sets behavior of the task when no resources are to be added.
+     * Possible values are: <code>fail</code> (throw an exception
+     * and halt the build); <code>skip</code> (do not create
+     * any archive, but issue a warning);.
+     * Default is <code>fail</code>;
+     * @param we a <code>WhenEmpty</code> enumerated value
+     */
+    public void setWhenempty(WhenEmpty we) {
+        emptyBehavior = we;
     }
 
     public void execute() {
@@ -198,7 +213,11 @@ public abstract class ArchiveBase extends Task {
             throw new BuildException("Failed to read sources", ioex);
         }
         if (toAdd.length == 0) {
-            log("No sources, nothing to do", Project.MSG_WARN);
+            if (WhenEmpty.SKIP.equals(emptyBehavior.getValue())) {
+                log(NO_SOURCES_MSG, Project.MSG_WARN);
+            } else {
+                throw new BuildException(NO_SOURCES_MSG);
+            }
         } else {
             try {
                 writeArchive(toAdd);
@@ -593,6 +612,27 @@ public abstract class ArchiveBase extends Task {
         /** {@inheritDoc} */
         public String[] getValues() {
             return new String[] {ADD, PRESERVE, FAIL};
+        }
+    }
+
+    /**
+     * Possible behaviors when there are no matching files for the task:
+     * "fail", "skip".
+     */
+    public static class WhenEmpty extends EnumeratedAttribute {
+        private static String FAIL = "fail";
+        private static String SKIP = "skip";
+
+        public WhenEmpty() {
+            setValue(FAIL);
+        }
+
+        /**
+         * The string values for the enumerated value
+         * @return the values
+         */
+        public String[] getValues() {
+            return new String[] {FAIL, SKIP};
         }
     }
 

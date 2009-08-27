@@ -411,4 +411,22 @@
       </cmp:zip>
     </au:expectfailure>
   </target>
+
+  <target name="testFailEmpty" depends="setUp">
+    <au:expectfailure
+       message="No sources, nothing to do.">
+      <cmp:zip destfile="${dest}">
+        <fileset dir="." includes="not-there"/>
+      </cmp:zip>
+    </au:expectfailure>
+  </target>
+
+  <target name="testSkipEmpty" depends="setUp">
+    <cmp:zip destfile="${dest}" whenEmpty="skip">
+      <fileset dir="." includes="not-there"/>
+    </cmp:zip>
+    <au:assertLogContains text="No sources, nothing to do."
+                          level="warn"/>
+    <au:assertFileDoesntExist file="${dest}"/>
+  </target>
 </project>

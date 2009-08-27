@@ -403,4 +403,22 @@
       </cmp:tar>
     </au:expectfailure>
   </target>
+
+  <target name="testFailEmpty" depends="setUp">
+    <au:expectfailure
+       message="No sources, nothing to do.">
+      <cmp:tar destfile="${dest}">
+        <fileset dir="." includes="not-there"/>
+      </cmp:tar>
+    </au:expectfailure>
+  </target>
+
+  <target name="testSkipEmpty" depends="setUp">
+    <cmp:tar destfile="${dest}" whenEmpty="skip">
+      <fileset dir="." includes="not-there"/>
+    </cmp:tar>
+    <au:assertLogContains text="No sources, nothing to do."
+                          level="warn"/>
+    <au:assertFileDoesntExist file="${dest}"/>
+  </target>
 </project>
