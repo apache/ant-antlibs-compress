@@ -90,7 +90,10 @@
     name="zipfileset"
     classname="org.apache.ant.compress.resources.ZipFileSet"
     />
-
+  <typedef
+    name="archives"
+    classname="org.apache.ant.compress.resources.Archives"
+    />
   <typedef
     name="bzip2resource"
     classname="org.apache.ant.compress.resources.BZip2Resource"
@@ -100,23 +103,23 @@
     classname="org.apache.ant.compress.resources.GZipResource"
     />
 
-  <typedef
+  <componentdef
      name="hasusername"
     classname="org.apache.ant.compress.conditions.HasUserName"
     />
-  <typedef
+  <componentdef
      name="hasgroupname"
      classname="org.apache.ant.compress.conditions.HasGroupName"
     />
-  <typedef
+  <componentdef
      name="hasuserid"
      classname="org.apache.ant.compress.conditions.HasUserId"
     />
-  <typedef
+  <componentdef
      name="hasgroupid"
      classname="org.apache.ant.compress.conditions.HasGroupId"
     />
-  <typedef
+  <componentdef
      name="hasmode"
      classname="org.apache.ant.compress.conditions.HasMode"
     />
