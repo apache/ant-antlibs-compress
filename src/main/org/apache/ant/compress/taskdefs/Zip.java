@@ -126,7 +126,7 @@ public class Zip extends ArchiveBase {
     }
 
     /**
-     * Whether to fall back to UTF-8 if a name cannot be enoded using
+     * Whether to fall back to UTF-8 if a name cannot be encoded using
      * the specified encoding.
      *
      * <p>Defaults to false.</p>
