@@ -36,6 +36,7 @@ public class Zip extends ArchiveBase {
     private int level = Deflater.DEFAULT_COMPRESSION;
     private String comment = "";
     private boolean keepCompression = false;
+    private boolean fallBackToUTF8 = false;
 
     public Zip() {
         setFactory(new ZipStreamFactory() {
@@ -47,6 +48,7 @@ public class Zip extends ArchiveBase {
                                                                         encoding);
                     o.setLevel(level);
                     o.setComment(comment);
+                    o.setFallbackToUTF8(fallBackToUTF8);
                     return o;
                 }
             });
@@ -113,5 +115,15 @@ public class Zip extends ArchiveBase {
      */
     public void setKeepCompression(boolean keep) {
         keepCompression = keep;
+    }
+
+    /**
+     * Whether to fall back to UTF-8 if a name cannot be enoded using
+     * the specified encoding.
+     *
+     * <p>Defaults to false.</p>
+     */
+    public void setFallBackToUTF8(boolean b) {
+        fallBackToUTF8 = b;
     }
 }
