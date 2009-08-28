@@ -37,6 +37,7 @@ public class Zip extends ArchiveBase {
     private String comment = "";
     private boolean keepCompression = false;
     private boolean fallBackToUTF8 = false;
+    private boolean useLanguageEncodingFlag = true;
 
     public Zip() {
         setFactory(new ZipStreamFactory() {
@@ -49,6 +50,7 @@ public class Zip extends ArchiveBase {
                     o.setLevel(level);
                     o.setComment(comment);
                     o.setFallbackToUTF8(fallBackToUTF8);
+                    o.setUseLanguageEncodingFlag(useLanguageEncodingFlag);
                     return o;
                 }
             });
@@ -125,5 +127,12 @@ public class Zip extends ArchiveBase {
      */
     public void setFallBackToUTF8(boolean b) {
         fallBackToUTF8 = b;
+    }
+
+    /**
+     * Whether to set the language encoding flag.
+     */
+    public void setUseLanguageEncodingFlag(boolean b) {
+        useLanguageEncodingFlag = b;
     }
 }
