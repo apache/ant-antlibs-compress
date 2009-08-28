@@ -20,6 +20,8 @@ package org.apache.ant.compress.taskdefs;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.Deflater;
 
 import org.apache.ant.compress.util.ZipStreamFactory;
@@ -28,6 +30,7 @@ import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.tools.ant.types.ArchiveFileSet;
+import org.apache.tools.ant.types.EnumeratedAttribute;
 
 /**
  * Creates zip archives.
@@ -38,6 +41,7 @@ public class Zip extends ArchiveBase {
     private boolean keepCompression = false;
     private boolean fallBackToUTF8 = false;
     private boolean useLanguageEncodingFlag = true;
+    private UnicodeExtraField createUnicodeExtraFields = UnicodeExtraField.NEVER;
 
     public Zip() {
         setFactory(new ZipStreamFactory() {
@@ -51,6 +55,8 @@ public class Zip extends ArchiveBase {
                     o.setComment(comment);
                     o.setFallbackToUTF8(fallBackToUTF8);
                     o.setUseLanguageEncodingFlag(useLanguageEncodingFlag);
+                    o.setCreateUnicodeExtraFields(createUnicodeExtraFields
+                                                  .getPolicy());
                     return o;
                 }
             });
@@ -134,5 +140,51 @@ public class Zip extends ArchiveBase {
      */
     public void setUseLanguageEncodingFlag(boolean b) {
         useLanguageEncodingFlag = b;
+    }
+
+    /**
+     * Whether Unicode extra fields will be created.
+     */
+    public void setCreateUnicodeExtraFields(UnicodeExtraField b) {
+        createUnicodeExtraFields = b;
+    }
+
+    /**
+     * Policiy for creation of Unicode extra fields: never, always or
+     * not-encodeable.
+     */
+    public static final class UnicodeExtraField extends EnumeratedAttribute {
+        private static final Map POLICIES = new HashMap();
+        private static final String NEVER_KEY = "never";
+        private static final String ALWAYS_KEY = "always";
+        private static final String N_E_KEY = "not-encodeable";
+        static {
+            POLICIES.put(NEVER_KEY,
+                         ZipArchiveOutputStream.UnicodeExtraFieldPolicy.NEVER);
+            POLICIES.put(ALWAYS_KEY,
+                         ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
+            POLICIES.put(N_E_KEY,
+                         ZipArchiveOutputStream.UnicodeExtraFieldPolicy
+                         .NOT_ENCODEABLE);
+        }
+
+        public String[] getValues() {
+            return new String[] {NEVER_KEY, ALWAYS_KEY, N_E_KEY};
+        }
+
+        public static final UnicodeExtraField NEVER =
+            new UnicodeExtraField(NEVER_KEY);
+
+        private UnicodeExtraField(String name) {
+            setValue(name);
+        }
+
+        public UnicodeExtraField() {
+        }
+
+        public ZipArchiveOutputStream.UnicodeExtraFieldPolicy getPolicy() {
+            return (ZipArchiveOutputStream.UnicodeExtraFieldPolicy)
+                POLICIES.get(getValue());
+        }
     }
 }
