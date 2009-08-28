@@ -92,6 +92,15 @@
     />
 
   <typedef
+    name="bzip2resource"
+    classname="org.apache.ant.compress.resources.BZip2Resource"
+    />
+  <typedef
+    name="gzipresource"
+    classname="org.apache.ant.compress.resources.GZipResource"
+    />
+
+  <typedef
      name="hasusername"
     classname="org.apache.ant.compress.conditions.HasUserName"
     />
