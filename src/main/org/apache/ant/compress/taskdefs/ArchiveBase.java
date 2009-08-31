@@ -58,6 +58,7 @@ import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.ArchiveResource;
 import org.apache.tools.ant.types.resources.FileResource;
+import org.apache.tools.ant.types.resources.Resources;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.zip.UnixStat;
 
@@ -95,13 +96,22 @@ public abstract class ArchiveBase extends Task {
      * The archive to create.
      */
     public void setDestfile(File f) {
-        addDest(new FileResource(f));
+        setDest(new FileResource(f));
     }
 
     /**
      * The archive to create.
      */
-    public void addDest(Resource r) {
+    public void addConfiguredDest(Resources r) {
+        for (Iterator it = r.iterator(); it.hasNext(); ) {
+            setDest((Resource) it.next());
+        }
+    }
+
+    /**
+     * The archive to create.
+     */
+    public void setDest(Resource r) {
         if (dest != null) {
             throw new BuildException("Can only have one destination resource"
                                      + " for archive.");

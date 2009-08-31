@@ -421,4 +421,21 @@
                           level="warn"/>
     <au:assertFileDoesntExist file="${dest}"/>
   </target>
+
+  <target name="testNonFileDest" depends="setUp">
+    <cmp:tar>
+      <fileset dir="." includes="ar-test.xml"/>
+      <dest>
+        <gzipresource>
+          <file file="${dest}.gz"/>
+        </gzipresource>
+      </dest>
+    </cmp:tar>
+    <au:assertFileExists file="${dest}.gz"/>
+    <au:assertFileDoesntExist file="${dest}"/>
+    <gunzip src="${dest}.gz" dest="${dest}"/>
+    <untar src="${dest}" dest="${output}"/>
+    <au:assertFilesMatch expected="ar-test.xml"
+                         actual="${output}/ar-test.xml"/>
+  </target>
 </project>
