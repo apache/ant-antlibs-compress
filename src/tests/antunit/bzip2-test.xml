@@ -85,4 +85,14 @@
               destfile="${output}/asf-logo.gif.bz2" />
     <au:assertLogContains text="Nothing to do: asf-logo.gif.bz2 is up to date."/>
   </target>
+
+  <target name="testHugeFile" depends="setUp">
+    <bunzip2 src="../resources/asf-logo-huge.tar.bz2"
+             dest="${output}/asf-logo-huge.tar"/>
+    <cmp:bzip2 src="${output}/asf-logo-huge.tar"
+              destfile="${output}/asf-logo-huge.tar.bz2" />
+    <au:assertLogContains text="Building: asf-logo-huge.tar.bz2"/>
+    <au:assertFileExists file="${output}/asf-logo-huge.tar.bz2"/>
+  </target>
+
 </project>
