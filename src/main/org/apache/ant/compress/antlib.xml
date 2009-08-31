@@ -1,134 +1,134 @@
 <?xml version="1.0"?>
 <!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with
-  the License.  You may obtain a copy of the License at
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
--->
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+  -->
 <antlib>
   <taskdef
-    name="uncpio"
-    classname="org.apache.ant.compress.taskdefs.Uncpio"
-    />
+     name="uncpio"
+     classname="org.apache.ant.compress.taskdefs.Uncpio"
+     />
   <taskdef
-    name="unar"
-    classname="org.apache.ant.compress.taskdefs.Unar"
-    />
+     name="unar"
+     classname="org.apache.ant.compress.taskdefs.Unar"
+     />
   <taskdef
-    name="untar"
-    classname="org.apache.ant.compress.taskdefs.Untar"
-    />
+     name="untar"
+     classname="org.apache.ant.compress.taskdefs.Untar"
+     />
   <taskdef
-    name="unzip"
-    classname="org.apache.ant.compress.taskdefs.Unzip"
-    />
+     name="unzip"
+     classname="org.apache.ant.compress.taskdefs.Unzip"
+     />
   <taskdef
-    name="ar"
-    classname="org.apache.ant.compress.taskdefs.Ar"
-    />
+     name="ar"
+     classname="org.apache.ant.compress.taskdefs.Ar"
+     />
   <taskdef
-    name="cpio"
-    classname="org.apache.ant.compress.taskdefs.Cpio"
-    />
+     name="cpio"
+     classname="org.apache.ant.compress.taskdefs.Cpio"
+     />
   <taskdef
-    name="tar"
-    classname="org.apache.ant.compress.taskdefs.Tar"
-    />
+     name="tar"
+     classname="org.apache.ant.compress.taskdefs.Tar"
+     />
   <taskdef
-    name="zip"
-    classname="org.apache.ant.compress.taskdefs.Zip"
-    />
+     name="zip"
+     classname="org.apache.ant.compress.taskdefs.Zip"
+     />
   <taskdef
-    name="gunzip"
-    classname="org.apache.ant.compress.taskdefs.GUnzip"
-    />
+     name="gunzip"
+     classname="org.apache.ant.compress.taskdefs.GUnzip"
+     />
   <taskdef
-    name="bunzip2"
-    classname="org.apache.ant.compress.taskdefs.BUnzip2"
-    />
+     name="bunzip2"
+     classname="org.apache.ant.compress.taskdefs.BUnzip2"
+     />
   <taskdef
-    name="gzip"
-    classname="org.apache.ant.compress.taskdefs.GZip"
-    />
+     name="gzip"
+     classname="org.apache.ant.compress.taskdefs.GZip"
+     />
   <taskdef
-    name="bzip2"
-    classname="org.apache.ant.compress.taskdefs.BZip2"
-    />
+     name="bzip2"
+     classname="org.apache.ant.compress.taskdefs.BZip2"
+     />
 
   <typedef
-    name="tarentry"
-    classname="org.apache.ant.compress.resources.TarResource"
-    />
+     name="tarentry"
+     classname="org.apache.ant.compress.resources.TarResource"
+     />
   <typedef
-    name="arentry"
-    classname="org.apache.ant.compress.resources.ArResource"
-    />
+     name="arentry"
+     classname="org.apache.ant.compress.resources.ArResource"
+     />
   <typedef
-    name="cpioentry"
-    classname="org.apache.ant.compress.resources.CpioResource"
-    />
+     name="cpioentry"
+     classname="org.apache.ant.compress.resources.CpioResource"
+     />
   <typedef
-    name="zipentry"
-    classname="org.apache.ant.compress.resources.ZipResource"
-    />
+     name="zipentry"
+     classname="org.apache.ant.compress.resources.ZipResource"
+     />
 
   <typedef
-    name="tarfileset"
-    classname="org.apache.ant.compress.resources.TarFileSet"
-    />
+     name="tarfileset"
+     classname="org.apache.ant.compress.resources.TarFileSet"
+     />
   <typedef
-    name="arfileset"
-    classname="org.apache.ant.compress.resources.ArFileSet"
-    />
+     name="arfileset"
+     classname="org.apache.ant.compress.resources.ArFileSet"
+     />
   <typedef
-    name="cpiofileset"
-    classname="org.apache.ant.compress.resources.CpioFileSet"
-    />
+     name="cpiofileset"
+     classname="org.apache.ant.compress.resources.CpioFileSet"
+     />
   <typedef
-    name="zipfileset"
-    classname="org.apache.ant.compress.resources.ZipFileSet"
-    />
+     name="zipfileset"
+     classname="org.apache.ant.compress.resources.ZipFileSet"
+     />
   <typedef
-    name="archives"
-    classname="org.apache.ant.compress.resources.Archives"
-    />
+     name="archives"
+     classname="org.apache.ant.compress.resources.Archives"
+     />
   <typedef
-    name="bzip2resource"
-    classname="org.apache.ant.compress.resources.BZip2Resource"
-    />
+     name="bzip2resource"
+     classname="org.apache.ant.compress.resources.BZip2Resource"
+     />
   <typedef
-    name="gzipresource"
-    classname="org.apache.ant.compress.resources.GZipResource"
-    />
+     name="gzipresource"
+     classname="org.apache.ant.compress.resources.GZipResource"
+     />
 
   <componentdef
      name="hasusername"
-    classname="org.apache.ant.compress.conditions.HasUserName"
-    />
+     classname="org.apache.ant.compress.conditions.HasUserName"
+     />
   <componentdef
      name="hasgroupname"
      classname="org.apache.ant.compress.conditions.HasGroupName"
-    />
+     />
   <componentdef
      name="hasuserid"
      classname="org.apache.ant.compress.conditions.HasUserId"
-    />
+     />
   <componentdef
      name="hasgroupid"
      classname="org.apache.ant.compress.conditions.HasGroupId"
-    />
+     />
   <componentdef
      name="hasmode"
      classname="org.apache.ant.compress.conditions.HasMode"
-    />
+     />
 </antlib>

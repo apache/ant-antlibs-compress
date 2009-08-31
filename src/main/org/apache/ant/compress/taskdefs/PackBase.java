@@ -122,7 +122,7 @@ public abstract class PackBase extends Task {
 
         if (src.isDirectory()) {
             throw new BuildException("source resource must not "
-                                    + "represent a directory!", getLocation());
+                                     + "represent a directory!", getLocation());
         }
 
         if (!src.isExists()) {
@@ -136,7 +136,7 @@ public abstract class PackBase extends Task {
 
         if (dest.isDirectory()) {
             throw new BuildException("dest resource must not "
-                                    + "represent a directory!", getLocation());
+                                     + "represent a directory!", getLocation());
         }
 
     }
