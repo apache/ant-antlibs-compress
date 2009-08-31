@@ -46,6 +46,14 @@
                          actual="${output}/asf-logo.gif"/>
   </target>
 
+  <target name="testAntlibGzipTask" depends="setUp">
+    <cmp:gzip src="../resources/asf-logo.gif"
+              destfile="${output}/asf-logo.gif.gz"/>
+    <cmp:gunzip src="${output}/asf-logo.gif.gz" dest="${output}/asf-logo.gif" />
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
   <target name="testNativeGzip" depends="setUp">
     <cmp:gunzip src="../resources/asf-logo.gif.gz"
                 dest="${output}/asf-logo.gif" />

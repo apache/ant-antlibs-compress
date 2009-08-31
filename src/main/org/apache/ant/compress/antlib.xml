@@ -56,6 +56,14 @@
     name="bunzip2"
     classname="org.apache.ant.compress.taskdefs.BUnzip2"
     />
+  <taskdef
+    name="gzip"
+    classname="org.apache.ant.compress.taskdefs.GZip"
+    />
+  <taskdef
+    name="bzip2"
+    classname="org.apache.ant.compress.taskdefs.BZip2"
+    />
 
   <typedef
     name="tarentry"

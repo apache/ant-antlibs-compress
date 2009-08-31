@@ -36,6 +36,15 @@
                          actual="${output}/asf-logo.gif"/>
   </target>
 
+  <target name="testAntlibBzip2Task" depends="setUp">
+    <cmp:bzip2 src="../resources/asf-logo.gif"
+               destfile="${output}/asf-logo.gif.bz2"/>
+    <cmp:bunzip2 src="${output}/asf-logo.gif.bz2"
+                 dest="${output}/asf-logo.gif" />
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
   <target name="testNativeBzip2" depends="setUp">
     <cmp:bunzip2 src="../resources/asf-logo.gif.bz2"
                  dest="${output}/asf-logo.gif" />
