@@ -28,7 +28,7 @@
     <touch file="${output}/filetwo" />
   </target>
 
-  <target name="testFailNone">
+  <target name="testFailNone" depends="setUp">
     <au:expectfailure expectedmessage="source resource is required.">
       <cmp:gzip destfile="${output}/file.gz">
         <fileset dir="${output}/empty" />
@@ -36,7 +36,7 @@
     </au:expectfailure>
   </target>
 
-  <target name="testFailTwo">
+  <target name="testFailTwo" depends="setUp">
     <au:expectfailure expectedmessage="Can only have one source resource.">
       <cmp:gzip destfile="${output}/file.gz">
         <fileset dir="${output}" />
@@ -44,7 +44,7 @@
     </au:expectfailure>
   </target>
 
-  <target name="testFailNoDest">
+  <target name="testFailNoDest" depends="setUp">
     <au:expectfailure expectedmessage="dest resource is required.">
       <cmp:gzip src="${output}/fileone">
         <dest>
@@ -54,7 +54,7 @@
     </au:expectfailure>
   </target>
 
-  <target name="testFailTwoDests">
+  <target name="testFailTwoDests" depends="setUp">
     <au:expectfailure expectedmessage="Can only have one destination resource.">
       <cmp:gzip src="${output}/fileone">
         <dest>
@@ -64,4 +64,25 @@
     </au:expectfailure>
   </target>
 
+  <target name="testRealTest" depends="setUp">
+    <cmp:gzip src="../resources/asf-logo.gif"
+              destfile="${output}/asf-logo.gif.gz" />
+    <au:assertLogContains text="Building: asf-logo.gif.gz"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.gz"/>
+  </target>
+
+  <target name="testRealTestWithResource" depends="setUp">
+    <cmp:gzip destfile="${output}/asf-logo.gif.gz">
+      <file file="../resources/asf-logo.gif"/>
+    </cmp:gzip>
+    <au:assertLogContains text="Building: asf-logo.gif.gz"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.gz"/>
+  </target>
+
+  <target name="testDateCheck" depends="setUp">
+    <touch file="${output}/asf-logo.gif.gz"/>
+    <cmp:gzip src="../resources/asf-logo.gif"
+              destfile="${output}/asf-logo.gif.gz" />
+    <au:assertLogContains text="Nothing to do: asf-logo.gif.gz is up to date."/>
+  </target>
 </project>

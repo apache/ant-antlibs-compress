@@ -91,7 +91,7 @@ public abstract class PackBase extends Task {
      * @param src resource to expand
      */
     public void setSrc(Resource src) {
-        if (this.dest != null) {
+        if (this.src != null) {
             throw new BuildException("Can only have one source resource.");
         }
         if (src.isDirectory()) {
@@ -148,7 +148,7 @@ public abstract class PackBase extends Task {
     public void execute() throws BuildException {
         validate();
 
-        if (dest.isExists() && dest.getLastModified() < src.getLastModified()) {
+        if (dest.isExists() && dest.getLastModified() > src.getLastModified()) {
             log("Nothing to do: " + dest.getName() + " is up to date.");
         } else {
             log("Building: " + dest.getName());
