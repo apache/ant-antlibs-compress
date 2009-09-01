@@ -133,14 +133,15 @@ public abstract class PackBase extends Task {
         }
 
         if (src !=  null) {
-        if (src.isDirectory()) {
-            throw new BuildException("source resource must not "
-                                     + "represent a directory!", getLocation());
-        }
+            if (src.isDirectory()) {
+                throw new BuildException("source resource must not "
+                                         + "represent a directory!",
+                                         getLocation());
+            }
 
-        if (!src.isExists()) {
-            throw new BuildException("source resource must exist.");
-        }
+            if (!src.isExists()) {
+                throw new BuildException("source resource must exist.");
+            }
         }
 
         if (dest == null) {
@@ -166,8 +167,8 @@ public abstract class PackBase extends Task {
             srcTask.setDest(wrapper.wrap(dest));
             srcTask.setTaskName(getTaskName());
             srcTask.execute();
-        } else
-        if (dest.isExists() && dest.getLastModified() > src.getLastModified()) {
+        } else if (dest.isExists()
+                   && dest.getLastModified() > src.getLastModified()) {
             log("Nothing to do: " + dest.getName() + " is up to date.");
         } else {
             log("Building: " + dest.getName());
