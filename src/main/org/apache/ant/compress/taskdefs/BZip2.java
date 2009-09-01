@@ -18,7 +18,10 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import org.apache.ant.compress.resources.BZip2Resource;
+import org.apache.ant.compress.resources.CommonsCompressCompressorResource;
 import org.apache.ant.compress.util.BZip2StreamFactory;
+import org.apache.tools.ant.types.Resource;
 
 /**
  * Compresses using gzip.
@@ -26,7 +29,12 @@ import org.apache.ant.compress.util.BZip2StreamFactory;
 public final class BZip2 extends PackBase {
 
     public BZip2() {
-        super(new BZip2StreamFactory());
+        super(new BZip2StreamFactory(),
+              new PackBase.ResourceWrapper() {
+                public CommonsCompressCompressorResource wrap(Resource dest) {
+                    return new BZip2Resource(dest);
+                }
+            });
     }
 
 }

@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Iterator;
 
+import org.apache.ant.compress.resources.CommonsCompressCompressorResource;
 import org.apache.ant.compress.util.CompressorStreamFactory;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.tools.ant.BuildException;
@@ -43,12 +44,16 @@ public abstract class PackBase extends Task {
     private static final int BUFFER_SIZE = 8 * 1024;
 
     private final CompressorStreamFactory factory;
+    private final ResourceWrapper wrapper;
 
     private Resource src;
+    private ArchiveBase srcTask;
     private Resource dest;
 
-    protected PackBase(CompressorStreamFactory factory) {
+    protected PackBase(CompressorStreamFactory factory,
+                       ResourceWrapper wrapper) {
         this.factory = factory;
+        this.wrapper = wrapper;
     }
 
     /**
@@ -91,8 +96,8 @@ public abstract class PackBase extends Task {
      * @param src resource to expand
      */
     public void setSrc(Resource src) {
-        if (this.src != null) {
-            throw new BuildException("Can only have one source resource.");
+        if (this.src != null || srcTask != null) {
+            throw new BuildException("Can only have one source.");
         }
         if (src.isDirectory()) {
             throw new BuildException("the source can't be a directory");
@@ -110,16 +115,24 @@ public abstract class PackBase extends Task {
         }
     }
 
+    public void add(ArchiveBase task) {
+        if (src != null || srcTask != null) {
+            throw new BuildException("Can only have one source.");
+        }
+        srcTask = task;
+    }
+
     /**
      * validation routine
      * @throws BuildException if anything is invalid
      */
     private void validate() throws BuildException {
-        if (src == null) {
-            throw new BuildException("source resource is required.",
+        if (src == null && srcTask == null) {
+            throw new BuildException("source is required.",
                                      getLocation());
         }
 
+        if (src !=  null) {
         if (src.isDirectory()) {
             throw new BuildException("source resource must not "
                                      + "represent a directory!", getLocation());
@@ -127,6 +140,7 @@ public abstract class PackBase extends Task {
 
         if (!src.isExists()) {
             throw new BuildException("source resource must exist.");
+        }
         }
 
         if (dest == null) {
@@ -148,6 +162,11 @@ public abstract class PackBase extends Task {
     public void execute() throws BuildException {
         validate();
 
+        if (srcTask != null) {
+            srcTask.setDest(wrapper.wrap(dest));
+            srcTask.setTaskName(getTaskName());
+            srcTask.execute();
+        } else
         if (dest.isExists() && dest.getLastModified() > src.getLastModified()) {
             log("Nothing to do: " + dest.getName() + " is up to date.");
         } else {
@@ -175,5 +194,9 @@ public abstract class PackBase extends Task {
             FileUtils.close(in);
             FileUtils.close(out);
         }
+    }
+
+    public static interface ResourceWrapper {
+        CommonsCompressCompressorResource wrap(Resource dest);
     }
 }

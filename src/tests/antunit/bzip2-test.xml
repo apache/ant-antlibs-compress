@@ -17,6 +17,7 @@
   -->
 <project default="antunit"
          xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
          xmlns:cmp="antlib:org.apache.ant.compress">
 
   <import file="antunit-base.xml" />
@@ -29,7 +30,7 @@
   </target>
 
   <target name="testFailNone" depends="setUp">
-    <au:expectfailure expectedmessage="source resource is required.">
+    <au:expectfailure expectedmessage="source is required.">
       <cmp:bzip2 destfile="${output}/file.bz2">
         <fileset dir="${output}/empty" />
       </cmp:bzip2>
@@ -37,7 +38,7 @@
   </target>
 
   <target name="testFailTwo" depends="setUp">
-    <au:expectfailure expectedmessage="Can only have one source resource.">
+    <au:expectfailure expectedmessage="Can only have one source.">
       <cmp:bzip2 destfile="${output}/file.bz2">
         <fileset dir="${output}" />
       </cmp:bzip2>
@@ -93,6 +94,26 @@
               destfile="${output}/asf-logo-huge.tar.bz2" />
     <au:assertLogContains text="Building: asf-logo-huge.tar.bz2"/>
     <au:assertFileExists file="${output}/asf-logo-huge.tar.bz2"/>
+  </target>
+
+  <target name="testNestedTask" depends="setUp">
+    <cmp:bzip2 destfile="${output}/asf-logo.tar.bz2">
+      <cmp:tar>
+        <cmp:cpiofileset src="../resources/asf-logo.gif.cpio"
+                         includes="asf-logo.gif"/>
+      </cmp:tar>
+    </cmp:bzip2>
+    <au:assertFileExists file="${output}/asf-logo.tar.bz2"/>
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-07-31-20:11:13 +0200"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:tarentry name="asf-logo.gif">
+          <bzip2resource>
+            <file file="${output}/asf-logo.tar.bz2"/>
+          </bzip2resource>
+        </cmp:tarentry>
+      </cond:islastmodified>
+    </au:assertTrue>
   </target>
 
 </project>

@@ -18,7 +18,10 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import org.apache.ant.compress.resources.CommonsCompressCompressorResource;
+import org.apache.ant.compress.resources.GZipResource;
 import org.apache.ant.compress.util.GZipStreamFactory;
+import org.apache.tools.ant.types.Resource;
 
 /**
  * Compresses using gzip.
@@ -26,7 +29,12 @@ import org.apache.ant.compress.util.GZipStreamFactory;
 public final class GZip extends PackBase {
 
     public GZip() {
-        super(new GZipStreamFactory());
+        super(new GZipStreamFactory(),
+              new PackBase.ResourceWrapper() {
+                public CommonsCompressCompressorResource wrap(Resource dest) {
+                    return new GZipResource(dest);
+                }
+            });
     }
 
 }
