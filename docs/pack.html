@@ -41,23 +41,23 @@
       <td align="center" valign="top"><b>Required</b></td>
     </tr>
     <tr>
-      <td valign="top">srcfile</td>
+      <td valign="top">src</td>
       <td valign="top">the resource to compress.</td>
       <td align="center" valign="top" rowspan="2">Yes, or a nested
         resource collection or a nested archiving task.</td>
     </tr>
     <tr>
-      <td valign="top">src</td>
+      <td valign="top">srcfile</td>
       <td valign="top">the file to compress.</td>
     </tr>
     <tr>
-      <td valign="top">destfile</td>
-      <td valign="top">the destination file to create.</td>
+      <td valign="top">dest</td>
+      <td valign="top">the destination resource to create.</td>
       <td align="center" valign="top" rowspan="2">Exactly one of the two.</td>
     </tr>
     <tr>
       <td valign="top">destfile</td>
-      <td valign="top">the destination resource to create.</td>
+      <td valign="top">the destination file to create.</td>
     </tr>
   </table>
 
@@ -68,7 +68,7 @@
 
   <h4>any <a href="archive.html">archiving task</a></h4>
 
-  <p>The tasks output will be used as source.</p>
+  <p>The task's output will be used as src.</p>
 
   <p>You must not specify the archiving task's dest attribute or
     nested element.</p>
