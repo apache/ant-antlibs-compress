@@ -1,0 +1,127 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<html>
+
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Compressing Tasks</title>
+</head>
+
+<body>
+
+  <h2><a name="pack">Compressing Tasks</a></h2>
+  <h3>Description</h3>
+
+  <p>For each of the supported compression formats there is a
+    correspondig task that compresses a resource.  These tasks are not
+    based on
+    their <a href="http://ant.apache.org/manual/CoreTasks/pack.html">core
+    cousin tasks</a> but provide similar functionality.</p>
+
+  <h3>Parameters</h3>
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">srcfile</td>
+      <td valign="top">the resource to compress.</td>
+      <td align="center" valign="top" rowspan="2">Yes, or a nested
+        resource collection or a nested archiving task.</td>
+    </tr>
+    <tr>
+      <td valign="top">src</td>
+      <td valign="top">the file to compress.</td>
+    </tr>
+    <tr>
+      <td valign="top">destfile</td>
+      <td valign="top">the destination file to create.</td>
+      <td align="center" valign="top" rowspan="2">Exactly one of the two.</td>
+    </tr>
+    <tr>
+      <td valign="top">destfile</td>
+      <td valign="top">the destination resource to create.</td>
+    </tr>
+  </table>
+
+  <h4>any <a href="http://ant.apache.org/manual/CoreTypes/resources.html">resource</a>
+    or single element resource collection</h4>
+
+  <p>The specified resource will be used as src.</p>
+
+  <h4>any <a href="archive.html">archiving task</a></h4>
+
+  <p>The tasks output will be used as source.</p>
+
+  <p>You must not specify the archiving task's dest attribute or
+    nested element.</p>
+
+  <h4>dest</h4>
+
+  <p>Accepts
+    any <a href="http://ant.apache.org/manual/CoreTypes/resources.html">resource</a>
+    or single element resource collection as nested element.</p>
+
+  <p>The specified resource will be used as dest.</p>
+
+  <h3><a name="bzip2">BZip2</a></h3>
+
+  <p>Is an <a href="#pack">compressing task</a> that uses the BZIP2
+    compression algorithm.</p>
+
+  <h3><a name="gzip">GZip</a></h3>
+
+  <p>Is an <a href="#pack">compressing task</a> that uses the GZIP
+    compression algorithm.</p>
+
+  <h3>Examples</h3>
+  <pre>
+    &lt;cmp:gzip src=&quot;test.tar&quot; dest=&quot;test.tar.gz&quot;
+         xmlns:cmp="antlib:org.apache.ant.compress"/&gt;
+</pre>
+
+  <pre>
+    &lt;cmp:bzip2 src=&quot;test.tar&quot; destfile=&quot;test.tar.bz2&quot;
+          xmlns:cmp="antlib:org.apache.ant.compress"/&gt;
+</pre>
+  <pre>
+    &lt;cmp:gzip destfile=&quot;archive.tar.gz&quot; xmlns:cmp="antlib:org.apache.ant.compress"&gt;
+      &lt;url url="http://example.org/archive.tar"/&gt;
+    &lt;/cmp:gzip&gt;
+</pre>
+  <p>downloads <i>http://example.org/archive.tar</i> and compresses it
+    to <i>archive.tar.gz</i> in the project's basedir on the fly.</p>
+
+  <pre>
+    &lt;cmp:gzip xmlns:cmp="antlib:org.apache.ant.compress"&gt;
+      &lt;cmp:tar&gt;
+        &lt;fileset dir="src"/&gt;
+      &lt;/cmp:tar&gt;
+      &lt;dest&gt;
+        &lt;file file=&quot;src.tar.gz&quot;/&gt;
+      &lt;/dest&gt;
+    &lt;/cmp:gzip&gt;
+</pre>
+  <p>Creates a tar archive of all files in the <i>src</i> directory,
+    compresses it using GZIP and stores it in the
+    file <i>src.tar.gz</i> in the project's basedir.</p>
+
+</body>
+</html>
