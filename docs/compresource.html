@@ -1,0 +1,73 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>Compressed Resource</title>
+</head>
+
+<body>
+
+<h2><a name="compresource">Compressed Resources</a></h2>
+
+<p>For each of the supported compression formats there is a
+  correspondig resource that wraps around another resource providing
+  compression or decompression on the fly.  A single element resource
+  collection must be specified as a nested element.</p>
+
+<h2><a name="bzip2resource">bzip2resource</a></h2>
+
+<p>This is a <a href="#compresource">compressed resource</a> using the
+  BZIP2 compression.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:tarentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="some-file.txt"&gt;
+  &lt;cmp:bzip2resource&gt;
+    &lt;file file="some-archive.tar.bz2"/&gt;
+  &lt;/cmp:bzip2resource&gt;
+&lt;/cmp:tarentry&gt;
+</pre>
+
+<p>Represents the entry named some-file.txt in archive
+  some-archive.tar.bz2 where the <code>bzip2resource</code> provides
+  the decompression of the archive.</p>
+
+<h2><a name="gzipresource">gzipresource</a></h2>
+
+<p>This is a <a href="#compresource">compressed resource</a> using the
+  GZIP compression.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:tarentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="some-file.txt"&gt;
+  &lt;cmp:gzipresource&gt;
+    &lt;file file="some-archive.tar.gz"/&gt;
+  &lt;/cmp:gzipresource&gt;
+&lt;/cmp:tarentry&gt;
+</pre>
+
+<p>Represents the entry named some-file.txt in archive
+  some-archive.tar.gz where the <code>gzipresource</code> provides
+  the decompression of the archive.</p>
+
