@@ -32,6 +32,28 @@
       Antlib supports gzip and bzip2 compression and ar, cpio, tar and
       zip archives.</p>
 
+    <h3>Known Limitations</h3>
+
+    <p>The archiving tasks currently don't support the equivalent of
+      the core zip task's update attribute, this will be added before
+      the first release of the Antlib.</p>
+
+    <p>The <code>tar</code> task currently doesn't support the
+      equivalent of the core task's <code>longfile</code> attribute -
+      the <code>untar</code> task and the resources support this
+      format transparently, though - this is expected to be fixed
+      before the first release of the Antlib.</p>
+
+    <p>Using Apache Commons Compress the AR and CPIO formats don't
+      read or write timestamps, permissions, userids and groupids
+      properly - this has been fixed in the svn trunk of Apache
+      Commons Compress and will be fixed with the next release of
+      it.</p>
+
+    <p>Reading AR archives from non-filesystem resources currently
+      fails for reasons that haven't been investigated, yet.  Most
+      likely the problem is within Apache Commons Compress.</p>
+
     <h3>Tasks and Types</h3>
 
     <p>This Antlib contains the following tasks:</p>
