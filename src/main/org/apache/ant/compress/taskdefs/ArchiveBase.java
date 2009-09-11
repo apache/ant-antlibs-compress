@@ -87,6 +87,8 @@ public abstract class ArchiveBase extends Task {
 
     private static final String NO_SOURCES_MSG = "No sources, nothing to do.";
 
+    private static final FileUtils FILE_UTILS = FileUtils.getFileUtils();
+
     protected ArchiveBase() {}
 
     protected final void setFactory(ArchiveStreamFactory factory) {
@@ -251,7 +253,8 @@ public abstract class ArchiveBase extends Task {
 
     public void execute() {
         validate();
-        if (!getDest().isExists()) {
+        final Resource targetArchive = getDest();
+        if (!targetArchive.isExists()) {
             // force create mode
             mode = new Mode();
             mode.setValue(Mode.FORCE_CREATE);
@@ -269,20 +272,24 @@ public abstract class ArchiveBase extends Task {
                 throw new BuildException(NO_SOURCES_MSG);
             }
         } else {
+            File copyOfDest = maybeCopyTarget();
+            Resource destOrCopy = copyOfDest == null
+                ? targetArchive
+                : new FileResource(copyOfDest);
             try {
-                if (!Mode.FORCE_CREATE.equals(mode.getValue())
-                    && !Mode.FORCE_REPLACE.equals(mode.getValue())
-                    && isUpToDate(toAdd, getDest())) {
-                    log(getDest() + " is up-to-date, nothing to do.");
+                    
+                if (checkAndLogUpToDate(toAdd, destOrCopy)) {
                     return;
                 }
-            } catch (IOException ioex) {
-                throw new BuildException("Failed to read target archive", ioex);
-            }
-            try {
-                writeArchive(toAdd);
-            } catch (IOException ioex) {
-                throw new BuildException("Failed to write archive", ioex);
+                try {
+                    writeArchive(toAdd);
+                } catch (IOException ioex) {
+                    throw new BuildException("Failed to write archive", ioex);
+                }
+            } finally {
+                if (copyOfDest != null) {
+                    FILE_UTILS.tryHardToDelete(copyOfDest);
+                }
             }
         }
     }
@@ -346,6 +353,21 @@ public abstract class ArchiveBase extends Task {
         return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
     }
 
+    private boolean checkAndLogUpToDate(ResourceWithFlags[] src,
+                                        Resource targetArchive) {
+        try {
+            if (!Mode.FORCE_CREATE.equals(mode.getValue())
+                && !Mode.FORCE_REPLACE.equals(mode.getValue())
+                && isUpToDate(src, targetArchive)) {
+                log(targetArchive + " is up-to-date, nothing to do.");
+                return true;
+            }
+        } catch (IOException ioex) {
+            throw new BuildException("Failed to read target archive", ioex);
+        }
+        return false;
+    }
+
     /**
      * Checks whether the target is more recent than the resources
      * that shall be added to it.
@@ -378,7 +400,6 @@ public abstract class ArchiveBase extends Task {
      */
     protected void writeArchive(ResourceWithFlags[] src)
         throws IOException {
-        FileUtils fu = FileUtils.getFileUtils();
         ArchiveOutputStream out = null;
         Set addedDirectories = new HashSet();
         try {
@@ -401,7 +422,7 @@ public abstract class ArchiveBase extends Task {
                         in = src[i].getResource().getInputStream();
                         IOUtils.copy(in, out);
                     } finally {
-                        fu.close(in);
+                        FILE_UTILS.close(in);
                     }
                 } else {
                     addedDirectories.add(src[i].getName());
@@ -410,7 +431,7 @@ public abstract class ArchiveBase extends Task {
 
             }
         } finally {
-            fu.close(out);
+            FILE_UTILS.close(out);
         }
     }
 
@@ -653,6 +674,29 @@ public abstract class ArchiveBase extends Task {
         // duplicate equal to add, so we continue
         log("duplicate entry " + name + " found, adding.", Project.MSG_VERBOSE);
         return true;
+    }
+
+    /**
+     * Creates a copy of the target archive in update or recreate mode
+     * because some entries may later be read and archived from it.
+     */
+    private File maybeCopyTarget() {
+        File copyOfDest = null;
+        try {
+            if (!Mode.FORCE_CREATE.equals(mode.getValue())
+                && !Mode.CREATE.equals(mode.getValue())) {
+                copyOfDest = FILE_UTILS.createTempFile(getTaskName(), ".tmp",
+                                                       null, true, false);
+                ResourceUtils.copyResource(getDest(),
+                                           new FileResource(copyOfDest));
+            }
+        } catch (IOException ioex) {
+            if (copyOfDest != null && copyOfDest.exists()) {
+                FILE_UTILS.tryHardToDelete(copyOfDest);
+            }
+            throw new BuildException("Failed to copy target archive", ioex);
+        }
+        return copyOfDest;
     }
 
     /**
