@@ -93,12 +93,24 @@ public abstract class ArchiveBase extends Task {
         this.factory = factory;
     }
 
+    protected final ArchiveStreamFactory getFactory() {
+        return factory;
+    }
+
     protected final void setEntryBuilder(EntryBuilder builder) {
         this.entryBuilder = builder;
     }
 
+    protected final EntryBuilder getEntryBuilder() {
+        return entryBuilder;
+    }
+
     protected final void setFileSetBuilder(FileSetBuilder builder) {
         this.fileSetBuilder = builder;
+    }
+
+    protected final FileSetBuilder getFileSetBuilder() {
+        return fileSetBuilder;
     }
 
     /**
@@ -128,6 +140,10 @@ public abstract class ArchiveBase extends Task {
         dest = r;
     }
 
+    protected Resource getDest() {
+        return dest;
+    }
+
     /**
      * Sources for the archive.
      */
@@ -150,10 +166,24 @@ public abstract class ArchiveBase extends Task {
     }
 
     /**
+     * Encoding of file names.
+     */
+    public String getEncoding() {
+        return encoding;
+    }
+
+    /**
      * Whether only file entries should be added to the archive.
      */
     public void setFilesOnly(boolean b) {
         filesOnly = b;
+    }
+
+    /**
+     * Whether only file entries should be added to the archive.
+     */
+    protected boolean isFilesOnly() {
+        return filesOnly;
     }
 
     /**
@@ -221,7 +251,7 @@ public abstract class ArchiveBase extends Task {
 
     public void execute() {
         validate();
-        if (!dest.isExists()) {
+        if (!getDest().isExists()) {
             // force create mode
             mode = new Mode();
             mode.setValue(Mode.FORCE_CREATE);
@@ -242,8 +272,8 @@ public abstract class ArchiveBase extends Task {
             try {
                 if (!Mode.FORCE_CREATE.equals(mode.getValue())
                     && !Mode.FORCE_REPLACE.equals(mode.getValue())
-                    && isUpToDate(toAdd)) {
-                    log(dest + " is up-to-date, nothing to do.");
+                    && isUpToDate(toAdd, getDest())) {
+                    log(getDest() + " is up-to-date, nothing to do.");
                     return;
                 }
             } catch (IOException ioex) {
@@ -273,7 +303,7 @@ public abstract class ArchiveBase extends Task {
             throw new BuildException("subclass didn't provide an fileSetBuilder"
                                      + " instance");
         }
-        if (dest == null) {
+        if (getDest() == null) {
             throw new BuildException("must provide a destination resource");
         }
         if (sources.size() == 0) {
@@ -293,7 +323,7 @@ public abstract class ArchiveBase extends Task {
             ResourceCollectionFlags rcFlags = getFlags(rc);
             for (Iterator rs = rc.iterator(); rs.hasNext(); ) {
                 Resource r = (Resource) rs.next();
-                if (!filesOnly || !r.isDirectory()) {
+                if (!isFilesOnly() || !r.isDirectory()) {
                     ResourceWithFlags rwf =
                         new ResourceWithFlags(r, rcFlags, getFlags(r));
                     String name = rwf.getName();
@@ -322,9 +352,13 @@ public abstract class ArchiveBase extends Task {
      *
      * <p>Will only ever be invoked if the target exists.</p>
      *
+     * @param src the resources that have been found as sources
+     * @param targetArchive the target archive
+     *
      * @return true if the target is up-to-date
      */
-    protected boolean isUpToDate(ResourceWithFlags[] src) throws IOException {
+    protected boolean isUpToDate(ResourceWithFlags[] src,
+                                 Resource targetArchive) throws IOException {
         final Resource[] srcResources = new Resource[src.length];
         for (int i = 0; i < srcResources.length; i++) {
             srcResources[i] =
@@ -334,7 +368,7 @@ public abstract class ArchiveBase extends Task {
         return ResourceUtils
             .selectOutOfDateSources(this, srcResources,
                                     new IdentityMapper(),
-                                    fileSetBuilder.buildFileSet(dest)
+                                    fileSetBuilder.buildFileSet(targetArchive)
                                     .getDirectoryScanner(getProject()))
             .length == 0;
     }
@@ -349,13 +383,13 @@ public abstract class ArchiveBase extends Task {
         Set addedDirectories = new HashSet();
         try {
             out =
-                factory.getArchiveStream(new BufferedOutputStream(dest
+                factory.getArchiveStream(new BufferedOutputStream(getDest()
                                                                   .getOutputStream()),
-                                         Expand.NATIVE_ENCODING.equals(encoding)
-                                         ? null : encoding);
+                                         Expand.NATIVE_ENCODING.equals(getEncoding())
+                                         ? null : getEncoding());
             for (int i = 0; i < src.length; i++) {
 
-                if (!filesOnly) {
+                if (!isFilesOnly()) {
                     ensureParentDirs(out, src[i], addedDirectories);
                 }
 
