@@ -276,9 +276,12 @@ public abstract class ArchiveBase extends Task {
             Resource destOrCopy = copyOfDest == null
                 ? targetArchive
                 : new FileResource(copyOfDest);
+            ArchiveFileSet existingEntries =
+                fileSetBuilder.buildFileSet(destOrCopy);
             try {
                     
-                if (checkAndLogUpToDate(toAdd, destOrCopy)) {
+                if (checkAndLogUpToDate(toAdd, targetArchive,
+                                        existingEntries)) {
                     return;
                 }
                 try {
@@ -354,11 +357,12 @@ public abstract class ArchiveBase extends Task {
     }
 
     private boolean checkAndLogUpToDate(ResourceWithFlags[] src,
-                                        Resource targetArchive) {
+                                        Resource targetArchive,
+                                        ArchiveFileSet existingEntries) {
         try {
             if (!Mode.FORCE_CREATE.equals(mode.getValue())
                 && !Mode.FORCE_REPLACE.equals(mode.getValue())
-                && isUpToDate(src, targetArchive)) {
+                && isUpToDate(src, existingEntries)) {
                 log(targetArchive + " is up-to-date, nothing to do.");
                 return true;
             }
@@ -375,12 +379,14 @@ public abstract class ArchiveBase extends Task {
      * <p>Will only ever be invoked if the target exists.</p>
      *
      * @param src the resources that have been found as sources
-     * @param targetArchive the target archive
+     * @param existingEntries the target archive as fileset
      *
      * @return true if the target is up-to-date
      */
     protected boolean isUpToDate(ResourceWithFlags[] src,
-                                 Resource targetArchive) throws IOException {
+                                 ArchiveFileSet existingEntries)
+        throws IOException {
+
         final Resource[] srcResources = new Resource[src.length];
         for (int i = 0; i < srcResources.length; i++) {
             srcResources[i] =
@@ -390,7 +396,7 @@ public abstract class ArchiveBase extends Task {
         return ResourceUtils
             .selectOutOfDateSources(this, srcResources,
                                     new IdentityMapper(),
-                                    fileSetBuilder.buildFileSet(targetArchive)
+                                    existingEntries
                                     .getDirectoryScanner(getProject()))
             .length == 0;
     }
