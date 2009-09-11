@@ -25,12 +25,14 @@ import java.util.Map;
 import java.util.zip.Deflater;
 
 import org.apache.ant.compress.util.ZipStreamFactory;
+import org.apache.ant.compress.resources.ZipFileSet;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.EnumeratedAttribute;
+import org.apache.tools.ant.types.Resource;
 
 /**
  * Creates zip archives.
@@ -47,7 +49,7 @@ public class Zip extends ArchiveBase {
         setFactory(new ZipStreamFactory() {
                 public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                             String encoding)
-        throws IOException {
+                    throws IOException {
                     ZipArchiveOutputStream o =
                         (ZipArchiveOutputStream) super.getArchiveStream(stream,
                                                                         encoding);
@@ -60,7 +62,7 @@ public class Zip extends ArchiveBase {
                     return o;
                 }
             });
-        setBuilder(
+        setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
@@ -93,6 +95,13 @@ public class Zip extends ArchiveBase {
                     }
 
                     return ent;
+                }
+            });
+        setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                public ArchiveFileSet buildFileSet(Resource dest) {
+                    ArchiveFileSet afs = new ZipFileSet();
+                    afs.setSrcResource(dest);
+                    return afs;
                 }
             });
     }

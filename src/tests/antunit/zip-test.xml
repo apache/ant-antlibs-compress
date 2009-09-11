@@ -446,4 +446,52 @@
     <au:assertFilesMatch expected="ar-test.xml"
                          actual="${output}/ar-test.xml"/>
   </target>
+
+  <target name="-prepareArchive" depends="setUp">
+    <mkdir dir="${input}"/>
+    <copy todir="${input}">
+      <file file="ar-test.xml"/>
+    </copy>
+    <cmp:zip dest="${dest}">
+      <fileset dir="${input}"/>
+    </cmp:zip>
+    <copy todir="${output}">
+      <file file="${dest}"/>
+      <globmapper from="*" to="*.bak"/>
+    </copy>
+    <sleep seconds="2"/>
+    <touch file="${dest}.bak"/>
+    <sleep seconds="2"/>
+  </target>
+
+  <target name="testCreateOfUpToDate" depends="-prepareArchive">
+    <cmp:zip dest="${dest}" mode="create">
+      <fileset dir="${input}"/>
+    </cmp:zip>
+    <au:assertLogContains
+       text="test.zip is up-to-date, nothing to do."/>
+    <au:assertDestIsUptodate
+       src="${dest}" dest="${dest}.bak"/>
+  </target>
+
+  <target name="testForceCreateOfUpToDate" depends="-prepareArchive">
+    <cmp:zip dest="${dest}" mode="force-create">
+      <fileset dir="${input}"/>
+    </cmp:zip>
+    <au:assertLogDoesntContain
+       text="test.zip is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+  </target>
+
+  <target name="testCreateOfOutOfDate" depends="-prepareArchive">
+    <touch file="${input}/ar-test.xml"/>
+    <cmp:zip dest="${dest}" mode="create">
+      <fileset dir="${input}"/>
+    </cmp:zip>
+    <au:assertLogDoesntContain
+       text="test.zip is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+  </target>
 </project>

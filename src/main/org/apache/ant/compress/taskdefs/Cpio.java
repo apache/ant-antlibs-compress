@@ -19,9 +19,11 @@
 package org.apache.ant.compress.taskdefs;
 
 import org.apache.ant.compress.util.CpioStreamFactory;
+import org.apache.ant.compress.resources.CpioFileSet;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
 import org.apache.tools.ant.types.ArchiveFileSet;
+import org.apache.tools.ant.types.Resource;
 
 /**
  * Creates cpio archives.
@@ -29,7 +31,7 @@ import org.apache.tools.ant.types.ArchiveFileSet;
 public class Cpio extends ArchiveBase {
     public Cpio() {
         setFactory(new CpioStreamFactory());
-        setBuilder(
+        setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
@@ -67,6 +69,13 @@ public class Cpio extends ArchiveBase {
                     }
  
                     return ent;
+                }
+            });
+        setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                public ArchiveFileSet buildFileSet(Resource dest) {
+                    ArchiveFileSet afs = new CpioFileSet();
+                    afs.setSrcResource(dest);
+                    return afs;
                 }
             });
     }

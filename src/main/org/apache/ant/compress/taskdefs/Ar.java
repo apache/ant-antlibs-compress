@@ -19,10 +19,12 @@
 package org.apache.ant.compress.taskdefs;
 
 import org.apache.ant.compress.util.ArStreamFactory;
+import org.apache.ant.compress.resources.ArFileSet;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.ArchiveFileSet;
+import org.apache.tools.ant.types.Resource;
 
 /**
  * Creates ar archives.
@@ -34,7 +36,7 @@ public class Ar extends ArchiveBase {
 
     public Ar() {
         setFactory(new ArStreamFactory());
-        setBuilder(
+        setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
@@ -73,6 +75,13 @@ public class Ar extends ArchiveBase {
                                               round(r.getResource()
                                                     .getLastModified(), 1000)
                                               / 1000);
+                }
+            });
+        setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                public ArchiveFileSet buildFileSet(Resource dest) {
+                    ArchiveFileSet afs = new ArFileSet();
+                    afs.setSrcResource(dest);
+                    return afs;
                 }
             });
     }

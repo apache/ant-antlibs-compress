@@ -58,8 +58,12 @@ import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.ArchiveResource;
 import org.apache.tools.ant.types.resources.FileResource;
+import org.apache.tools.ant.types.resources.MappedResource;
 import org.apache.tools.ant.types.resources.Resources;
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.tools.ant.util.IdentityMapper;
+import org.apache.tools.ant.util.MergingMapper;
+import org.apache.tools.ant.util.ResourceUtils;
 import org.apache.tools.zip.UnixStat;
 
 /**
@@ -67,7 +71,8 @@ import org.apache.tools.zip.UnixStat;
  */
 public abstract class ArchiveBase extends Task {
     private ArchiveStreamFactory factory;
-    private EntryBuilder builder;
+    private FileSetBuilder fileSetBuilder;
+    private EntryBuilder entryBuilder;
 
     private Resource dest;
     private List/*<ResourceCollection>*/ sources = new ArrayList();
@@ -88,8 +93,12 @@ public abstract class ArchiveBase extends Task {
         this.factory = factory;
     }
 
-    protected final void setBuilder(EntryBuilder builder) {
-        this.builder = builder;
+    protected final void setEntryBuilder(EntryBuilder builder) {
+        this.entryBuilder = builder;
+    }
+
+    protected final void setFileSetBuilder(FileSetBuilder builder) {
+        this.fileSetBuilder = builder;
     }
 
     /**
@@ -213,8 +222,9 @@ public abstract class ArchiveBase extends Task {
     public void execute() {
         validate();
         if (!dest.isExists()) {
-            // create mode
+            // force create mode
             mode = new Mode();
+            mode.setValue(Mode.FORCE_CREATE);
         }
         ResourceWithFlags[] toAdd;
         try {
@@ -229,6 +239,16 @@ public abstract class ArchiveBase extends Task {
                 throw new BuildException(NO_SOURCES_MSG);
             }
         } else {
+            try {
+                if (!Mode.FORCE_CREATE.equals(mode.getValue())
+                    && !Mode.FORCE_REPLACE.equals(mode.getValue())
+                    && isUpToDate(toAdd)) {
+                    log(dest + " is up-to-date, nothing to do.");
+                    return;
+                }
+            } catch (IOException ioex) {
+                throw new BuildException("Failed to read target archive", ioex);
+            }
             try {
                 writeArchive(toAdd);
             } catch (IOException ioex) {
@@ -245,8 +265,12 @@ public abstract class ArchiveBase extends Task {
             throw new BuildException("subclass didn't provide a factory"
                                      + " instance");
         }
-        if (builder == null) {
-            throw new BuildException("subclass didn't provide a builder"
+        if (entryBuilder == null) {
+            throw new BuildException("subclass didn't provide an entryBuilder"
+                                     + " instance");
+        }
+        if (fileSetBuilder == null) {
+            throw new BuildException("subclass didn't provide an fileSetBuilder"
                                      + " instance");
         }
         if (dest == null) {
@@ -293,6 +317,29 @@ public abstract class ArchiveBase extends Task {
     }
 
     /**
+     * Checks whether the target is more recent than the resources
+     * that shall be added to it.
+     *
+     * <p>Will only ever be invoked if the target exists.</p>
+     *
+     * @return true if the target is up-to-date
+     */
+    protected boolean isUpToDate(ResourceWithFlags[] src) throws IOException {
+        final Resource[] srcResources = new Resource[src.length];
+        for (int i = 0; i < srcResources.length; i++) {
+            srcResources[i] =
+                new MappedResource(src[i].getResource(),
+                                   new MergingMapper(src[i].getName()));
+        }
+        return ResourceUtils
+            .selectOutOfDateSources(this, srcResources,
+                                    new IdentityMapper(),
+                                    fileSetBuilder.buildFileSet(dest)
+                                    .getDirectoryScanner(getProject()))
+            .length == 0;
+    }
+
+    /**
      * Creates the archive archiving the given resources.
      */
     protected void writeArchive(ResourceWithFlags[] src)
@@ -312,7 +359,7 @@ public abstract class ArchiveBase extends Task {
                     ensureParentDirs(out, src[i], addedDirectories);
                 }
 
-                ArchiveEntry ent = builder.buildEntry(src[i]);
+                ArchiveEntry ent = entryBuilder.buildEntry(src[i]);
                 out.putArchiveEntry(ent);
                 if (!src[i].getResource().isDirectory()) {
                     InputStream in = null;
@@ -359,7 +406,7 @@ public abstract class ArchiveBase extends Task {
                     new ResourceWithFlags(currentParent,
                                           dir, r.getCollectionFlags(),
                                           new ResourceFlags());
-                ArchiveEntry ent = builder.buildEntry(artifical);
+                ArchiveEntry ent = entryBuilder.buildEntry(artifical);
                 out.putArchiveEntry(ent);
                 out.closeArchiveEntry();
             }
@@ -584,6 +631,11 @@ public abstract class ArchiveBase extends Task {
          */
         private static final String CREATE = "create";
         /**
+         * Create a new archive even if the target exists and seems
+         * up-to-date.
+         */
+        private static final String FORCE_CREATE = "force-create";
+        /**
          * Update an existing archive.
          */
         private static final String UPDATE = "update";
@@ -592,6 +644,12 @@ public abstract class ArchiveBase extends Task {
          * with those from sources.
          */
         private static final String REPLACE = "replace";
+        /**
+         * Update an existing archive - replacing all existing entries
+         * with those from sources - even if the target exists and
+         * seems up-to-date.
+         */
+        private static final String FORCE_REPLACE = "force-replace";
 
         public Mode() {
             super();
@@ -599,7 +657,8 @@ public abstract class ArchiveBase extends Task {
         }
 
         public String[] getValues() {
-            return new String[] {CREATE, UPDATE, REPLACE};
+            return new String[] {CREATE, UPDATE, REPLACE,
+                                 FORCE_CREATE, FORCE_REPLACE};
         }
 
     }
@@ -841,5 +900,12 @@ public abstract class ArchiveBase extends Task {
      */
     public static interface EntryBuilder {
         ArchiveEntry buildEntry(ResourceWithFlags resource);
+    }
+
+    /**
+     * Creates an archive fileset to read the target archive.
+     */
+    public static interface FileSetBuilder {
+        ArchiveFileSet buildFileSet(Resource dest);
     }
 }

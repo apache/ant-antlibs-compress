@@ -19,10 +19,12 @@
 package org.apache.ant.compress.taskdefs;
 
 import org.apache.ant.compress.util.TarStreamFactory;
+import org.apache.ant.compress.resources.TarFileSet;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarConstants;
 import org.apache.tools.ant.types.ArchiveFileSet;
+import org.apache.tools.ant.types.Resource;
 
 /**
  * Creates tar archives.
@@ -30,7 +32,7 @@ import org.apache.tools.ant.types.ArchiveFileSet;
 public class Tar extends ArchiveBase {
     public Tar() {
         setFactory(new TarStreamFactory());
-        setBuilder(
+        setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
@@ -80,6 +82,13 @@ public class Tar extends ArchiveBase {
                     }
  
                     return ent;
+                }
+            });
+        setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                public ArchiveFileSet buildFileSet(Resource dest) {
+                    ArchiveFileSet afs = new TarFileSet();
+                    afs.setSrcResource(dest);
+                    return afs;
                 }
             });
     }
