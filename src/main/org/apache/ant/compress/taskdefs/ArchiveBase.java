@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -259,13 +260,13 @@ public abstract class ArchiveBase extends Task {
             mode = new Mode();
             mode.setValue(Mode.FORCE_CREATE);
         }
-        ResourceWithFlags[] toAdd;
+        ResourceWithFlags[] sourceResources;
         try {
-            toAdd = findSources();
+            sourceResources = findSources();
         } catch (IOException ioex) {
             throw new BuildException("Failed to read sources", ioex);
         }
-        if (toAdd.length == 0) {
+        if (sourceResources.length == 0) {
             if (WhenEmpty.SKIP.equals(emptyBehavior.getValue())) {
                 log(NO_SOURCES_MSG, Project.MSG_WARN);
             } else {
@@ -280,12 +281,20 @@ public abstract class ArchiveBase extends Task {
                 fileSetBuilder.buildFileSet(destOrCopy);
             try {
                     
-                if (checkAndLogUpToDate(toAdd, targetArchive,
+                List/*<ResourceWithFlags>*/ toAdd
+                    = new ArrayList/*<ResourceWithFlags>*/();
+                toAdd.addAll(Arrays.asList(sourceResources));
+
+                if (checkAndLogUpToDate(sourceResources, targetArchive,
                                         existingEntries)) {
                     return;
                 }
+
+                sort(toAdd);
+
                 try {
-                    writeArchive(toAdd);
+                    writeArchive((ResourceWithFlags[])
+                                 toAdd.toArray(new ResourceWithFlags[0]));
                 } catch (IOException ioex) {
                     throw new BuildException("Failed to write archive", ioex);
                 }
@@ -346,13 +355,6 @@ public abstract class ArchiveBase extends Task {
                 }
             }
         }
-        Collections.sort(l, new Comparator/*<ResourceWithFlags>*/() {
-                public int compare(Object o1, Object o2) {
-                    ResourceWithFlags r1 = (ResourceWithFlags) o1;
-                    ResourceWithFlags r2 = (ResourceWithFlags) o2;
-                    return r1.getName().compareTo(r2.getName());
-                }
-            });
         return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
     }
 
@@ -399,6 +401,19 @@ public abstract class ArchiveBase extends Task {
                                     existingEntries
                                     .getDirectoryScanner(getProject()))
             .length == 0;
+    }
+
+    /**
+     * Sorts the list of resources to add.
+     */
+    protected void sort(List/*<ResourceWithFlags>*/ l) {
+        Collections.sort(l, new Comparator/*<ResourceWithFlags>*/() {
+                public int compare(Object o1, Object o2) {
+                    ResourceWithFlags r1 = (ResourceWithFlags) o1;
+                    ResourceWithFlags r2 = (ResourceWithFlags) o2;
+                    return r1.getName().compareTo(r2.getName());
+                }
+            });
     }
 
     /**
