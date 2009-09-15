@@ -20,12 +20,28 @@
 
   <import file="antunit-base.xml"/>
 
-  <target name="testExtractJars">
+  <target name="-findAntHomeLib" depends="-useAntHome, -searchAntHomeLib"/>
+
+  <target name="-useAntHome" if="ant.home">
+    <property name="ant.home.lib" value="${ant.home}/lib"/>
+  </target>
+
+  <target name="-searchAntHomeLib" unless="ant.home">
+    <first id="ant-jar">
+      <restrict>
+        <path path="${java.class.path}"/>
+        <name name="**/ant.jar"/>
+      </restrict>
+    </first>
+    <dirname property="ant.home.lib" file="${toString:ant-jar}"/>
+  </target>
+
+  <target name="testExtractJars" depends="-findAntHomeLib">
     <mkdir dir="${output}"/>
     <copy todir="${output}">
       <cmp:archives>
         <zips>
-          <fileset dir="${ant.home}/lib"
+          <fileset dir="${ant.home.lib}"
                    includes="ant-*.jar"/>
         </zips>
       </cmp:archives>
@@ -36,7 +52,7 @@
        file="${output}/org/apache/tools/ant/BuildFileTest.class"/>
   </target>
 
-  <target name="testMixingFormats">
+  <target name="testMixingFormats" depends="-findAntHomeLib">
     <mkdir dir="${output}"/>
     <tar destfile="${output}/test.tar.gz" compression="gzip">
       <fileset file="${ant.file}"/>
@@ -47,7 +63,7 @@
     <copy todir="${output}">
       <cmp:archives>
         <zips>
-          <fileset dir="${ant.home}/lib"
+          <fileset dir="${ant.home.lib}"
                    includes="ant-launcher.jar"/>
         </zips>
         <tars>
@@ -74,11 +90,11 @@
     <au:assertFileExists file="${output}/cpio/${filename}"/>
   </target>
 
-  <target name="testReference">
+  <target name="testReference" depends="-findAntHomeLib">
     <mkdir dir="${output}"/>
     <cmp:archives id="ref">
       <zips>
-        <fileset dir="${ant.home}/lib"
+        <fileset dir="${ant.home.lib}"
                  includes="ant-launcher.jar"/>
       </zips>
     </cmp:archives>
