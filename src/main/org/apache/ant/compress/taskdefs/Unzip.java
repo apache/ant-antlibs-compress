@@ -64,9 +64,15 @@ public class Unzip extends ExpandBase {
             while (e.hasMoreElements()) {
                 empty = false;
                 ZipArchiveEntry ze = (ZipArchiveEntry) e.nextElement();
-                extractFile(fileUtils, srcF, dir, zf.getInputStream(ze),
-                            ze.getName(), new Date(ze.getTime()),
-                            ze.isDirectory(), mapper);
+                InputStream is = null;
+                try {
+                    extractFile(fileUtils, srcF, dir,
+                                is = zf.getInputStream(ze),
+                                ze.getName(), new Date(ze.getTime()),
+                                ze.isDirectory(), mapper);
+                } finally {
+                    FileUtils.close(is);
+                }
             }
             if (empty && getFailOnEmptyArchive()) {
                 throw new BuildException("archive '" + srcF + "' is empty");
