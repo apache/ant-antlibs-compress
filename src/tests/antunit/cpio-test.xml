@@ -425,7 +425,7 @@
   <target name="-prepareArchive" depends="setUp">
     <mkdir dir="${input}"/>
     <copy todir="${input}">
-      <file file="ar-test.xml"/>
+      <fileset dir="." includes="*r-test.xml"/>
     </copy>
     <cmp:cpio dest="${dest}">
       <fileset dir="${input}"/>
@@ -441,7 +441,7 @@
 
   <target name="testCreateOfUpToDate" depends="-prepareArchive">
     <cmp:cpio dest="${dest}" mode="create">
-      <fileset dir="${input}"/>
+      <fileset dir="${input}" includes="ar-test.xml"/>
     </cmp:cpio>
     <au:assertLogContains
        text="test.cpio is up-to-date, nothing to do."/>
@@ -451,22 +451,73 @@
 
   <target name="testForceCreateOfUpToDate" depends="-prepareArchive">
     <cmp:cpio dest="${dest}" mode="force-create">
-      <fileset dir="${input}"/>
+      <fileset dir="${input}" includes="ar-test.xml"/>
     </cmp:cpio>
     <au:assertLogDoesntContain
        text="test.cpio is up-to-date, nothing to do."/>
     <au:assertDestIsOutofdate
        src="${dest}" dest="${dest}.bak"/>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
   </target>
 
   <target name="testCreateOfOutOfDate" depends="-prepareArchive">
     <touch file="${input}/ar-test.xml"/>
     <cmp:cpio dest="${dest}" mode="create">
-      <fileset dir="${input}"/>
+      <fileset dir="${input}" includes="ar-test.xml"/>
     </cmp:cpio>
     <au:assertLogDoesntContain
        text="test.cpio is up-to-date, nothing to do."/>
     <au:assertDestIsOutofdate
        src="${dest}" dest="${dest}.bak"/>
+    <assertResourceDoesntExist>
+      <cmp:cpioentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testReplaceOfUpToDate" depends="-prepareArchive">
+    <cmp:cpio dest="${dest}" mode="replace">
+      <fileset dir="${input}" includes="ar-test.xml"/>
+    </cmp:cpio>
+    <au:assertLogContains
+       text="test.cpio is up-to-date, nothing to do."/>
+    <au:assertDestIsUptodate
+       src="${dest}" dest="${dest}.bak"/>
+  </target>
+
+  <target name="testForceReplaceOfUpToDate" depends="-prepareArchive">
+    <cmp:cpio dest="${dest}" mode="force-replace">
+      <fileset dir="${input}" includes="ar-test.xml"/>
+    </cmp:cpio>
+    <au:assertLogDoesntContain
+       text="test.cpio is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+    <assertResourceExists>
+      <cmp:cpioentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
+  </target>
+
+  <target name="testReplaceOfOutOfDate" depends="-prepareArchive">
+    <touch file="${input}/ar-test.xml"/>
+    <cmp:cpio dest="${dest}" mode="replace">
+      <fileset dir="${input}" includes="ar-test.xml"/>
+    </cmp:cpio>
+    <au:assertLogDoesntContain
+       text="test.cpio is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+    <assertResourceExists>
+      <cmp:cpioentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:cpioentry>
+    </assertResourceExists>
   </target>
 </project>

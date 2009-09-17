@@ -61,6 +61,10 @@ import org.apache.tools.ant.types.resources.ArchiveResource;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.MappedResource;
 import org.apache.tools.ant.types.resources.Resources;
+import org.apache.tools.ant.types.resources.Restrict;
+import org.apache.tools.ant.types.resources.selectors.Name;
+import org.apache.tools.ant.types.resources.selectors.Not;
+import org.apache.tools.ant.types.resources.selectors.Or;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.IdentityMapper;
 import org.apache.tools.ant.util.MergingMapper;
@@ -279,8 +283,9 @@ public abstract class ArchiveBase extends Task {
                 : new FileResource(copyOfDest);
             ArchiveFileSet existingEntries =
                 fileSetBuilder.buildFileSet(destOrCopy);
+            existingEntries.setProject(getProject());
             try {
-                    
+
                 List/*<ResourceWithFlags>*/ toAdd
                     = new ArrayList/*<ResourceWithFlags>*/();
                 toAdd.addAll(Arrays.asList(sourceResources));
@@ -290,6 +295,7 @@ public abstract class ArchiveBase extends Task {
                     return;
                 }
 
+                addResourcesToKeep(toAdd, existingEntries, sourceResources);
                 sort(toAdd);
 
                 try {
@@ -401,6 +407,62 @@ public abstract class ArchiveBase extends Task {
                                     existingEntries
                                     .getDirectoryScanner(getProject()))
             .length == 0;
+    }
+
+    /**
+     * Add the resources of the target archive that shall be kept when
+     * creating the new one.
+     */
+    private void addResourcesToKeep(List/*<ResourceWithFlags>*/ toAdd,
+                                    ArchiveFileSet target,
+                                    ResourceWithFlags[] src) {
+        if (!Mode.FORCE_CREATE.equals(mode.getValue())
+            && !Mode.CREATE.equals(mode.getValue())) {
+            try {
+                toAdd.addAll(Arrays.asList(findUnmatchedTargets(target, src)));
+            } catch (IOException ioex) {
+                throw new BuildException("Failed to read target archive", ioex);
+            }
+        }
+    }
+
+    /**
+     * Find the resources from the target archive that don't have a
+     * matching resource in the sources to be added.
+     */
+    protected ResourceWithFlags[] findUnmatchedTargets(ArchiveFileSet target,
+                                                       ResourceWithFlags[] src)
+        throws IOException {
+
+        List/*<ResourceWithFlags>*/ l = new ArrayList/*<ResourceWithFlags>*/();
+        ResourceCollectionFlags rcFlags = getFlags(target);
+
+        Restrict res = new Restrict();
+        res.setProject(getProject());
+        res.add(target);
+
+        Not not = new Not();
+        Or or = new Or();
+        not.add(or);
+        for (int i = 0; i < src.length; i++) {
+            Name name = new Name();
+            name.setName(src[i].getName());
+            or.add(name);
+        }
+        res.add(not);
+
+        for (Iterator rs = res.iterator(); rs.hasNext(); ) {
+            Resource r = (Resource) rs.next();
+            String name = r.getName();
+            if ("".equals(name) || "/".equals(name)) {
+                continue;
+            }
+            if (!isFilesOnly() || !r.isDirectory()) {
+                l.add(new ResourceWithFlags(r, rcFlags, getFlags(r)));
+            }
+        }
+
+        return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
     }
 
     /**
