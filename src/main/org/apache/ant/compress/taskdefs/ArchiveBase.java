@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -264,13 +264,13 @@ public abstract class ArchiveBase extends Task {
             mode = new Mode();
             mode.setValue(Mode.FORCE_CREATE);
         }
-        ResourceWithFlags[] sourceResources;
+        Collection sourceResources;
         try {
             sourceResources = findSources();
         } catch (IOException ioex) {
             throw new BuildException("Failed to read sources", ioex);
         }
-        if (sourceResources.length == 0) {
+        if (sourceResources.size() == 0) {
             if (WhenEmpty.SKIP.equals(emptyBehavior.getValue())) {
                 log(NO_SOURCES_MSG, Project.MSG_WARN);
             } else {
@@ -288,7 +288,7 @@ public abstract class ArchiveBase extends Task {
 
                 List/*<ResourceWithFlags>*/ toAdd
                     = new ArrayList/*<ResourceWithFlags>*/();
-                toAdd.addAll(Arrays.asList(sourceResources));
+                toAdd.addAll(sourceResources);
 
                 if (checkAndLogUpToDate(sourceResources, targetArchive,
                                         existingEntries)) {
@@ -299,8 +299,7 @@ public abstract class ArchiveBase extends Task {
                 sort(toAdd);
 
                 try {
-                    writeArchive((ResourceWithFlags[])
-                                 toAdd.toArray(new ResourceWithFlags[0]));
+                    writeArchive(toAdd);
                 } catch (IOException ioex) {
                     throw new BuildException("Failed to write archive", ioex);
                 }
@@ -340,7 +339,9 @@ public abstract class ArchiveBase extends Task {
      * Find all the resources with their flags that should be added to
      * the archive.
      */
-    protected ResourceWithFlags[] findSources() throws IOException {
+    protected Collection/*<ResourceWithFlags>*/ findSources()
+        throws IOException {
+
         List/*<ResourceWithFlags>*/ l = new ArrayList/*<ResourceWithFlags>*/();
         Set/*<String>*/ addedNames = new HashSet/*<String>*/();
         for (Iterator rcs = sources.iterator(); rcs.hasNext(); ) {
@@ -361,10 +362,10 @@ public abstract class ArchiveBase extends Task {
                 }
             }
         }
-        return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
+        return l;
     }
 
-    private boolean checkAndLogUpToDate(ResourceWithFlags[] src,
+    private boolean checkAndLogUpToDate(Collection/*<ResourceWithFlags>*/ src,
                                         Resource targetArchive,
                                         ArchiveFileSet existingEntries) {
         try {
@@ -391,15 +392,17 @@ public abstract class ArchiveBase extends Task {
      *
      * @return true if the target is up-to-date
      */
-    protected boolean isUpToDate(ResourceWithFlags[] src,
+    protected boolean isUpToDate(Collection/*<ResourceWithFlags>*/ src,
                                  ArchiveFileSet existingEntries)
         throws IOException {
 
-        final Resource[] srcResources = new Resource[src.length];
-        for (int i = 0; i < srcResources.length; i++) {
-            srcResources[i] =
-                new MappedResource(src[i].getResource(),
-                                   new MergingMapper(src[i].getName()));
+        final Resource[] srcResources = new Resource[src.size()];
+        int index = 0;
+        for (Iterator i = src.iterator(); i.hasNext(); ) {
+            ResourceWithFlags r = (ResourceWithFlags) i.next();
+            srcResources[index++] =
+                new MappedResource(r.getResource(),
+                                   new MergingMapper(r.getName()));
         }
         return ResourceUtils
             .selectOutOfDateSources(this, srcResources,
@@ -413,13 +416,13 @@ public abstract class ArchiveBase extends Task {
      * Add the resources of the target archive that shall be kept when
      * creating the new one.
      */
-    private void addResourcesToKeep(List/*<ResourceWithFlags>*/ toAdd,
+    private void addResourcesToKeep(Collection/*<ResourceWithFlags>*/ toAdd,
                                     ArchiveFileSet target,
-                                    ResourceWithFlags[] src) {
+                                    Collection/*<ResourceWithFlags>*/ src) {
         if (!Mode.FORCE_CREATE.equals(mode.getValue())
             && !Mode.CREATE.equals(mode.getValue())) {
             try {
-                toAdd.addAll(Arrays.asList(findUnmatchedTargets(target, src)));
+                toAdd.addAll(findUnmatchedTargets(target, src));
             } catch (IOException ioex) {
                 throw new BuildException("Failed to read target archive", ioex);
             }
@@ -430,8 +433,9 @@ public abstract class ArchiveBase extends Task {
      * Find the resources from the target archive that don't have a
      * matching resource in the sources to be added.
      */
-    protected ResourceWithFlags[] findUnmatchedTargets(ArchiveFileSet target,
-                                                       ResourceWithFlags[] src)
+    protected Collection/*<ResourceWithFlags>*/
+        findUnmatchedTargets(ArchiveFileSet target,
+                             Collection/*<ResourceWithFlags>*/ src)
         throws IOException {
 
         List/*<ResourceWithFlags>*/ l = new ArrayList/*<ResourceWithFlags>*/();
@@ -444,9 +448,10 @@ public abstract class ArchiveBase extends Task {
         Not not = new Not();
         Or or = new Or();
         not.add(or);
-        for (int i = 0; i < src.length; i++) {
+        for (Iterator i = src.iterator(); i.hasNext(); ) {
+            ResourceWithFlags r = (ResourceWithFlags) i.next();
             Name name = new Name();
-            name.setName(src[i].getName());
+            name.setName(r.getName());
             or.add(name);
         }
         res.add(not);
@@ -462,7 +467,7 @@ public abstract class ArchiveBase extends Task {
             }
         }
 
-        return (ResourceWithFlags[]) l.toArray(new ResourceWithFlags[l.size()]);
+        return l;
     }
 
     /**
@@ -481,7 +486,7 @@ public abstract class ArchiveBase extends Task {
     /**
      * Creates the archive archiving the given resources.
      */
-    protected void writeArchive(ResourceWithFlags[] src)
+    protected void writeArchive(Collection/*<ResourceWithFlags>*/ src)
         throws IOException {
         ArchiveOutputStream out = null;
         Set addedDirectories = new HashSet();
@@ -491,24 +496,25 @@ public abstract class ArchiveBase extends Task {
                                                                   .getOutputStream()),
                                          Expand.NATIVE_ENCODING.equals(getEncoding())
                                          ? null : getEncoding());
-            for (int i = 0; i < src.length; i++) {
+            for (Iterator i = src.iterator(); i.hasNext(); ) {
+                ResourceWithFlags r = (ResourceWithFlags) i.next();
 
                 if (!isFilesOnly()) {
-                    ensureParentDirs(out, src[i], addedDirectories);
+                    ensureParentDirs(out, r, addedDirectories);
                 }
 
-                ArchiveEntry ent = entryBuilder.buildEntry(src[i]);
+                ArchiveEntry ent = entryBuilder.buildEntry(r);
                 out.putArchiveEntry(ent);
-                if (!src[i].getResource().isDirectory()) {
+                if (!r.getResource().isDirectory()) {
                     InputStream in = null;
                     try {
-                        in = src[i].getResource().getInputStream();
+                        in = r.getResource().getInputStream();
                         IOUtils.copy(in, out);
                     } finally {
                         FILE_UTILS.close(in);
                     }
                 } else {
-                    addedDirectories.add(src[i].getName());
+                    addedDirectories.add(r.getName());
                 }
                 out.closeArchiveEntry();
 
