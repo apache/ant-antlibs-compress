@@ -439,10 +439,10 @@
                          actual="${output}/ar-test.xml"/>
   </target>
 
-  <target name="-prepareArchive" depends="setUp">
+  <target name="-prepareArchiveForModeTests" depends="setUp">
     <mkdir dir="${input}"/>
     <copy todir="${input}">
-      <fileset dir="." includes="*r-test.xml"/>
+      <fileset dir="." includes="*r-test.xml,zip-test.xml"/>
     </copy>
     <cmp:tar dest="${dest}">
       <fileset dir="${input}"/>
@@ -451,14 +451,17 @@
       <file file="${dest}"/>
       <globmapper from="*" to="*.bak"/>
     </copy>
+    <property name="timestamp" value="2000-01-01-00:00:00 +0000"/>
+    <touch datetime="${timestamp}" file="${input}/zip-test.xml"
+           pattern="yyyy-MM-dd-HH:mm:ss Z"/>
     <sleep seconds="2"/>
     <touch file="${dest}.bak"/>
     <sleep seconds="2"/>
   </target>
 
-  <target name="testCreateOfUpToDate" depends="-prepareArchive">
+  <target name="testCreateOfUpToDate" depends="-prepareArchiveForModeTests">
     <cmp:tar dest="${dest}" mode="create">
-      <fileset dir="${input}" includes="ar-test.xml"/>
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
     </cmp:tar>
     <au:assertLogContains
        text="test.tar is up-to-date, nothing to do."/>
@@ -466,9 +469,10 @@
        src="${dest}" dest="${dest}.bak"/>
   </target>
 
-  <target name="testForceCreateOfUpToDate" depends="-prepareArchive">
+  <target name="testForceCreateOfUpToDate"
+          depends="-prepareArchiveForModeTests">
     <cmp:tar dest="${dest}" mode="force-create">
-      <fileset dir="${input}" includes="ar-test.xml"/>
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
     </cmp:tar>
     <au:assertLogDoesntContain
        text="test.tar is up-to-date, nothing to do."/>
@@ -481,10 +485,10 @@
     </assertResourceDoesntExist>
   </target>
 
-  <target name="testCreateOfOutOfDate" depends="-prepareArchive">
+  <target name="testCreateOfOutOfDate" depends="-prepareArchiveForModeTests">
     <touch file="${input}/ar-test.xml"/>
     <cmp:tar dest="${dest}" mode="create">
-      <fileset dir="${input}" includes="ar-test.xml"/>
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
     </cmp:tar>
     <au:assertLogDoesntContain
        text="test.tar is up-to-date, nothing to do."/>
@@ -497,9 +501,9 @@
     </assertResourceDoesntExist>
   </target>
 
-  <target name="testReplaceOfUpToDate" depends="-prepareArchive">
+  <target name="testReplaceOfUpToDate" depends="-prepareArchiveForModeTests">
     <cmp:tar dest="${dest}" mode="replace">
-      <fileset dir="${input}" includes="ar-test.xml"/>
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
     </cmp:tar>
     <au:assertLogContains
        text="test.tar is up-to-date, nothing to do."/>
@@ -507,9 +511,10 @@
        src="${dest}" dest="${dest}.bak"/>
   </target>
 
-  <target name="testForceReplaceOfUpToDate" depends="-prepareArchive">
+  <target name="testForceReplaceOfUpToDate"
+          depends="-prepareArchiveForModeTests">
     <cmp:tar dest="${dest}" mode="force-replace">
-      <fileset dir="${input}" includes="ar-test.xml"/>
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
     </cmp:tar>
     <au:assertLogDoesntContain
        text="test.tar is up-to-date, nothing to do."/>
@@ -520,12 +525,20 @@
         <file file="${dest}"/>
       </cmp:tarentry>
     </assertResourceExists>
+    <au:assertTrue>
+      <cond:islastmodified datetime="${timestamp}"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:tarentry name="zip-test.xml">
+          <file file="${dest}"/>
+        </cmp:tarentry>
+      </cond:islastmodified>
+    </au:assertTrue>
   </target>
 
-  <target name="testReplaceOfOutOfDate" depends="-prepareArchive">
+  <target name="testReplaceOfOutOfDate" depends="-prepareArchiveForModeTests">
     <touch file="${input}/ar-test.xml"/>
     <cmp:tar dest="${dest}" mode="replace">
-      <fileset dir="${input}" includes="ar-test.xml"/>
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
     </cmp:tar>
     <au:assertLogDoesntContain
        text="test.tar is up-to-date, nothing to do."/>
@@ -536,5 +549,47 @@
         <file file="${dest}"/>
       </cmp:tarentry>
     </assertResourceExists>
+    <au:assertTrue>
+      <cond:islastmodified datetime="${timestamp}"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:tarentry name="zip-test.xml">
+          <file file="${dest}"/>
+        </cmp:tarentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+
+  <target name="testUpdateOfUpToDate" depends="-prepareArchiveForModeTests">
+    <cmp:tar dest="${dest}" mode="update">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:tar>
+    <au:assertLogContains
+       text="test.tar is up-to-date, nothing to do."/>
+    <au:assertDestIsUptodate
+       src="${dest}" dest="${dest}.bak"/>
+  </target>
+
+  <target name="FUTURE-testUpdateOfOutOfDate" depends="-prepareArchiveForModeTests">
+    <touch file="${input}/ar-test.xml"/>
+    <cmp:tar dest="${dest}" mode="update">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:tar>
+    <au:assertLogDoesntContain
+       text="test.tar is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+    <assertResourceExists>
+      <cmp:tarentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:tarentry>
+    </assertResourceExists>
+    <au:assertFalse>
+      <cond:islastmodified datetime="${timestamp}"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:tarentry name="zip-test.xml">
+          <file file="${dest}"/>
+        </cmp:tarentry>
+      </cond:islastmodified>
+    </au:assertFalse>
   </target>
 </project>
