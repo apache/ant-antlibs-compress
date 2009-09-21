@@ -569,7 +569,7 @@
        src="${dest}" dest="${dest}.bak"/>
   </target>
 
-  <target name="FUTURE-testUpdateOfOutOfDate" depends="-prepareArchiveForModeTests">
+  <target name="testUpdateOfOutOfDate" depends="-prepareArchiveForModeTests">
     <touch file="${input}/ar-test.xml"/>
     <cmp:tar dest="${dest}" mode="update">
       <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>

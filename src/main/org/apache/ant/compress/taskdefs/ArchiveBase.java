@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.zip.ZipException;
@@ -165,6 +166,10 @@ public abstract class ArchiveBase extends Task {
         mode = m;
     }
 
+    protected Mode getMode() {
+        return mode;
+    }
+
     /**
      * Encoding of file names.
      */
@@ -290,7 +295,7 @@ public abstract class ArchiveBase extends Task {
                     = new ArrayList/*<ResourceWithFlags>*/();
                 toAdd.addAll(sourceResources);
 
-                if (checkAndLogUpToDate(sourceResources, targetArchive,
+                if (checkAndLogUpToDate(toAdd, targetArchive,
                                         existingEntries)) {
                     return;
                 }
@@ -369,8 +374,8 @@ public abstract class ArchiveBase extends Task {
                                         Resource targetArchive,
                                         ArchiveFileSet existingEntries) {
         try {
-            if (!Mode.FORCE_CREATE.equals(mode.getValue())
-                && !Mode.FORCE_REPLACE.equals(mode.getValue())
+            if (!Mode.FORCE_CREATE.equals(getMode().getValue())
+                && !Mode.FORCE_REPLACE.equals(getMode().getValue())
                 && isUpToDate(src, existingEntries)) {
                 log(targetArchive + " is up-to-date, nothing to do.");
                 return true;
@@ -387,7 +392,9 @@ public abstract class ArchiveBase extends Task {
      *
      * <p>Will only ever be invoked if the target exists.</p>
      *
-     * @param src the resources that have been found as sources
+     * @param src the resources that have been found as sources, may
+     * be modified in "update" mode to remove entries that are up to
+     * date
      * @param existingEntries the target archive as fileset
      *
      * @return true if the target is up-to-date
@@ -404,12 +411,27 @@ public abstract class ArchiveBase extends Task {
                 new MappedResource(r.getResource(),
                                    new MergingMapper(r.getName()));
         }
-        return ResourceUtils
+        Resource[] outOfDate = ResourceUtils
             .selectOutOfDateSources(this, srcResources,
                                     new IdentityMapper(),
                                     existingEntries
-                                    .getDirectoryScanner(getProject()))
-            .length == 0;
+                                    .getDirectoryScanner(getProject()));
+        if (outOfDate.length > 0 && Mode.UPDATE.equals(getMode().getValue())) {
+            HashSet/*<String>*/ oodNames = new HashSet/*<String>*/();
+            for (int i = 0; i < outOfDate.length; i++) {
+                oodNames.add(outOfDate[i].getName());
+            }
+            List/*<ResourceWithFlags>*/ copy =
+                new LinkedList/*<ResourceWithFlags>*/(src);
+            src.clear();
+            for (Iterator i = copy.iterator(); i.hasNext(); ) {
+                ResourceWithFlags r = (ResourceWithFlags) i.next();
+                if (oodNames.contains(r.getName())) {
+                    src.add(r);
+                }
+            }
+        }
+        return outOfDate.length == 0;
     }
 
     /**
@@ -419,8 +441,8 @@ public abstract class ArchiveBase extends Task {
     private void addResourcesToKeep(Collection/*<ResourceWithFlags>*/ toAdd,
                                     ArchiveFileSet target,
                                     Collection/*<ResourceWithFlags>*/ src) {
-        if (!Mode.FORCE_CREATE.equals(mode.getValue())
-            && !Mode.CREATE.equals(mode.getValue())) {
+        if (!Mode.FORCE_CREATE.equals(getMode().getValue())
+            && !Mode.CREATE.equals(getMode().getValue())) {
             try {
                 toAdd.addAll(findUnmatchedTargets(target, src));
             } catch (IOException ioex) {
@@ -772,8 +794,8 @@ public abstract class ArchiveBase extends Task {
     private File maybeCopyTarget() {
         File copyOfDest = null;
         try {
-            if (!Mode.FORCE_CREATE.equals(mode.getValue())
-                && !Mode.CREATE.equals(mode.getValue())) {
+            if (!Mode.FORCE_CREATE.equals(getMode().getValue())
+                && !Mode.CREATE.equals(getMode().getValue())) {
                 copyOfDest = FILE_UTILS.createTempFile(getTaskName(), ".tmp",
                                                        null, true, false);
                 ResourceUtils.copyResource(getDest(),
@@ -796,27 +818,27 @@ public abstract class ArchiveBase extends Task {
         /**
          * Create a new archive.
          */
-        private static final String CREATE = "create";
+        public static final String CREATE = "create";
         /**
          * Create a new archive even if the target exists and seems
          * up-to-date.
          */
-        private static final String FORCE_CREATE = "force-create";
+        public static final String FORCE_CREATE = "force-create";
         /**
          * Update an existing archive.
          */
-        private static final String UPDATE = "update";
+        public static final String UPDATE = "update";
         /**
          * Update an existing archive, replacing all existing entries
          * with those from sources.
          */
-        private static final String REPLACE = "replace";
+        public static final String REPLACE = "replace";
         /**
          * Update an existing archive - replacing all existing entries
          * with those from sources - even if the target exists and
          * seems up-to-date.
          */
-        private static final String FORCE_REPLACE = "force-replace";
+        public static final String FORCE_REPLACE = "force-replace";
 
         public Mode() {
             super();
