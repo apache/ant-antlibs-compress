@@ -140,7 +140,66 @@
         &quot;fail&quot;.</td>
       <td valign="top" align="center">No</td>
     </tr>
+    <tr>
+      <td valign="top">mode</td>
+      <td valign="top">One of "create", "force-create", "replace",
+        "force-replace" or "update" - see below.  Default is
+        "create".</td>
+      <td valign="top" align="center">No</td>
+    </tr>
   </table>
+
+  <h4><a name="mode"><em>mode</em> attribute</a></h4>
+
+  <p>There are three basic modes a task can be in:</p>
+
+  <ul>
+
+    <li><strong>create</strong> - creates an archive that will contain
+      all resources that have been specified as nested resources.</li>
+
+    <li><strong>replace</strong> - creates an archive that will
+      contain all resources that have been specified as nested
+      resources.  If the <em>dest</em> archive exists before running
+      the task, any resource of the original archive that doesn't
+      match a resource specified as nested resource will be
+      preserved.</li>
+
+    <li><strong>update</strong> - creates an archive that will
+      contain all resources that have been specified as nested
+      resources that are newer than their corresponding entries in the
+      <em>dest</em> archive - or that don't exist in the <em>dest</em>
+      archive.  If the <em>dest</em> archive exists before running the
+      task, any resource of the original archive that doesn't match a
+      resource specified as nested resource or is more recent than the
+      nested resource will be preserved.</li>
+
+  </ul>
+
+  <p>If the <em>dest</em> archive doesn't exist before running the
+    task, all modes behave the same.  If it does
+    exist, <strong>create</strong> may remove existing
+    entries and <strong>replace</strong> may replace entries that are
+    more recent than the specified source resources.</p>
+
+  <p>All three modes will first check whether the <em>dest</em>
+    archive is "out of date".  An archive is considered out of date
+    if</p>
+
+  <ul>
+    <li>it doesn't exist.</li>
+    <li>it exists but for at least one source resource there is no
+      matching entry in the <em>dest</em> resource.</li>
+    <li>the matching entry for at least one source resource is older
+      than the source resource.</li>
+  </ul>
+
+  <p>Neither of the basic modes will modifiy the <em>dest</em> archive
+    if it is not "out of date".  For the <strong>create</strong>
+    and <strong>replace</strong> modes there are
+    variants <strong>force-create</strong>
+    and <strong>force-replace</strong> that will bypass the "out of
+    date" check and always replace (entries in) existing archives.</p>
 
   <h3>Parameters specified as nested elements</h3>
 
