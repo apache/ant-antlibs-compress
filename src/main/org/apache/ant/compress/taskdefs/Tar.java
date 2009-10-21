@@ -18,20 +18,39 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import org.apache.ant.compress.util.TarStreamFactory;
 import org.apache.ant.compress.resources.TarFileSet;
 import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.archivers.tar.TarConstants;
 import org.apache.tools.ant.types.ArchiveFileSet;
+import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.Resource;
 
 /**
  * Creates tar archives.
  */
 public class Tar extends ArchiveBase {
+    private Format format = Format.USTAR;
+
     public Tar() {
-        setFactory(new TarStreamFactory());
+        setFactory(new TarStreamFactory(){
+                public ArchiveOutputStream getArchiveStream(OutputStream stream,
+                                                            String encoding)
+                    throws IOException {
+                    TarArchiveOutputStream o =
+                        (TarArchiveOutputStream) super.getArchiveStream(stream,
+                                                                        encoding);
+                    if (format.equals(Format.OLDGNU)) {
+                        o.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
+                    }
+                    return o;
+                }
+            });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
@@ -93,4 +112,39 @@ public class Tar extends ArchiveBase {
             });
     }
 
+    /**
+     * The format for entries with filenames longer than 100
+     * characters - any other entry will always use "ustar".
+     */
+    public void setFormat(Format f) {
+        format = f;
+    }
+
+    /**
+     * The supported tar formats for entries with long file names.
+     */
+    public final static class Format extends EnumeratedAttribute {
+        private static final String USTAR_NAME = "ustar";
+        private static final String OLDGNU_NAME = "oldgnu";
+
+        public static final Format USTAR = new Format(USTAR_NAME);
+        public static final Format OLDGNU = new Format(OLDGNU_NAME);
+
+        public Format(String v) {
+            setValue(v);
+        }
+
+        public Format() {
+            setValue(USTAR_NAME);
+        }
+
+        public String[] getValues() {
+            return new String[] {USTAR_NAME, OLDGNU_NAME};
+        }
+
+        public boolean equals(Object other) {
+            return other instanceof Format
+                && ((Format) other).getValue().equals(getValue());
+        }
+    }
 }

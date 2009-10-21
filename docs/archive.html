@@ -244,6 +244,24 @@
     task</a> with a <code>tar</code> task as nested element
     instead.</p>
 
+  <p>This task supports the following additional attributes:</p>
+
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">format</td>
+      <td valign="top">Tar format for entries with names longer than
+        100 characters.  Supported values are "ustar" which doesn't
+        support entries of that length and results in a build failure
+        and "oldgnu".</td>
+      <td valign="top" align="center">No, default is "ustar"</td>
+    </tr>
+  </table>
+
   <h4>Examples</h4>
 
 <pre>
@@ -293,8 +311,8 @@
     <code>docs/index.html</code> is written as
     <code>/usr/doc/ant/index.html</code> to the archive.</p>
 
-<!--pre>
-&lt;tar longfile=&quot;gnu&quot;
+<pre>
+&lt;cmp:tar format=&quot;oldgnu&quot;
      destfile=&quot;${dist.base}/${dist.name}-src.tar&quot;&gt;
   &lt;tarfileset dir=&quot;${dist.name}/..&quot; filemode=&quot;755&quot; username=&quot;ant&quot; group=&quot;ant&quot;&gt;
     &lt;include name=&quot;${dist.name}/bootstrap.sh&quot;/&gt;
@@ -305,13 +323,13 @@
     &lt;exclude name=&quot;${dist.name}/bootstrap.sh&quot;/&gt;
     &lt;exclude name=&quot;${dist.name}/build.sh&quot;/&gt;
   &lt;/tarfileset&gt;
-&lt;/tar&gt;
+&lt;/cmp:tar&gt;
 </pre>
 <p>This example shows building a tar which uses the GNU extensions for long paths and
 where some files need to be marked as executable (mode 755)
 and the rest are use the default mode (read-write by owner). The first
 fileset selects just the executable files. The second fileset must exclude
-the executable files and include all others. </p-->
+the executable files and include all others. </p>
 
 <pre>
 &lt;cmp:gzip destfile="release.tar.gz" xmlns:cmp="antlib:org.apache.ant.compress"&gt;

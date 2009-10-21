@@ -592,4 +592,37 @@
       </cond:islastmodified>
     </au:assertFalse>
   </target>
+
+  <target name="-longFileSetUp" depends="setUp">
+    <property name="long" value="0123456789/0123456789/0123456789/0123456789/0123456789/0123456789/0123456789/0123456789/0123456789/0123456789.txt"/>
+    <touch file="${input}/${long}"
+           mkdirs="true"/>
+  </target>
+
+  <target name="testImplicitUstarLongFile" depends="-longFileSetUp">
+    <au:expectfailure>
+      <cmp:tar destfile="${dest}">
+        <fileset dir="${input}"/>
+      </cmp:tar>
+    </au:expectfailure>
+  </target>
+
+  <target name="testExplicitUstarLongFile" depends="-longFileSetUp">
+    <au:expectfailure>
+      <cmp:tar destfile="${dest}" format="ustar">
+        <fileset dir="${input}"/>
+      </cmp:tar>
+    </au:expectfailure>
+  </target>
+
+  <target name="testOldgnuLongFile" depends="-longFileSetUp">
+    <cmp:tar destfile="${dest}" format="oldgnu">
+      <fileset dir="${input}"/>
+    </cmp:tar>
+    <assertResourceExists>
+      <cmp:tarentry name="${long}">
+        <file file="${dest}"/>
+      </cmp:tarentry>
+    </assertResourceExists>
+  </target>
 </project>
