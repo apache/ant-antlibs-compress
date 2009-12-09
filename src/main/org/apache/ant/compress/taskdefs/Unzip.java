@@ -64,6 +64,7 @@ public class Unzip extends ExpandBase {
             while (e.hasMoreElements()) {
                 empty = false;
                 ZipArchiveEntry ze = (ZipArchiveEntry) e.nextElement();
+                log("extracting " + ze.getName(), Project.MSG_DEBUG);
                 InputStream is = null;
                 try {
                     extractFile(fileUtils, srcF, dir,
