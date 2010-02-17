@@ -455,10 +455,7 @@
     <cmp:zip dest="${dest}">
       <fileset dir="${input}"/>
     </cmp:zip>
-    <copy todir="${output}">
-      <file file="${dest}"/>
-      <globmapper from="*" to="*.bak"/>
-    </copy>
+    <copy tofile="${dest}.bak" file="${dest}"/>
     <property name="timestamp" value="2000-01-01-00:00:00 +0000"/>
     <touch datetime="${timestamp}" file="${input}/zip-test.xml"
            pattern="yyyy-MM-dd-HH:mm:ss Z"/>
