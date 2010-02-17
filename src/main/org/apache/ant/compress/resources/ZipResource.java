@@ -186,7 +186,7 @@ public final class ZipResource extends CommonsCompressArchiveResource {
         super.setEntry(e);
         if (e != null) {
             ZipArchiveEntry ze = (ZipArchiveEntry) e;
-            extras = ze.getExtraFields();
+            extras = ze.getExtraFields(true);
             method = ze.getMethod();
         }
     }

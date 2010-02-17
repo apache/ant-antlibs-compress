@@ -213,7 +213,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         }
         setName(e.getName());
         setExists(true);
-        setLastModified(EntryHelper.getLastModified(e).getTime());
+        setLastModified(e.getLastModifiedDate().getTime());
         setDirectory(e.isDirectory());
         setSize(e.getSize());
         setMode(EntryHelper.getMode(e));

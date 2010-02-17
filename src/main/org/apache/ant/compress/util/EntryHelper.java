@@ -30,34 +30,10 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 
 /**
  * Helper methods that gloss over API differences between the
- * ArchiveEntry implementations of Apache Commons Compress 1.0.
+ * ArchiveEntry implementations of Apache Commons Compress 1.1.
  */
 public class EntryHelper {
     private EntryHelper() {}
-
-    /**
-     * Can be replaced with entry.getLastModifiedDate in ACC 1.1
-     */
-    public static Date getLastModified(ArchiveEntry entry) {
-        if (entry == null) {
-            throw new IllegalArgumentException("entry must not be null.");
-        }
-
-        if (entry instanceof ArArchiveEntry) {
-            return new Date(((ArArchiveEntry) entry).getLastModified() * 1000);
-        }
-        if (entry instanceof CpioArchiveEntry) {
-            return new Date(((CpioArchiveEntry) entry).getTime() * 1000);
-        }
-        if (entry instanceof TarArchiveEntry) {
-            return ((TarArchiveEntry) entry).getModTime();
-        }
-        if (entry instanceof ZipArchiveEntry) {
-            return new Date(((ZipArchiveEntry) entry).getTime());
-        }
-        throw new BuildException("archive entry " + entry.getClass()
-                                 + " is not supported.");
-    }
 
     // REVISIT: are the "mode" formats really compatible with each other?
     /**

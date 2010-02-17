@@ -28,17 +28,11 @@
     <p>This Antlib contains tasks and resources that provide
       compression/uncompression and archival/unarchival capabilities
       based on <a href="http://commons.apache.org/compress/">Apache
-      Commons Compress</a>.  Using Apache Commons Compress 1.0 this
+      Commons Compress</a>.  Using Apache Commons Compress 1.1 this
       Antlib supports gzip and bzip2 compression and ar, cpio, tar and
       zip archives.</p>
 
     <h3>Known Limitations</h3>
-
-    <p>Using Apache Commons Compress 1.0 the AR and CPIO formats don't
-      read or write timestamps, permissions, userids and groupids
-      properly - this has been fixed in the svn trunk of Apache
-      Commons Compress and will be fixed with the next release of
-      it.</p>
 
     <p>Reading AR archives from non-filesystem resources currently
       fails for reasons that haven't been investigated, yet.  Most
@@ -94,7 +88,7 @@
     <h3>Installing and Using</h3>
 
     <p>This Antlib requires Apache Ant 1.8.0 or higher and Apache
-      Commons Compress 1.0 or higher.</p>
+      Commons Compress 1.1 or higher.</p>
 
     <p>If you are building the Antlib from sources, run
       the <code>antlib</code> target and you'll get a

@@ -128,7 +128,7 @@ public abstract class ExpandBase extends Expand {
                 empty = false;
                 log("extracting " + ent.getName(), Project.MSG_DEBUG);
                 extractFile(FileUtils.getFileUtils(), null, dir, is,
-                            ent.getName(), EntryHelper.getLastModified(ent),
+                            ent.getName(), ent.getLastModifiedDate(),
                             ent.isDirectory(), mapper);
             }
             if (empty && getFailOnEmptyArchive()) {
