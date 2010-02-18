@@ -232,6 +232,29 @@
   <p>An <a href="#archive">archiving task</a> creating archives of the
     CPIO format.</p>
 
+  <p>This task supports the following additional attributes:</p>
+
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">format</td>
+      <td valign="top">CPIO format for the archive to create.  One of
+        "binary", "old-ascii", "new-ascii"<!-- or "crc"-->.  "odc" can be
+        used as a synonym for "old-ascii".</td>
+      <td valign="top" align="center">No, default is "binary"</td>
+    </tr>
+    <tr>
+      <td valign="top">blocksize</td>
+      <td valign="top">Block size for the archive.  Must be a
+        positive number.</td>
+      <td valign="top" align="center">No, default is 512.</td>
+    </tr>
+  </table>
+
   <h3><a name="tar">Tar</a></h3>
 
   <p>An <a href="#archive">archiving task</a> creating archives of the

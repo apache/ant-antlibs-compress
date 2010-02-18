@@ -18,25 +18,43 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import org.apache.ant.compress.util.CpioStreamFactory;
 import org.apache.ant.compress.resources.CpioFileSet;
 import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
+import org.apache.commons.compress.archivers.cpio.CpioArchiveOutputStream;
+import org.apache.commons.compress.archivers.cpio.CpioConstants;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.ArchiveFileSet;
+import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.Resource;
 
 /**
  * Creates cpio archives.
  */
 public class Cpio extends ArchiveBase {
+    private Format format = Format.BINARY;
+    private int blockSize = CpioConstants.BLOCK_SIZE;
+
     public Cpio() {
-        setFactory(new CpioStreamFactory());
+        setFactory(new CpioStreamFactory() {
+                public ArchiveOutputStream getArchiveStream(OutputStream stream,
+                                                            String encoding)
+                    throws IOException {
+                    return new CpioArchiveOutputStream(stream,
+                                                       format.getFormat(),
+                                                       blockSize);
+                }
+            });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
                     CpioArchiveEntry ent =
-                        new CpioArchiveEntry(r.getName(),
+                        new CpioArchiveEntry(format.getFormat(), r.getName(),
                                              isDir
                                              ? 0 : r.getResource().getSize());
                     ent.setTime(round(r.getResource().getLastModified(), 1000)
@@ -80,4 +98,72 @@ public class Cpio extends ArchiveBase {
             });
     }
 
+    /**
+     * The format to use.
+     * <p>Default is binary</b>
+     */
+    public void setFormat(Format f) {
+        format = f;
+    }
+
+    /**
+     * The blocksize to use.
+     * <p>Default is 512 bytes.</p>
+     */
+    public void setBlockSize(int size) {
+        if (size <= 0) {
+            throw new BuildException("Block size must be a positive number");
+        }
+        blockSize = size;
+    }
+
+    /**
+     * The supported cpio formats.
+     */
+    public static class Format extends EnumeratedAttribute {
+        private static final String BINARY_NAME = "binary";
+        private static final String OLD_ASCII_NAME = "old-ascii";
+        private static final String ODC_NAME = "odc";
+        private static final String NEW_ASCII_NAME = "new-ascii";
+        private static final String CRC_NAME = "crc";
+
+        public static final Format BINARY = new Format(BINARY_NAME);
+        public static final Format OLD_ASCII = new Format(OLD_ASCII_NAME);
+        public static final Format ODC = new Format(ODC_NAME);
+        public static final Format NEW_ASCII = new Format(NEW_ASCII_NAME);
+        //public static final Format CRC = new Format(CRC_NAME);
+
+        public Format(String v) {
+            setValue(v);
+        }
+
+        public Format() {
+            setValue(BINARY_NAME);
+        }
+
+        public String[] getValues() {
+            return new String[] {
+                BINARY_NAME, OLD_ASCII_NAME, ODC_NAME, NEW_ASCII_NAME, //CRC_NAME
+            };
+        }
+
+        public short getFormat() {
+            String v = getValue();
+            if (v.equals(OLD_ASCII_NAME) || v.equals(ODC_NAME)) {
+                return CpioConstants.FORMAT_OLD_ASCII;
+            }
+            if (v.equals(NEW_ASCII_NAME)) {
+                return CpioConstants.FORMAT_NEW;
+            }
+            if (v.equals(CRC_NAME)) {
+                return CpioConstants.FORMAT_NEW_CRC;
+            }
+            return CpioConstants.FORMAT_OLD_BINARY;
+        }
+
+        public boolean equals(Object other) {
+            return other instanceof Format
+                && ((Format) other).getFormat() == getFormat();
+        }
+    }
 }

@@ -26,7 +26,7 @@
     <mkdir dir="${input}"/>
   </target>
 
-  <target name="testAgainstAntlibCpioTask" depends="setUp">
+  <target name="testAgainstAntlibCpioTaskBinary" depends="setUp">
     <cmp:cpio destfile="${input}/test.cpio">
       <fileset dir="."/>
     </cmp:cpio>
@@ -37,6 +37,42 @@
        expected="uncpio-test.xml"
        />
   </target>
+
+  <target name="testAgainstAntlibCpioTaskOldAscii" depends="setUp">
+    <cmp:cpio destfile="${input}/test.cpio" format="odc">
+      <fileset dir="."/>
+    </cmp:cpio>
+    <cmp:uncpio src="${input}/test.cpio" dest="${output}"/>
+    <au:assertFileExists file="${output}/uncpio-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/uncpio-test.xml"
+       expected="uncpio-test.xml"
+       />
+  </target>
+
+  <target name="testAgainstAntlibCpioTaskNewAscii" depends="setUp">
+    <cmp:cpio destfile="${input}/test.cpio" format="new-ascii">
+      <fileset dir="."/>
+    </cmp:cpio>
+    <cmp:uncpio src="${input}/test.cpio" dest="${output}"/>
+    <au:assertFileExists file="${output}/uncpio-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/uncpio-test.xml"
+       expected="uncpio-test.xml"
+       />
+  </target>
+
+  <!--target name="testAgainstAntlibCpioTaskCRC" depends="setUp">
+    <cmp:cpio destfile="${input}/test.cpio" format="crc">
+      <fileset dir="."/>
+    </cmp:cpio>
+    <cmp:uncpio src="${input}/test.cpio" dest="${output}"/>
+    <au:assertFileExists file="${output}/uncpio-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/uncpio-test.xml"
+       expected="uncpio-test.xml"
+       />
+  </target-->
 
   <target name="testAgainstNativeCpio" depends="setUp">
     <cmp:uncpio src="../resources/asf-logo.gif.cpio" dest="${output}" />
