@@ -43,7 +43,7 @@
 
   <target name="testCpioSource" depends="setUp">
     <copy todir="${output}">
-      <cmp:cpiofileset src="../resources/asf-logo.gif.cpio"
+      <cmp:cpiofileset src="../resources/asf-logo.gif.bin.cpio"
                       includes="*.gif"/>
     </copy>
     <au:assertFilesMatch
@@ -53,12 +53,12 @@
   </target>
 
   <target name="testUncompressSource" depends="setUp">
-    <gzip destfile="${input}/asf-logo.gif.cpio.gz"
-          src="../resources/asf-logo.gif.cpio"/>
+    <gzip destfile="${input}/asf-logo.gif.bin.cpio.gz"
+          src="../resources/asf-logo.gif.bin.cpio"/>
     <copy todir="${output}">
       <cmp:cpiofileset includes="*.gif">
         <gzipresource>
-          <file file="${input}/asf-logo.gif.cpio.gz"/>
+          <file file="${input}/asf-logo.gif.bin.cpio.gz"/>
         </gzipresource>
       </cmp:cpiofileset>
     </copy>

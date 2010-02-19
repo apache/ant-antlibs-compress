@@ -144,7 +144,7 @@
 
   <target name="testCpioFileSet" depends="setUp">
     <cmp:tar destfile="${dest}">
-      <cmp:cpiofileset src="../resources/asf-logo.gif.cpio"
+      <cmp:cpiofileset src="../resources/asf-logo.gif.bin.cpio"
                        includes="asf-logo.gif"/>
     </cmp:tar>
     <checkProperties dateTime="2009-07-31-20:11:13 +0200" mode="644"

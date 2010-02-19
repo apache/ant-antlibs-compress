@@ -99,7 +99,7 @@
   <target name="testNestedTask" depends="setUp">
     <cmp:bzip2 destfile="${output}/asf-logo.tar.bz2">
       <cmp:tar>
-        <cmp:cpiofileset src="../resources/asf-logo.gif.cpio"
+        <cmp:cpiofileset src="../resources/asf-logo.gif.bin.cpio"
                          includes="asf-logo.gif"/>
       </cmp:tar>
     </cmp:bzip2>
