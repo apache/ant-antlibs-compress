@@ -74,8 +74,35 @@
        />
   </target-->
 
-  <target name="testAgainstNativeCpio" depends="setUp">
-    <cmp:uncpio src="../resources/asf-logo.gif.cpio" dest="${output}" />
+  <target name="testAgainstNativeCpioBinary" depends="setUp">
+    <cmp:uncpio src="../resources/asf-logo.gif.bin.cpio" dest="${output}" />
+    <au:assertFileExists file="${output}/asf-logo.gif"/>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+  <target name="testAgainstNativeCpioOldAscii" depends="setUp">
+    <cmp:uncpio src="../resources/asf-logo.gif.odc.cpio" dest="${output}" />
+    <au:assertFileExists file="${output}/asf-logo.gif"/>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+  <target name="testAgainstNativeCpioNewAscii" depends="setUp">
+    <cmp:uncpio src="../resources/asf-logo.gif.new.cpio" dest="${output}" />
+    <au:assertFileExists file="${output}/asf-logo.gif"/>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+  <target name="testAgainstNativeCpioCRC" depends="setUp">
+    <cmp:uncpio src="../resources/asf-logo.gif.crc.cpio" dest="${output}" />
     <au:assertFileExists file="${output}/asf-logo.gif"/>
     <au:assertFilesMatch
        actual="${output}/asf-logo.gif"
