@@ -19,7 +19,7 @@
 -->
 <ivy-module version="2.0">
   <info organization="${ivy.organization}"
-        module="compress-antlib"
+        module="ant"
         revision="${artifact.version}"
         publication="${publication.datetime}">
     <license name="Apache Software License 2.0"
@@ -32,6 +32,12 @@
       Apache Commons Compress.
     </description>
   </info>
+  <publications>  
+    <artifact name="${artifact.name}" type="pom" ext="pom"/>
+    <artifact name="${artifact.name}" type="pom.asc" ext="pom.asc"/>
+    <artifact name="${artifact.name}" type="jar" ext="jar"/>
+    <artifact name="${artifact.name}" type="jar.asc" ext="jar.asc"/>
+  </publications>
   <dependencies>
     <dependency org="org.apache.ant" name="ant" revision="[1.8.0,)"/>
     <dependency org="org.apache.commons" name="commons-compress"
