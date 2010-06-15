@@ -37,6 +37,18 @@
     <artifact name="${artifact.name}" type="pom.asc" ext="pom.asc"/>
     <artifact name="${artifact.name}" type="jar" ext="jar"/>
     <artifact name="${artifact.name}" type="jar.asc" ext="jar.asc"/>
+    <artifact name="${artifact.name}" type="source" ext="jar"
+              classifier="sources"/>
+    <artifact name="${artifact.name}" type="source.asc" ext="jar.asc"
+              classifier="sources"/>
+    <artifact name="${artifact.name}" type="javadoc" ext="jar"
+              classifier="javadoc"/>
+    <artifact name="${artifact.name}" type="javadoc.asc" ext="jar.asc"
+              classifier="javadoc"/>
+    <artifact name="${artifact.name}" type="ivy" ext="xml"
+              classifier="ivy"/>
+    <artifact name="${artifact.name}" type="ivy.asc" ext="xml.asc"
+              classifier="ivy"/>
   </publications>
   <dependencies>
     <dependency org="org.apache.ant" name="ant" revision="[1.8.0,)"/>
