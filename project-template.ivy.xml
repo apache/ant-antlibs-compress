@@ -18,14 +18,14 @@
 
 -->
 <ivy-module version="2.0">
-  <info organization="${ivy.organization}"
+  <info organisation="${ivy.organization}"
         module="ant"
         revision="${artifact.version}"
         publication="${publication.datetime}">
     <license name="Apache Software License 2.0"
              url="http://www.apache.org/licenses/LICENSE-2.0"/>
-    <ivy-author name="Apache Ant Development Team"
-                url="http://ant.apache.org/"/>
+    <ivyauthor name="Apache Ant Development Team"
+               url="http://ant.apache.org/"/>
     <description homepage="http://ant.apache.org/antlibs/compress/">
       Provides tasks and types that deal with AR, CPIO, TAR
       and ZIP archives as well as BZIP2 and GZIP compressed files based on
@@ -51,8 +51,8 @@
               e:classifier="ivy"/>
   </publications>
   <dependencies>
-    <dependency org="org.apache.ant" name="ant" revision="[1.8.0,)"/>
+    <dependency org="org.apache.ant" name="ant" rev="[1.8.0,)"/>
     <dependency org="org.apache.commons" name="commons-compress"
-                revision="[1.1,)"/>
+                rev="[1.1,)"/>
   </dependencies>
 </ivy-module>
