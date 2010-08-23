@@ -22,4 +22,18 @@
 
   <import file="common/build.xml"/>
 
+  <target name="style-changes"
+          description="there are no changes in a 1.0 release">
+    <echo file="${dest.dir}/README.html"><![CDATA[<body>
+        <h1>Apache Compress Antlib 1.0</h1>
+        <p>This is a library of Ant tasks and types that support
+        archive and compression formats with the help of <a
+        href="http://commons.apache.org/compress/">Apache Commons
+        Compress</a>.  For details - including installation
+        instructions - see the docs subdirectory of this
+        distribution.</p>
+      </body>]]>
+    </echo>
+  </target>
+
 </project>
