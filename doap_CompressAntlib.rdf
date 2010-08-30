@@ -20,11 +20,11 @@
          xmlns="http://usefulinc.com/ns/doap#" 
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
          xmlns:asfext="http://projects.apache.org/ns/asfext#">
-  <Project rdf:about="http://ant.apache.org/antlibs/dotnet/">
+  <Project rdf:about="http://ant.apache.org/antlibs/compress/">
     <created>2009-07-31</created>
     <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
     <name>Apache Compress Ant Library</name>
-    <homepage rdf:resource="http://ant.apache.org/antlibs/dotnet/" />
+    <homepage rdf:resource="http://ant.apache.org/antlibs/compress/" />
     <asfext:pmc rdf:resource="http://ant.apache.org/" />
     <shortdesc>Provides Support for Some Archive Formats not Supported by Ant's Core</shortdesc>
     <description>This is a library of Ant tasks and types uses Apache
@@ -36,11 +36,16 @@
     <programming-language>Java</programming-language>
     <category rdf:resource="http://projects.apache.org/category/build-management" />
     <release>
+      <Version>
+        <name>Apache Compress Ant Library 1.0</name>
+        <created>2010-08-30</created>
+        <revision>1.0</revision>
+      </Version>
     </release>
     <repository>
       <SVNRepository>
-        <location rdf:resource="http://svn.apache.org/repos/asf/ant/sandbox/antlibs/compress"/>
-        <browse rdf:resource="http://svn.apache.org/viewcvs.cgi/ant/sandbox/antlibs/compress"/>
+        <location rdf:resource="http://svn.apache.org/repos/asf/ant/antlibs/compress"/>
+        <browse rdf:resource="http://svn.apache.org/viewvc/ant/antlibs/compress"/>
       </SVNRepository>
     </repository>
   </Project>
