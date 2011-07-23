@@ -61,7 +61,7 @@
 
   <target name="testResourceCollection" depends="setUp">
     <zip destfile="${input}/test.zip">
-      <fileset dir="../resources" includes="*.zip"/>
+      <fileset dir="../resources" includes="*.zip" excludes="passwo*"/>
     </zip>
     <cmp:unzip dest="${output}">
       <zipfileset src="${input}/test.zip">
@@ -83,5 +83,12 @@
     <cmp:unzip src="${output}/a.zip" stripAbsolutePathSpec="true"
            dest="${output}"/>
     <au:assertFileExists file="${output}/foo/file"/>
+  </target>
+
+  <target name="testFailsOnUnreadableEntries" depends="setUp">
+    <au:expectfailure message="unsupported feature encryption">
+      <cmp:unzip src="../resources/password-encrypted.zip"
+                 dest="${output}"/>
+    </au:expectfailure>
   </target>
 </project>

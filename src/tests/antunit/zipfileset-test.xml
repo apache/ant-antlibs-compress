@@ -111,4 +111,12 @@
        expected="../resources/asf-logo.gif"
        />
   </target>
+
+  <target name="testFailsOnUnreadableEntries" depends="setUp">
+    <au:expectfailure message="unsupported feature encryption">
+      <copy todir="${output}">
+        <cmp:zipfileset src="../resources/password-encrypted.zip"/>
+      </copy>
+    </au:expectfailure>
+  </target>
 </project>
