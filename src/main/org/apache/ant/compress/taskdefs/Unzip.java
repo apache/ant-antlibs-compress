@@ -64,6 +64,11 @@ public class Unzip extends ExpandBase {
             while (e.hasMoreElements()) {
                 empty = false;
                 ZipArchiveEntry ze = (ZipArchiveEntry) e.nextElement();
+                if (getSkipUnreadableEntries() && !zf.canReadEntryData(ze)) {
+                    log("skipping " + ze.getName()
+                        + ", Commons Compress cannot read it");
+                    continue;
+                }
                 log("extracting " + ze.getName(), Project.MSG_DEBUG);
                 InputStream is = null;
                 try {

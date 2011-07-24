@@ -55,6 +55,8 @@ public abstract class ExpandBase extends Expand {
         this.factory = factory;
     }
 
+    private boolean skipUnreadable = false;
+
     /**
      * No encoding support in general.
      * @param encoding not used
@@ -72,6 +74,24 @@ public abstract class ExpandBase extends Expand {
         throw new BuildException("The " + getTaskName()
                                  + " task doesn't support the encoding"
                                  + " attribute", getLocation());
+    }
+
+    /**
+     * Whether to skip entries that Commons Compress signals it cannot read.
+     *
+     * @since Compress Antlib 1.1
+     */
+    public void setSkipUnreadableEntries(boolean b) {
+        skipUnreadable = b;
+    }
+
+    /**
+     * Whether to skip entries that Commons Compress signals it cannot read.
+     *
+     * @since Compress Antlib 1.1
+     */
+    public boolean getSkipUnreadableEntries() {
+        return skipUnreadable;
     }
 
     /** {@inheritDoc} */
@@ -125,6 +145,11 @@ public abstract class ExpandBase extends Expand {
             boolean empty = true;
             ArchiveEntry ent = null;
             while ((ent = is.getNextEntry()) != null) {
+                if (skipUnreadable && !is.canReadEntryData(ent)) {
+                    log("skipping " + ent.getName()
+                        + ", Commons Compress cannot read it");
+                    continue;
+                }
                 empty = false;
                 log("extracting " + ent.getName(), Project.MSG_DEBUG);
                 extractFile(FileUtils.getFileUtils(), null, dir, is,
