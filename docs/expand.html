@@ -87,6 +87,18 @@ mapper</a>.</p>
       any).</td>
     <td valign="top" align="center">No, defaults to false</td>
   </tr>
+  <tr>
+    <td valign="top">skipUnreadableEntries</td>
+    <td valign="top">Sometimes archives may contain entries that use
+      features not (yet) supported by Apache Commons Compress,
+      encryption for example.  Trying to expand such an archive will
+      normally lead to an error.  Sometimes Commons Compress can
+      signal it doesn't know how to handle an entry and if you set 
+      <code>skipUnreadableEntries</code> to true, the Compress Antlib
+      will simply skip those entries, avoiding the error.
+      <br/><em>since Compress Antlib 1.1</em></td>
+    <td valign="top" align="center">No, defaults to false</td>
+  </tr>
 </table>
 
 <h3><a name="unar">UnAr</a></h3>
