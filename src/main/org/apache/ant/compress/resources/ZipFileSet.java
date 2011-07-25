@@ -37,6 +37,7 @@ import org.apache.tools.ant.types.Reference;
 public class ZipFileSet extends ArchiveFileSet {
 
     private String encoding = null;
+    private boolean skipUnreadable = false;
 
     /** Constructor for ZipFileSet */
     public ZipFileSet() {
@@ -86,11 +87,20 @@ public class ZipFileSet extends ArchiveFileSet {
     }
 
     /**
+     * Whether to skip entries that Commons Compress signals it cannot read.
+     *
+     * @since Compress Antlib 1.1
+     */
+    public void setSkipUnreadableEntries(boolean b) {
+        skipUnreadable = b;
+    }
+
+    /**
      * Return a new archive scanner based on this one.
      * @return a new ZipScanner with the same encoding as this one.
      */
     protected ArchiveScanner newArchiveScanner() {
-        ZipScanner zs = new ZipScanner();
+        ZipScanner zs = new ZipScanner(skipUnreadable, getProject());
         zs.setEncoding(encoding);
         return zs;
     }

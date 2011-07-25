@@ -119,4 +119,12 @@
       </copy>
     </au:expectfailure>
   </target>
+
+  <target name="testSkipUnreadableEntries" depends="setUp">
+    <copy todir="${output}">
+      <cmp:zipfileset src="../resources/password-encrypted.zip"
+                      skipUnreadableEntries="true"/>
+    </copy>
+    <au:assertLogContains text="Commons Compress cannot read it"/>
+  </target>
 </project>

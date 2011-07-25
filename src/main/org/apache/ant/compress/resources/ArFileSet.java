@@ -47,6 +47,8 @@ public class ArFileSet extends ArchiveFileSet {
     private int    uid;
     private int    gid;
 
+    private boolean skipUnreadable = false;
+
     /** Constructor for ArFileSet */
     public ArFileSet() {
         super();
@@ -125,6 +127,15 @@ public class ArFileSet extends ArchiveFileSet {
     }
 
     /**
+     * Whether to skip entries that Commons Compress signals it cannot read.
+     *
+     * @since Compress Antlib 1.1
+     */
+    public void setSkipUnreadableEntries(boolean b) {
+        skipUnreadable = b;
+    }
+
+    /**
      * Create a new scanner.
      * @return the created scanner.
      */
@@ -135,7 +146,7 @@ public class ArFileSet extends ArchiveFileSet {
                                               ArchiveEntry entry) {
                     return new ArResource(archive, (ArArchiveEntry) entry);
                 }
-            });
+            }, skipUnreadable, getProject());
     }
 
     /**

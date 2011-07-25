@@ -51,6 +51,8 @@ public class TarFileSet extends ArchiveFileSet {
     private int    uid;
     private int    gid;
 
+    private boolean skipUnreadable = false;
+
     /** Constructor for TarFileSet */
     public TarFileSet() {
         super();
@@ -185,6 +187,15 @@ public class TarFileSet extends ArchiveFileSet {
     }
 
     /**
+     * Whether to skip entries that Commons Compress signals it cannot read.
+     *
+     * @since Compress Antlib 1.1
+     */
+    public void setSkipUnreadableEntries(boolean b) {
+        skipUnreadable = b;
+    }
+
+    /**
      * Create a new scanner.
      * @return the created scanner.
      */
@@ -195,7 +206,7 @@ public class TarFileSet extends ArchiveFileSet {
                                               ArchiveEntry entry) {
                     return new TarResource(archive, (TarArchiveEntry) entry);
                 }
-            });
+            }, skipUnreadable, getProject());
     }
 
     /**

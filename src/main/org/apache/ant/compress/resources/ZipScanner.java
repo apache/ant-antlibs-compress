@@ -30,6 +30,7 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.FileProvider;
 
@@ -39,6 +40,10 @@ import org.apache.tools.ant.types.resources.FileProvider;
 public class ZipScanner extends CommonsCompressArchiveScanner {
 
     public ZipScanner() {
+        this(false, null);
+    }
+
+    public ZipScanner(boolean skipUnreadable, Project project) {
         super(new ZipStreamFactory(),
               new CommonsCompressArchiveScanner.ResourceBuilder() {
                 public Resource buildResource(Resource archive, String encoding,
@@ -46,7 +51,7 @@ public class ZipScanner extends CommonsCompressArchiveScanner {
                     return new ZipResource(archive, encoding,
                                            (ZipArchiveEntry) entry);
                 }
-            });
+            }, skipUnreadable, project);
     }
 
     /**
@@ -93,6 +98,11 @@ public class ZipScanner extends CommonsCompressArchiveScanner {
             Enumeration e = zf.getEntries();
             while (e.hasMoreElements()) {
                 entry = (ZipArchiveEntry) e.nextElement();
+                if (getSkipUnreadableEntries() && !zf.canReadEntryData(entry)) {
+                    getProject().log("skipping " + entry.getName()
+                                     + ", Commons Compress cannot read it");
+                    continue;
+                }
                 Resource r = new ZipResource(srcFile, encoding, entry);
                 String name = entry.getName();
                 if (entry.isDirectory()) {

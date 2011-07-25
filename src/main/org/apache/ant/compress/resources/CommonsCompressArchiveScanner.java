@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.util.FileUtils;
@@ -37,13 +38,39 @@ public class CommonsCompressArchiveScanner extends ArchiveScanner {
 
     private final ArchiveStreamFactory factory;
     private final ResourceBuilder builder;
+    private final boolean skipUnreadable;
+    private final Project project;
 
     public CommonsCompressArchiveScanner(ArchiveStreamFactory factory,
                                          ResourceBuilder builder) {
-        this.factory = factory;
-        this.builder = builder;
+        this(factory, builder, false, null);
     }
 
+    public CommonsCompressArchiveScanner(ArchiveStreamFactory factory,
+                                         ResourceBuilder builder,
+                                         boolean skipUnreadableEntries,
+                                         Project project) {
+        this.factory = factory;
+        this.builder = builder;
+        skipUnreadable = skipUnreadableEntries;
+        this.project = project;
+    }
+
+    /**
+     * Whether to skip entries that Commons Compress signals it cannot read.
+     *
+     * @since Compress Antlib 1.1
+     */
+    public boolean getSkipUnreadableEntries() {
+        return skipUnreadable;
+    }
+
+    /**
+     * @since Compress Antlib 1.1
+     */
+    public Project getProject() {
+        return project;
+    }
 
     /**
      * Fills the file and directory maps with resources read from the
@@ -78,6 +105,11 @@ public class CommonsCompressArchiveScanner extends ArchiveScanner {
                 throw new BuildException("problem opening " + src, ex);
             }
             while ((entry = ai.getNextEntry()) != null) {
+                if (skipUnreadable && !ai.canReadEntryData(entry)) {
+                    project.log("skipping " + entry.getName()
+                                + ", Commons Compress cannot read it");
+                    continue;
+                }
                 Resource r = builder.buildResource(src, encoding, entry);
                 String name = entry.getName();
                 if (entry.isDirectory()) {
