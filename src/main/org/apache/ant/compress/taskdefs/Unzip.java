@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Enumeration;
 
+import org.apache.ant.compress.util.Messages;
 import org.apache.ant.compress.util.ZipStreamFactory;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -65,8 +66,7 @@ public class Unzip extends ExpandBase {
                 empty = false;
                 ZipArchiveEntry ze = (ZipArchiveEntry) e.nextElement();
                 if (getSkipUnreadableEntries() && !zf.canReadEntryData(ze)) {
-                    log("skipping " + ze.getName()
-                        + ", Commons Compress cannot read it");
+                    log(Messages.skippedIsUnreadable(ze));
                     continue;
                 }
                 log("extracting " + ze.getName(), Project.MSG_DEBUG);

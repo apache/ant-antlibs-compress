@@ -27,6 +27,7 @@ import java.util.zip.ZipException;
 import org.apache.ant.compress.util.ZipStreamFactory;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.ant.compress.util.Messages;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.tools.ant.BuildException;
@@ -99,8 +100,7 @@ public class ZipScanner extends CommonsCompressArchiveScanner {
             while (e.hasMoreElements()) {
                 entry = (ZipArchiveEntry) e.nextElement();
                 if (getSkipUnreadableEntries() && !zf.canReadEntryData(entry)) {
-                    getProject().log("skipping " + entry.getName()
-                                     + ", Commons Compress cannot read it");
+                    log(Messages.skippedIsUnreadable(entry));
                     continue;
                 }
                 Resource r = new ZipResource(srcFile, encoding, entry);

@@ -27,6 +27,7 @@ import java.util.Date;
 
 import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
+import org.apache.ant.compress.util.Messages;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -146,8 +147,7 @@ public abstract class ExpandBase extends Expand {
             ArchiveEntry ent = null;
             while ((ent = is.getNextEntry()) != null) {
                 if (skipUnreadable && !is.canReadEntryData(ent)) {
-                    log("skipping " + ent.getName()
-                        + ", Commons Compress cannot read it");
+                    log(Messages.skippedIsUnreadable(ent));
                     continue;
                 }
                 empty = false;

@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.apache.ant.compress.util.ArchiveStreamFactory;
+import org.apache.ant.compress.util.Messages;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.ArchiveScanner;
@@ -66,13 +67,6 @@ public class CommonsCompressArchiveScanner extends ArchiveScanner {
     }
 
     /**
-     * @since Compress Antlib 1.1
-     */
-    public Project getProject() {
-        return project;
-    }
-
-    /**
      * Fills the file and directory maps with resources read from the
      * archive.
      *
@@ -106,8 +100,7 @@ public class CommonsCompressArchiveScanner extends ArchiveScanner {
             }
             while ((entry = ai.getNextEntry()) != null) {
                 if (skipUnreadable && !ai.canReadEntryData(entry)) {
-                    project.log("skipping " + entry.getName()
-                                + ", Commons Compress cannot read it");
+                    log(Messages.skippedIsUnreadable(entry));
                     continue;
                 }
                 Resource r = builder.buildResource(src, encoding, entry);
@@ -129,6 +122,18 @@ public class CommonsCompressArchiveScanner extends ArchiveScanner {
             throw new BuildException("problem reading " + src, ex);
         } finally {
             FileUtils.close(ai);
+        }
+    }
+
+    /**
+     * @since Compress Antlib 1.1
+     */
+    protected final void log(String msg) {
+        if (project != null) {
+            project.log(msg);
+        } else {
+            // rely on Ant's output redirection
+            System.out.println(msg);
         }
     }
 
