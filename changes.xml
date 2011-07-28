@@ -37,6 +37,13 @@
       <title>Apache Compress Ant Library</title>
     </properties>
 
-    <release version="SVN trunk" date="unpublished">
+    <release version="1.1" date="unpublished">
+      <action type="add">
+        The unarchiving tasks and fileset types share a new attribute
+        skipUnreadableEntries that can be used to ignore archive
+        entries that Apache Commons Compress knows it cannot handle
+        (like encrypted ZIP entries or sparse files in GNU tar
+        archives).
+      </action>
     </release>
   </document>
