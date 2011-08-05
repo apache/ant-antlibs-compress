@@ -27,6 +27,7 @@ import java.util.Date;
 
 import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
+import org.apache.ant.compress.util.FileAwareArchiveStreamFactory;
 import org.apache.ant.compress.util.Messages;
 
 import org.apache.tools.ant.BuildException;
@@ -102,16 +103,24 @@ public abstract class ExpandBase extends Expand {
                                      + " as the file does not exist",
                                      getLocation());
         }
-        FileInputStream fis = null;
+        InputStream is = null;
         try {
-            fis = new FileInputStream(srcF);
-            expandStream(srcF.getPath(), fis, dir);
+            if (factory instanceof FileAwareArchiveStreamFactory) {
+                FileAwareArchiveStreamFactory f =
+                    (FileAwareArchiveStreamFactory) factory;
+                is =  f.getArchiveInputStream(srcF, getEncoding());
+                expandArchiveStream(srcF.getPath(), (ArchiveInputStream) is,
+                                    dir);
+            } else {
+                is = new FileInputStream(srcF);
+                expandStream(srcF.getPath(), is, dir);
+            }
         } catch (IOException ioe) {
             throw new BuildException("Error while expanding " + srcF.getPath()
                                      + "\n" + ioe.toString(),
                                      ioe, getLocation());
         } finally {
-            FileUtils.close(fis);
+            FileUtils.close(is);
         }
     }
 
@@ -139,10 +148,19 @@ public abstract class ExpandBase extends Expand {
         throws IOException {
         ArchiveInputStream is = null;
         try {
-            FileNameMapper mapper = getMapper();
-            log("Expanding: " + name + " into " + dir, Project.MSG_INFO);
             is = factory.getArchiveStream(new BufferedInputStream(stream),
                                           getEncoding());
+            expandArchiveStream(name, is, dir);
+        } finally {
+            FileUtils.close(is);
+        }
+    }
+
+    private void expandArchiveStream(String name, ArchiveInputStream is,
+                                     File dir)
+        throws IOException {
+            FileNameMapper mapper = getMapper();
+            log("Expanding: " + name + " into " + dir, Project.MSG_INFO);
             boolean empty = true;
             ArchiveEntry ent = null;
             while ((ent = is.getNextEntry()) != null) {
@@ -160,8 +178,5 @@ public abstract class ExpandBase extends Expand {
                 throw new BuildException("archive '" + name + "' is empty");
             }
             log("expand complete", Project.MSG_VERBOSE);
-        } finally {
-            FileUtils.close(is);
-        }
     }
 }

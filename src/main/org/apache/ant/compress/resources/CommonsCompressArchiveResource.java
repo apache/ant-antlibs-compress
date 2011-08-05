@@ -28,7 +28,9 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.ArchiveResource;
+import org.apache.tools.ant.types.resources.FileProvider;
 import org.apache.tools.ant.util.FileUtils;
+import org.apache.ant.compress.util.FileAwareArchiveStreamFactory;
 import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -123,10 +125,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         if (isReference()) {
             return ((Resource) getCheckedRef()).getInputStream();
         }
-        Resource archive = getArchive();
-        final ArchiveInputStream i =
-            factory.getArchiveStream(new BufferedInputStream(archive.getInputStream()),
-                                     getEncoding());
+        final ArchiveInputStream i = getStream();
         ArchiveEntry ae = null;
         while ((ae = i.getNextEntry()) != null) {
             if (ae.getName().equals(getName())) {
@@ -183,11 +182,9 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * fetches information from the named entry inside the archive.
      */
     protected void fetchEntry() {
-        Resource archive = getArchive();
         ArchiveInputStream i = null;
         try {
-            i = factory.getArchiveStream(archive.getInputStream(),
-                                         getEncoding());
+            i = getStream();
             ArchiveEntry ae = null;
             while ((ae = i.getNextEntry()) != null) {
                 if (ae.getName().equals(getName())) {
@@ -221,4 +218,18 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         gid = EntryHelper.getGroupId(e);
     }
 
+    private ArchiveInputStream getStream() throws IOException {
+        Resource archive = getArchive();
+        if (factory instanceof FileAwareArchiveStreamFactory
+            && archive.as(FileProvider.class) != null) {
+            FileProvider p = (FileProvider) archive.as(FileProvider.class);
+            FileAwareArchiveStreamFactory f =
+                (FileAwareArchiveStreamFactory) factory;
+            return f.getArchiveInputStream(p.getFile(), getEncoding());
+        }
+        return 
+            factory.getArchiveStream(new BufferedInputStream(archive
+                                                             .getInputStream()),
+                                     getEncoding());
+    }
 }
