@@ -26,6 +26,7 @@ import java.io.InputStream;
 import org.apache.ant.compress.util.CompressorStreamFactory;
 import org.apache.ant.compress.util.StreamHelper;
 import org.apache.commons.compress.compressors.CompressorInputStream;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.taskdefs.Unpack;
@@ -71,12 +72,7 @@ public abstract class UnpackBase extends Unpack {
                     fis = srcResource.getInputStream();
                     zIn = factory.getCompressorStream(new BufferedInputStream(fis));
                 }
-                byte[] buffer = new byte[BUFFER_SIZE];
-                int count = 0;
-                do {
-                    out.write(buffer, 0, count);
-                    count = zIn.read(buffer, 0, buffer.length);
-                } while (count != -1);
+                IOUtils.copy(zIn, out, BUFFER_SIZE);
             } catch (IOException ioe) {
                 String msg = "Problem expanding " + ioe.getMessage();
                 throw new BuildException(msg, ioe, getLocation());
