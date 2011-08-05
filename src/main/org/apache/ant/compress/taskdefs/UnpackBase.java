@@ -75,8 +75,8 @@ public abstract class UnpackBase extends Unpack {
                         (FileAwareCompressorStreamFactory) factory;
                     zIn =  f.getCompressorInputStream(p.getFile());
                 } else {
-                fis = srcResource.getInputStream();
-                zIn = factory.getCompressorStream(new BufferedInputStream(fis));
+                    fis = srcResource.getInputStream();
+                    zIn = factory.getCompressorStream(new BufferedInputStream(fis));
                 }
                 byte[] buffer = new byte[BUFFER_SIZE];
                 int count = 0;

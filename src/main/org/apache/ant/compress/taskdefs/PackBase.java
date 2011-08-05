@@ -194,8 +194,8 @@ public abstract class PackBase extends Task {
                     (FileAwareCompressorStreamFactory) factory;
                 out =  f.getCompressorOutputStream(p.getFile());
             } else {
-            out =
-                factory.getCompressorStream(new BufferedOutputStream(dest.getOutputStream()));
+                out =
+                    factory.getCompressorStream(new BufferedOutputStream(dest.getOutputStream()));
             }
             IOUtils.copy(in, out, BUFFER_SIZE);
         } catch (IOException e) {
