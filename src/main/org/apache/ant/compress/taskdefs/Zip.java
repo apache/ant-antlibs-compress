@@ -18,6 +18,7 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -53,12 +54,15 @@ public class Zip extends ArchiveBase {
                     ZipArchiveOutputStream o =
                         (ZipArchiveOutputStream) super.getArchiveStream(stream,
                                                                         encoding);
-                    o.setLevel(level);
-                    o.setComment(comment);
-                    o.setFallbackToUTF8(fallBackToUTF8);
-                    o.setUseLanguageEncodingFlag(useLanguageEncodingFlag);
-                    o.setCreateUnicodeExtraFields(createUnicodeExtraFields
-                                                  .getPolicy());
+                    configure(o);
+                    return o;
+                }
+                public ArchiveOutputStream getArchiveOutputStream(File f,
+                                                                  String encoding)
+                    throws IOException {
+                    ZipArchiveOutputStream o = (ZipArchiveOutputStream)
+                        super.getArchiveOutputStream(f, encoding);
+                    configure(o);
                     return o;
                 }
             });
@@ -156,6 +160,14 @@ public class Zip extends ArchiveBase {
      */
     public void setCreateUnicodeExtraFields(UnicodeExtraField b) {
         createUnicodeExtraFields = b;
+    }
+
+    private void configure(ZipArchiveOutputStream o) {
+        o.setLevel(level);
+        o.setComment(comment);
+        o.setFallbackToUTF8(fallBackToUTF8);
+        o.setUseLanguageEncodingFlag(useLanguageEncodingFlag);
+        o.setCreateUnicodeExtraFields(createUnicodeExtraFields.getPolicy());
     }
 
     /**

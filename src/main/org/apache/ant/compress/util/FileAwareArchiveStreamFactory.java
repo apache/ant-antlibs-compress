@@ -18,42 +18,21 @@
 
 package org.apache.ant.compress.util;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
-public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
-
-    /**
-     * @param stream the stream to read from, should be buffered
-     * @param encoding the encoding of the entry names
-     */
-    public ArchiveInputStream getArchiveStream(InputStream stream,
-                                               String encoding)
-        throws IOException {
-        return new ZipArchiveInputStream(stream, encoding, true);
-    }
-
-    /**
-     * @param stream the stream to write to, should be buffered
-     * @param encoding the encoding of the entry names
-     */
-    public ArchiveOutputStream getArchiveStream(OutputStream stream,
-                                                String encoding)
-        throws IOException {
-        ZipArchiveOutputStream o = new ZipArchiveOutputStream(stream);
-        o.setEncoding(encoding);
-        return o;
-    }
-
+/**
+ * Creates streams for the supported archive formats that may take
+ * advantage of writing to/reading from a file.
+ *
+ * @since Apache Compress Antlib 1.1
+ */
+public interface FileAwareArchiveStreamFactory extends ArchiveStreamFactory {
     /**
      * @param file the file to read from
      * @param encoding the encoding of the entry names, ignored by all
@@ -61,11 +40,8 @@ public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
      */
     public ArchiveInputStream getArchiveInputStream(File file,
                                                     String encoding)
-        throws IOException {
-        return
-            getArchiveStream(new BufferedInputStream(new FileInputStream(file)),
-                             encoding);
-    }
+        throws IOException;
+
 
     /**
      * @param file the file to write to
@@ -74,9 +50,6 @@ public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
      */
     public ArchiveOutputStream getArchiveOutputStream(File file,
                                                       String encoding)
-        throws IOException {
-        ZipArchiveOutputStream o = new ZipArchiveOutputStream(file);
-        o.setEncoding(encoding);
-        return o;
-    }
+        throws IOException;
+
 }

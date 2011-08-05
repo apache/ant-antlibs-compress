@@ -42,6 +42,7 @@ import org.apache.ant.compress.resources.ZipFileSet;
 import org.apache.ant.compress.resources.ZipResource;
 import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
+import org.apache.ant.compress.util.FileAwareArchiveStreamFactory;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
@@ -59,6 +60,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.ArchiveResource;
+import org.apache.tools.ant.types.resources.FileProvider;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.MappedResource;
 import org.apache.tools.ant.types.resources.Resources;
@@ -513,11 +515,21 @@ public abstract class ArchiveBase extends Task {
         ArchiveOutputStream out = null;
         Set addedDirectories = new HashSet();
         try {
-            out =
-                factory.getArchiveStream(new BufferedOutputStream(getDest()
-                                                                  .getOutputStream()),
-                                         Expand.NATIVE_ENCODING.equals(getEncoding())
-                                         ? null : getEncoding());
+            String enc = Expand.NATIVE_ENCODING.equals(getEncoding())
+                ? null : getEncoding();
+            if (factory instanceof FileAwareArchiveStreamFactory
+                && getDest().as(FileProvider.class) != null) {
+                FileProvider p =
+                    (FileProvider) getDest().as(FileProvider.class);
+                FileAwareArchiveStreamFactory f =
+                    (FileAwareArchiveStreamFactory) factory;
+                out = f.getArchiveOutputStream(p.getFile(), enc);
+            } else {
+                out =
+                    factory.getArchiveStream(new BufferedOutputStream(getDest()
+                                                                      .getOutputStream()),
+                                             enc);
+            }
             for (Iterator i = src.iterator(); i.hasNext(); ) {
                 ResourceWithFlags r = (ResourceWithFlags) i.next();
 
