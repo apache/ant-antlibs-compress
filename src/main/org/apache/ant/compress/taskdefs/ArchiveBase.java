@@ -329,7 +329,7 @@ public abstract class ArchiveBase extends Task {
                                      + " instance");
         }
         if (fileSetBuilder == null) {
-            throw new BuildException("subclass didn't provide an fileSetBuilder"
+            throw new BuildException("subclass didn't provide a fileSetBuilder"
                                      + " instance");
         }
         if (getDest() == null) {
