@@ -27,13 +27,14 @@ import java.util.Date;
 
 import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
-import org.apache.ant.compress.util.FileAwareArchiveStreamFactory;
 import org.apache.ant.compress.util.Messages;
+import org.apache.ant.compress.util.StreamHelper;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Expand;
 import org.apache.tools.ant.types.Resource;
+import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.apache.tools.ant.util.FileUtils;
 
@@ -105,10 +106,9 @@ public abstract class ExpandBase extends Expand {
         }
         InputStream is = null;
         try {
-            if (factory instanceof FileAwareArchiveStreamFactory) {
-                FileAwareArchiveStreamFactory f =
-                    (FileAwareArchiveStreamFactory) factory;
-                is =  f.getArchiveInputStream(srcF, getEncoding());
+            is = StreamHelper.getInputStream(factory, new FileResource(srcF),
+                                             getEncoding());
+            if (is != null) {
                 expandArchiveStream(srcF.getPath(), (ArchiveInputStream) is,
                                     dir);
             } else {

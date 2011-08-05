@@ -27,7 +27,7 @@ import java.util.Iterator;
 
 import org.apache.ant.compress.resources.CommonsCompressCompressorResource;
 import org.apache.ant.compress.util.CompressorStreamFactory;
-import org.apache.ant.compress.util.FileAwareCompressorStreamFactory;
+import org.apache.ant.compress.util.StreamHelper;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -187,13 +187,8 @@ public abstract class PackBase extends Task {
         OutputStream out = null;
         try {
             in = src.getInputStream();
-            if (factory instanceof FileAwareCompressorStreamFactory
-                && dest.as(FileProvider.class) != null) {
-                FileProvider p = (FileProvider) dest.as(FileProvider.class);
-                FileAwareCompressorStreamFactory f =
-                    (FileAwareCompressorStreamFactory) factory;
-                out =  f.getCompressorOutputStream(p.getFile());
-            } else {
+            out = StreamHelper.getOutputStream(factory, dest);
+            if (out == null) {
                 out =
                     factory.getCompressorStream(new BufferedOutputStream(dest.getOutputStream()));
             }

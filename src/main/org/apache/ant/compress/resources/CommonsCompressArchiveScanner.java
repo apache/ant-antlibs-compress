@@ -22,14 +22,13 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.ant.compress.util.StreamHelper;
 import org.apache.ant.compress.util.ArchiveStreamFactory;
-import org.apache.ant.compress.util.FileAwareArchiveStreamFactory;
 import org.apache.ant.compress.util.Messages;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.Resource;
-import org.apache.tools.ant.types.resources.FileProvider;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
@@ -93,14 +92,8 @@ public class CommonsCompressArchiveScanner extends ArchiveScanner {
 
         try {
             try {
-                if (factory instanceof FileAwareArchiveStreamFactory
-                    && src.as(FileProvider.class) != null) {
-                    FileProvider p =
-                        (FileProvider) src.as(FileProvider.class);
-                    FileAwareArchiveStreamFactory f =
-                        (FileAwareArchiveStreamFactory) factory;
-                    ai = f.getArchiveInputStream(p.getFile(), encoding);
-                } else {
+                ai = StreamHelper.getInputStream(factory, src, encoding);
+                if (ai == null) {
                     ai =
                         factory.getArchiveStream(new BufferedInputStream(src
                                                                          .getInputStream()),

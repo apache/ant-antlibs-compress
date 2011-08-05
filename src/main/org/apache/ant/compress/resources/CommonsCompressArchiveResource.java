@@ -28,11 +28,10 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.resources.ArchiveResource;
-import org.apache.tools.ant.types.resources.FileProvider;
 import org.apache.tools.ant.util.FileUtils;
-import org.apache.ant.compress.util.FileAwareArchiveStreamFactory;
 import org.apache.ant.compress.util.ArchiveStreamFactory;
 import org.apache.ant.compress.util.EntryHelper;
+import org.apache.ant.compress.util.StreamHelper;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 
@@ -220,14 +219,9 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
 
     private ArchiveInputStream getStream() throws IOException {
         Resource archive = getArchive();
-        if (factory instanceof FileAwareArchiveStreamFactory
-            && archive.as(FileProvider.class) != null) {
-            FileProvider p = (FileProvider) archive.as(FileProvider.class);
-            FileAwareArchiveStreamFactory f =
-                (FileAwareArchiveStreamFactory) factory;
-            return f.getArchiveInputStream(p.getFile(), getEncoding());
-        }
-        return 
+        ArchiveInputStream s = StreamHelper.getInputStream(factory, archive,
+                                                           getEncoding());
+        return s != null ? s :
             factory.getArchiveStream(new BufferedInputStream(archive
                                                              .getInputStream()),
                                      getEncoding());

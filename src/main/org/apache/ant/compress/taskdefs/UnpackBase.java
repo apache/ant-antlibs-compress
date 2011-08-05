@@ -24,10 +24,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.ant.compress.util.CompressorStreamFactory;
-import org.apache.ant.compress.util.FileAwareCompressorStreamFactory;
+import org.apache.ant.compress.util.StreamHelper;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.resources.FileProvider;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.taskdefs.Unpack;
 
@@ -67,14 +66,8 @@ public abstract class UnpackBase extends Unpack {
             InputStream fis = null;
             try {
                 out = new FileOutputStream(dest);
-                if (factory instanceof FileAwareCompressorStreamFactory
-                    && srcResource.as(FileProvider.class) != null) {
-                    FileProvider p =
-                        (FileProvider) srcResource.as(FileProvider.class);
-                    FileAwareCompressorStreamFactory f =
-                        (FileAwareCompressorStreamFactory) factory;
-                    zIn =  f.getCompressorInputStream(p.getFile());
-                } else {
+                zIn = StreamHelper.getInputStream(factory, srcResource);
+                if (zIn == null) {
                     fis = srcResource.getInputStream();
                     zIn = factory.getCompressorStream(new BufferedInputStream(fis));
                 }
