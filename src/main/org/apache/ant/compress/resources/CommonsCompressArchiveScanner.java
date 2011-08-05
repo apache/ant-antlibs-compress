@@ -101,10 +101,10 @@ public class CommonsCompressArchiveScanner extends ArchiveScanner {
                         (FileAwareArchiveStreamFactory) factory;
                     ai = f.getArchiveInputStream(p.getFile(), encoding);
                 } else {
-                ai =
-                    factory.getArchiveStream(new BufferedInputStream(src
-                                                                     .getInputStream()),
-                                             encoding);
+                    ai =
+                        factory.getArchiveStream(new BufferedInputStream(src
+                                                                         .getInputStream()),
+                                                 encoding);
                 }
             } catch (IOException ex) {
                 throw new BuildException("problem opening " + src, ex);

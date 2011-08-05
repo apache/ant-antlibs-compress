@@ -159,24 +159,24 @@ public abstract class ExpandBase extends Expand {
     private void expandArchiveStream(String name, ArchiveInputStream is,
                                      File dir)
         throws IOException {
-            FileNameMapper mapper = getMapper();
-            log("Expanding: " + name + " into " + dir, Project.MSG_INFO);
-            boolean empty = true;
-            ArchiveEntry ent = null;
-            while ((ent = is.getNextEntry()) != null) {
-                if (skipUnreadable && !is.canReadEntryData(ent)) {
-                    log(Messages.skippedIsUnreadable(ent));
-                    continue;
-                }
-                empty = false;
-                log("extracting " + ent.getName(), Project.MSG_DEBUG);
-                extractFile(FileUtils.getFileUtils(), null, dir, is,
-                            ent.getName(), ent.getLastModifiedDate(),
-                            ent.isDirectory(), mapper);
+        FileNameMapper mapper = getMapper();
+        log("Expanding: " + name + " into " + dir, Project.MSG_INFO);
+        boolean empty = true;
+        ArchiveEntry ent = null;
+        while ((ent = is.getNextEntry()) != null) {
+            if (skipUnreadable && !is.canReadEntryData(ent)) {
+                log(Messages.skippedIsUnreadable(ent));
+                continue;
             }
-            if (empty && getFailOnEmptyArchive()) {
-                throw new BuildException("archive '" + name + "' is empty");
-            }
-            log("expand complete", Project.MSG_VERBOSE);
+            empty = false;
+            log("extracting " + ent.getName(), Project.MSG_DEBUG);
+            extractFile(FileUtils.getFileUtils(), null, dir, is,
+                        ent.getName(), ent.getLastModifiedDate(),
+                        ent.isDirectory(), mapper);
+        }
+        if (empty && getFailOnEmptyArchive()) {
+            throw new BuildException("archive '" + name + "' is empty");
+        }
+        log("expand complete", Project.MSG_VERBOSE);
     }
 }
