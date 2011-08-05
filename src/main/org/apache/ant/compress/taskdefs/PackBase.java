@@ -27,11 +27,13 @@ import java.util.Iterator;
 
 import org.apache.ant.compress.resources.CommonsCompressCompressorResource;
 import org.apache.ant.compress.util.CompressorStreamFactory;
+import org.apache.ant.compress.util.FileAwareCompressorStreamFactory;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.types.ResourceCollection;
+import org.apache.tools.ant.types.resources.FileProvider;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.Resources;
 import org.apache.tools.ant.util.FileUtils;
@@ -185,8 +187,16 @@ public abstract class PackBase extends Task {
         OutputStream out = null;
         try {
             in = src.getInputStream();
+            if (factory instanceof FileAwareCompressorStreamFactory
+                && dest.as(FileProvider.class) != null) {
+                FileProvider p = (FileProvider) dest.as(FileProvider.class);
+                FileAwareCompressorStreamFactory f =
+                    (FileAwareCompressorStreamFactory) factory;
+                out =  f.getCompressorOutputStream(p.getFile());
+            } else {
             out =
                 factory.getCompressorStream(new BufferedOutputStream(dest.getOutputStream()));
+            }
             IOUtils.copy(in, out, BUFFER_SIZE);
         } catch (IOException e) {
             throw new BuildException("Error compressing " + src.getName()
