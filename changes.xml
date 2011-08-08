@@ -38,6 +38,10 @@
     </properties>
 
     <release version="1.1" date="unpublished">
+      <action type="update" breaks-bwc="true">
+        The Apache Compress Antlib now requires Apache Commons
+        Compress 1.3 which in turn requires Java5 at runtime.
+      </action>
       <action type="add">
         The unarchiving tasks and fileset types share a new attribute
         skipUnreadableEntries that can be used to ignore archive
