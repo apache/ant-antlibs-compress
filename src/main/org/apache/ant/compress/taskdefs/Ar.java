@@ -41,17 +41,11 @@ public class Ar extends ArchiveBase {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
                     if (isDir) {
-                        // REVISIT
                         throw new BuildException(NO_DIRS_MESSAGE);
                     }
 
                     int mode = ArchiveFileSet.DEFAULT_FILE_MODE;
-                    if (!isDir && r.getCollectionFlags().hasModeBeenSet()) {
-                        mode = r.getCollectionFlags().getMode();
-                    } else if (isDir
-                               && r.getCollectionFlags().hasDirModeBeenSet()) {
-                        mode = r.getCollectionFlags().getDirMode();
-                    } else if (r.getResourceFlags().hasModeBeenSet()) {
+                    if (r.getCollectionFlags().hasModeBeenSet()) {
                         mode = r.getResourceFlags().getMode();
                     }
 
