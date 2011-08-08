@@ -539,4 +539,26 @@
       </cond:islastmodified>
     </au:assertFalse>
   </target>
+
+  <target name="testLongNameException" depends="setUp">
+    <touch file="${input}/this-is-a-long-name-for-ar.txt"/>
+    <au:expectfailure>
+      <cmp:ar dest="${dest}">
+        <fileset dir="${input}"/>
+      </cmp:ar>
+    </au:expectfailure>
+  </target>
+
+
+  <target name="testLongNameBSD" depends="setUp">
+    <touch file="${input}/this-is-a-long-name-for-ar.txt"/>
+    <cmp:ar dest="${dest}" format="bsd">
+      <fileset dir="${input}"/>
+    </cmp:ar>
+    <assertResourceExists>
+      <cmp:arentry name="this-is-a-long-name-for-ar.txt">
+        <file file="${dest}"/>
+      </cmp:arentry>
+    </assertResourceExists>
+  </target>
 </project>

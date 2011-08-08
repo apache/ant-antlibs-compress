@@ -222,10 +222,26 @@
   <p>An <a href="#archive">archiving task</a> creating archives of the
     AR format.</p>
 
-  <p>The AR format is pretty limited, it can only store file names up
+  <p>The AR format is pretty limited, by default it can only store file names up
     to 16 characters and not store directories at all.  It is not
     possible to set the <code>filesonly</code> attribute to true for
     the <code>ar</code> task.</p>
+
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">format</td>
+      <td valign="top">Ar format for entries with names longer than
+        16 characters.  Supported values are "ar" which doesn't
+        support entries of that length and results in a build failure
+        and "bsd".</td>
+      <td valign="top" align="center">No, default is "ar"</td>
+    </tr>
+  </table>
 
   <h3><a name="cpio">Cpio</a></h3>
 

@@ -18,12 +18,17 @@
 
 package org.apache.ant.compress.taskdefs;
 
-import org.apache.ant.compress.util.ArStreamFactory;
+import java.io.IOException;
+import java.io.OutputStream;
 import org.apache.ant.compress.resources.ArFileSet;
+import org.apache.ant.compress.util.ArStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
+import org.apache.commons.compress.archivers.ar.ArArchiveOutputStream;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.ArchiveFileSet;
+import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.Resource;
 
 /**
@@ -34,8 +39,22 @@ public class Ar extends ArchiveBase {
     private static final String NO_DIRS_MESSAGE = "ar archives cannot store"
         + " directory entries";
 
+    private Format format = Format.AR;
+
     public Ar() {
-        setFactory(new ArStreamFactory());
+        setFactory(new ArStreamFactory() {
+                public ArchiveOutputStream getArchiveStream(OutputStream stream,
+                                                            String encoding)
+                    throws IOException {
+                    ArArchiveOutputStream o =
+                        (ArArchiveOutputStream) super.getArchiveStream(stream,
+                                                                       encoding);
+                    if (format.equals(Format.BSD)) {
+                        o.setLongFileMode(ArArchiveOutputStream.LONGFILE_BSD);
+                    }
+                    return o;
+                }
+            });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
@@ -85,4 +104,43 @@ public class Ar extends ArchiveBase {
             throw new BuildException(NO_DIRS_MESSAGE);
         }
     }
+
+    /**
+     * The format for entries with filenames longer than 16 characters
+     * or containign spaces - any other entry will always use "ar".
+     *
+     * @since Apache Compress Antlib 1.1
+     */
+    public void setFormat(Format f) {
+        format = f;
+    }
+
+    /**
+     * The supported tar formats for entries with long file names.
+     */
+    public final static class Format extends EnumeratedAttribute {
+        private static final String AR_NAME = "ar";
+        private static final String BSD_NAME = "bsd";
+
+        public static final Format AR = new Format(AR_NAME);
+        public static final Format BSD = new Format(BSD_NAME);
+
+        public Format(String v) {
+            setValue(v);
+        }
+
+        public Format() {
+            setValue(AR_NAME);
+        }
+
+        public String[] getValues() {
+            return new String[] {AR_NAME, BSD_NAME};
+        }
+
+        public boolean equals(Object other) {
+            return other instanceof Format
+                && ((Format) other).getValue().equals(getValue());
+        }
+    }
+
 }
