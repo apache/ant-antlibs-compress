@@ -65,6 +65,8 @@ public class Ar extends ArchiveBase {
 
                     int mode = ArchiveFileSet.DEFAULT_FILE_MODE;
                     if (r.getCollectionFlags().hasModeBeenSet()) {
+                        mode = r.getCollectionFlags().getMode();
+                    } else if (r.getResourceFlags().hasModeBeenSet()) {
                         mode = r.getResourceFlags().getMode();
                     }
 
