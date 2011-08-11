@@ -29,6 +29,7 @@ import org.apache.ant.compress.util.ZipStreamFactory;
 import org.apache.ant.compress.resources.ZipFileSet;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.zip.Zip64Mode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.tools.ant.types.ArchiveFileSet;
@@ -45,6 +46,7 @@ public class Zip extends ArchiveBase {
     private boolean fallBackToUTF8 = false;
     private boolean useLanguageEncodingFlag = true;
     private UnicodeExtraField createUnicodeExtraFields = UnicodeExtraField.NEVER;
+    private Zip64Enum zip64Mode = Zip64Enum.AS_NEEDED;
 
     public Zip() {
         setFactory(new ZipStreamFactory() {
@@ -162,12 +164,22 @@ public class Zip extends ArchiveBase {
         createUnicodeExtraFields = b;
     }
 
+    /**
+     * Whether to create Zip64 extended information.
+     *
+     * @since Commons Compress 1.1
+     */
+    public void setZip64Mode(Zip64Enum mode) {
+        zip64Mode = mode;
+    }
+
     private void configure(ZipArchiveOutputStream o) {
         o.setLevel(level);
         o.setComment(comment);
         o.setFallbackToUTF8(fallBackToUTF8);
         o.setUseLanguageEncodingFlag(useLanguageEncodingFlag);
         o.setCreateUnicodeExtraFields(createUnicodeExtraFields.getPolicy());
+        o.setUseZip64(zip64Mode.getPolicy());
     }
 
     /**
@@ -206,6 +218,39 @@ public class Zip extends ArchiveBase {
         public ZipArchiveOutputStream.UnicodeExtraFieldPolicy getPolicy() {
             return (ZipArchiveOutputStream.UnicodeExtraFieldPolicy)
                 POLICIES.get(getValue());
+        }
+    }
+
+    /**
+     * Policiy for creation of Zip64 extended information: never, always or
+     * as-needed.
+     */
+    public static final class Zip64Enum extends EnumeratedAttribute {
+        private static final Map POLICIES = new HashMap();
+        private static final String NEVER_KEY = "never";
+        private static final String ALWAYS_KEY = "always";
+        private static final String A_N_KEY = "as-needed";
+        static {
+            POLICIES.put(NEVER_KEY, Zip64Mode.Never);
+            POLICIES.put(ALWAYS_KEY, Zip64Mode.Always);
+            POLICIES.put(A_N_KEY, Zip64Mode.AsNeeded);
+        }
+
+        public String[] getValues() {
+            return new String[] {NEVER_KEY, ALWAYS_KEY, A_N_KEY};
+        }
+
+        public static final Zip64Enum AS_NEEDED = new Zip64Enum(A_N_KEY);
+
+        private Zip64Enum(String name) {
+            setValue(name);
+        }
+
+        public Zip64Enum() {
+        }
+
+        public Zip64Mode getPolicy() {
+            return (Zip64Mode) POLICIES.get(getValue());
         }
     }
 }

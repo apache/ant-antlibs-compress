@@ -597,4 +597,23 @@
       </cond:islastmodified>
     </au:assertFalse>
   </target>
+
+  <target name="testBigArchiveWithZip64" depends="setUp">
+    <cmp:zip dest="${dest}" zip64mode="always">
+      <cmp:devzero size="5000000000" name="big"/>
+    </cmp:zip>
+    <assertResourceExists>
+      <cmp:zipentry name="big">
+        <file file="${dest}"/>
+      </cmp:zipentry>
+    </assertResourceExists>
+  </target>
+
+  <target name="testBigArchiveWithoutZip64" depends="setUp">
+    <au:expectfailure>
+      <cmp:zip dest="${dest}" zip64mode="never">
+        <cmp:devzero size="5000000000" name="big"/>
+      </cmp:zip>
+    </au:expectfailure>
+  </target>
 </project>

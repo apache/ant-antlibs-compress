@@ -43,6 +43,11 @@
         Compress 1.3 which in turn requires Java5 at runtime.
       </action>
       <action type="update">
+        The &lt;zip&gt; task has a new attribute zip64Mode that
+        controls whether Zip64 extended information is written to the
+        archive.
+      </action>
+      <action type="update">
         The &lt;ar&gt; task now optionally suppports writing entries
         with names longer than 16 characters using the BSD variant of
         AR archives.

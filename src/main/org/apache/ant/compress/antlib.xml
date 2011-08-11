@@ -131,4 +131,9 @@
      name="hasmode"
      classname="org.apache.ant.compress.conditions.HasMode"
      />
+
+  <typedef
+     name="devzero"
+     classname="org.apache.ant.compress.resources.DevZeroResource"
+     />
 </antlib>

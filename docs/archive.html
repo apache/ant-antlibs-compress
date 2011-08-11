@@ -463,6 +463,26 @@ the executable files and include all others. </p>
         Default is false.</td>
       <td align="center" valign="top">No</td>
     </tr>
+    <tr>
+      <td valign="top">zip64Mode</td>
+      <td valign="top">Controls whether Zip64 extended information is
+        written to the archive.<br/>
+        In order to store entries bigger than 4GB or more than 65536
+        entries inside an archive, so called Zip64 extensions must be
+        used.  An archive that uses such extensions may not be
+        readable by all unarchivers.<br/>
+        The possible modes are "always", "never" and "as-needed".  The
+        default is "as-needed" which enables Zip64 extensions if a
+        resource is added to the archive whose size is known to exceed
+        4GB or if there are more than 65536 entries.  "as-needed" does
+        not work for resources of unknown size (like URL-resources),
+        if you try to archive such resources, the default will be
+        "never" instead of "as-needed".<br/>
+        If the mode is "never" and the resource actually exceeds the
+        limit, the build will fail.
+      </td>
+      <td align="center" valign="top">No</td>
+    </tr>
   </table>
 
 <h3>Examples</h3>
