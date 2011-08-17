@@ -32,7 +32,7 @@ import org.apache.tools.ant.types.Resource;
 
 /**
  * A CpioFileSet is a FileSet with extra attributes useful in the context of
- * Cpio/Jar tasks.
+ * Cpio tasks.
  *
  * A CpioFileSet extends FileSets with the ability to extract a subset of the
  * entries of a Cpio file for inclusion in another Cpio file.  It also includes

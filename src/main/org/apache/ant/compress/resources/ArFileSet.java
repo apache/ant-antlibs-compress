@@ -32,7 +32,7 @@ import org.apache.tools.ant.types.Resource;
 
 /**
  * A ArFileSet is a FileSet with extra attributes useful in the context of
- * Ar/Jar tasks.
+ * Ar tasks.
  *
  * A ArFileSet extends FileSets with the ability to extract a subset of the
  * entries of a Ar file for inclusion in another Ar file.  It also includes

@@ -32,7 +32,7 @@ import org.apache.tools.ant.types.Resource;
 
 /**
  * A TarFileSet is a FileSet with extra attributes useful in the context of
- * Tar/Jar tasks.
+ * Tar tasks.
  *
  * A TarFileSet extends FileSets with the ability to extract a subset of the
  * entries of a Tar file for inclusion in another Tar file.  It also includes
