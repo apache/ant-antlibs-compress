@@ -25,12 +25,13 @@ import org.apache.tools.ant.BuildException;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
+import org.apache.commons.compress.archivers.dump.DumpArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 
 /**
  * Helper methods that gloss over API differences between the
- * ArchiveEntry implementations of Apache Commons Compress 1.1.
+ * ArchiveEntry implementations of Apache Commons Compress 1.3.
  */
 public class EntryHelper {
     private EntryHelper() {}
@@ -55,6 +56,9 @@ public class EntryHelper {
         }
         if (entry instanceof ZipArchiveEntry) {
             return ((ZipArchiveEntry) entry).getUnixMode();
+        }
+        if (entry instanceof DumpArchiveEntry) {
+            return ((DumpArchiveEntry) entry).getMode();
         }
         throw new BuildException("archive entry " + entry.getClass()
                                  + " is not supported.");
@@ -82,6 +86,9 @@ public class EntryHelper {
         if (entry instanceof ZipArchiveEntry) {
             return UNKNOWN_ID;
         }
+        if (entry instanceof DumpArchiveEntry) {
+            return ((DumpArchiveEntry) entry).getUserId();
+        }
         throw new BuildException("archive entry " + entry.getClass()
                                  + " is not supported.");
     }
@@ -105,6 +112,9 @@ public class EntryHelper {
         }
         if (entry instanceof ZipArchiveEntry) {
             return UNKNOWN_ID;
+        }
+        if (entry instanceof DumpArchiveEntry) {
+            return (int) ((DumpArchiveEntry) entry).getGroupId();
         }
         throw new BuildException("archive entry " + entry.getClass()
                                  + " is not supported.");

@@ -17,12 +17,16 @@
   -->
 <antlib>
   <taskdef
+     name="unar"
+     classname="org.apache.ant.compress.taskdefs.Unar"
+     />
+  <taskdef
      name="uncpio"
      classname="org.apache.ant.compress.taskdefs.Uncpio"
      />
   <taskdef
-     name="unar"
-     classname="org.apache.ant.compress.taskdefs.Unar"
+     name="undump"
+     classname="org.apache.ant.compress.taskdefs.Undump"
      />
   <taskdef
      name="untar"
