@@ -70,10 +70,6 @@
      />
 
   <typedef
-     name="tarentry"
-     classname="org.apache.ant.compress.resources.TarResource"
-     />
-  <typedef
      name="arentry"
      classname="org.apache.ant.compress.resources.ArResource"
      />
@@ -82,14 +78,18 @@
      classname="org.apache.ant.compress.resources.CpioResource"
      />
   <typedef
+     name="dumpentry"
+     classname="org.apache.ant.compress.resources.DumpResource"
+     />
+  <typedef
+     name="tarentry"
+     classname="org.apache.ant.compress.resources.TarResource"
+     />
+  <typedef
      name="zipentry"
      classname="org.apache.ant.compress.resources.ZipResource"
      />
 
-  <typedef
-     name="tarfileset"
-     classname="org.apache.ant.compress.resources.TarFileSet"
-     />
   <typedef
      name="arfileset"
      classname="org.apache.ant.compress.resources.ArFileSet"
@@ -97,6 +97,14 @@
   <typedef
      name="cpiofileset"
      classname="org.apache.ant.compress.resources.CpioFileSet"
+     />
+  <typedef
+     name="dumpfileset"
+     classname="org.apache.ant.compress.resources.DumpFileSet"
+     />
+  <typedef
+     name="tarfileset"
+     classname="org.apache.ant.compress.resources.TarFileSet"
      />
   <typedef
      name="zipfileset"

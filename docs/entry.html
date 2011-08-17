@@ -94,6 +94,24 @@
 
 <p>Represents the entry named some-file.txt in archive some-archive.cpio.</p>
 
+<h2><a name="dumpentry">dumpentry</a></h2>
+
+<p><em>Since Apache Compress Antlib 1.1</em>.</p>
+
+<p>An <a href="#archiveentry">archive entry</a> representing an entry
+  in a Unix dump archive.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:dumpentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="/some-file.txt"&gt;
+  &lt;file file="some-archive.dump"/&gt;
+&lt;/cmp:dumpentry&gt;
+</pre>
+
+<p>Represents the entry named /some-file.txt in archive some-archive.dump.</p>
+
 <h2><a name="tarentry">tarentry</a></h2>
 
 <p>An <a href="#archiveentry">archive entry</a> representing an entry

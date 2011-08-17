@@ -42,6 +42,11 @@
         The Apache Compress Antlib now requires Apache Commons
         Compress 1.3 which in turn requires Java5 at runtime.
       </action>
+      <action type="add">
+        Read-only support for the Unix dump format has been added in
+        the form of an &lt;undump&gt; task and corresponding
+        &lt;dumpentry&gt; and &lt;dumpfileset&gt; resources.
+      </action>
       <action type="update">
         The &lt;zip&gt; task has a new attribute zip64Mode that
         controls whether Zip64 extended information is written to the

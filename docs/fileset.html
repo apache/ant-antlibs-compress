@@ -225,6 +225,55 @@ resource collection</h4>
   target directory, no files get overwritten unless they are
   out-of-date.</p>
 
+<h2><a name="dumpfileset">DumpFileSet</a></h2>
+
+<p><em>Since Apache Compress Antlib 1.1</em>.</p>
+
+<p>A <code>&lt;dumpfileset&gt;</code> is
+  an <a href="#archivefileset">archive fileset</a> with attributes to
+  specify user and group ids in addition to the parameters
+  specified above.</p>
+
+<h3>Parameters</h3>
+<table border="1" cellpadding="2" cellspacing="0">
+  <tbody>
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td valign="top" align="center"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">uid</td>
+      <td valign="top">The user identifier (UID) for the dump entry. This is an integer value
+        and is not the same as the username.
+      </td>
+      <td align="center" valign="top">No</td>
+    </tr>
+    <tr>
+      <td valign="top">gid</td>
+      <td valign="top">The group identifier (GID) for the dump entry.
+      </td>
+      <td align="center" valign="top">No</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4>Examples</h4>
+<blockquote>
+<pre>
+  &lt;copy todir="some-dir"&gt;
+    &lt;cmp:dumpfileset xmlns:cmp="antlib:org.apache.ant.compress"&gt;
+      &lt;file file="some-archive.dump"/&gt;
+    &lt;/cmp:dumpfileset&gt;
+  &lt;/copy&gt;
+</pre></blockquote>
+
+<p>extracts some-archive.dump, uncompresses and extracts it on the fly
+  and copies the contents of it into some-dir.  File timestamps will
+  be compared between the archive's entries and files inside the
+  target directory, no files get overwritten unless they are
+  out-of-date.</p>
+
 <h2><a name="tarfileset">TarFileSet</a></h2>
 
 <p>A <code>&lt;tarfileset&gt;</code> is
