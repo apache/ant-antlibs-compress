@@ -27,8 +27,7 @@
   </target>
 
   <target name="testAgainstNativeDump" depends="setUp">
-    <cmp:undump src="../resources/asf-logo.gif.dump" dest="${output}"
-                stripabsolutepathspec="true"/>
+    <cmp:undump src="../resources/asf-logo.gif.dump" dest="${output}"/>
     <au:assertFileExists file="${output}/asf-logo.gif"/>
     <au:assertFilesMatch
        actual="${output}/asf-logo.gif"
@@ -37,8 +36,7 @@
   </target>
 
   <target name="testAgainstNativeDumpCompressed" depends="setUp">
-    <cmp:undump src="../resources/asf-logo.gif.z.dump" dest="${output}"
-                stripabsolutepathspec="true"/>
+    <cmp:undump src="../resources/asf-logo.gif.z.dump" dest="${output}"/>
     <au:assertFileExists file="${output}/asf-logo.gif"/>
     <au:assertFilesMatch
        actual="${output}/asf-logo.gif"
@@ -50,7 +48,7 @@
     <zip destfile="${input}/test.zip">
       <fileset dir="../resources" includes="*.dump"/>
     </zip>
-    <cmp:undump dest="${output}" stripabsolutepathspec="true">
+    <cmp:undump dest="${output}">
       <zipfileset src="${input}/test.zip">
         <include name="*.dump"/>
       </zipfileset>
