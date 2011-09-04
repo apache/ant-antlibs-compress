@@ -16,34 +16,25 @@
  *
  */
 
-package org.apache.ant.compress.util;
+package org.apache.ant.compress.taskdefs;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.compress.compressors.CompressorInputStream;
-import org.apache.commons.compress.compressors.CompressorOutputStream;
+import org.apache.ant.compress.resources.CommonsCompressCompressorResource;
+import org.apache.ant.compress.resources.Pack200Resource;
+import org.apache.ant.compress.util.Pack200StreamFactory;
+import org.apache.tools.ant.types.Resource;
 
 /**
- * Creates streams for the supported compression formats that may take
- * advantage of writing to/reading from a file.
- *
- * @since Apache Compress Antlib 1.1
+ * Compresses using pack200.
  */
-public interface FileAwareCompressorStreamFactory
-    extends CompressorStreamFactory {
+public final class Pack200 extends PackBase {
 
-    /**
-     * @param file the file to read from
-     */
-    CompressorInputStream getCompressorInputStream(File file)
-        throws IOException;
-
-
-    /**
-     * @param file the file to write to
-     */
-    CompressorOutputStream getCompressorOutputStream(File file)
-        throws IOException;
+    public Pack200() {
+        super(new Pack200StreamFactory(),
+              new PackBase.ResourceWrapper() {
+                public CommonsCompressCompressorResource wrap(Resource dest) {
+                    return new Pack200Resource(dest);
+                }
+            });
+    }
 
 }

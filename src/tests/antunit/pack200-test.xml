@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project default="antunit"
+         xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
+         xmlns:cmp="antlib:org.apache.ant.compress">
+
+  <import file="antunit-base.xml" />
+
+  <target name="setUp">
+    <mkdir dir="${output}" />
+  </target>
+
+  <target name="testRealTest" depends="setUp">
+    <cmp:pack200 src="../resources/asf-logo.gif.zip"
+              destfile="${output}/asf-logo.gif.pack" />
+    <au:assertLogContains text="Building: asf-logo.gif.pack"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
+  </target>
+
+  <target name="testRealTestWithResource" depends="setUp">
+    <cmp:pack200 destfile="${output}/asf-logo.gif.pack">
+      <file file="../resources/asf-logo.gif.zip"/>
+    </cmp:pack200>
+    <au:assertLogContains text="Building: asf-logo.gif.pack"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
+  </target>
+
+  <target name="testDateCheck" depends="setUp">
+    <touch file="${output}/asf-logo.gif.pack"/>
+    <cmp:pack200 src="../resources/asf-logo.gif.zip"
+              destfile="${output}/asf-logo.gif.pack" />
+    <au:assertLogContains text="Nothing to do: asf-logo.gif.pack is up to date."/>
+  </target>
+
+  <target name="testNestedTask" depends="setUp">
+    <cmp:pack200 destfile="${output}/asf-logo.zip.pack">
+      <cmp:zip>
+        <cmp:cpiofileset src="../resources/asf-logo.gif.bin.cpio"
+                         includes="asf-logo.gif"/>
+      </cmp:zip>
+    </cmp:pack200>
+    <au:assertFileExists file="${output}/asf-logo.zip.pack"/>
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-07-31-20:11:14 +0200"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:zipentry name="asf-logo.gif">
+          <cmp:pack200resource>
+            <file file="${output}/asf-logo.zip.pack"/>
+          </cmp:pack200resource>
+        </cmp:zipentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+</project>

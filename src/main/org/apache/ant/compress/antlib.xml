@@ -53,20 +53,28 @@
      classname="org.apache.ant.compress.taskdefs.Zip"
      />
   <taskdef
+     name="bunzip2"
+     classname="org.apache.ant.compress.taskdefs.BUnzip2"
+     />
+  <taskdef
      name="gunzip"
      classname="org.apache.ant.compress.taskdefs.GUnzip"
      />
   <taskdef
-     name="bunzip2"
-     classname="org.apache.ant.compress.taskdefs.BUnzip2"
+     name="unpack200"
+     classname="org.apache.ant.compress.taskdefs.UnPack200"
+     />
+  <taskdef
+     name="bzip2"
+     classname="org.apache.ant.compress.taskdefs.BZip2"
      />
   <taskdef
      name="gzip"
      classname="org.apache.ant.compress.taskdefs.GZip"
      />
   <taskdef
-     name="bzip2"
-     classname="org.apache.ant.compress.taskdefs.BZip2"
+     name="pack200"
+     classname="org.apache.ant.compress.taskdefs.Pack200"
      />
 
   <typedef
@@ -121,6 +129,10 @@
   <typedef
      name="gzipresource"
      classname="org.apache.ant.compress.resources.GZipResource"
+     />
+  <typedef
+     name="pack200resource"
+     classname="org.apache.ant.compress.resources.Pack200Resource"
      />
 
   <componentdef

@@ -36,8 +36,8 @@ public interface FileAwareArchiveStreamFactory extends ArchiveStreamFactory {
      * @param encoding the encoding of the entry names, ignored by all
      * formats except zip
      */
-    public ArchiveInputStream getArchiveInputStream(File file,
-                                                    String encoding)
+    ArchiveInputStream getArchiveInputStream(File file,
+                                             String encoding)
         throws IOException;
 
 
@@ -46,8 +46,8 @@ public interface FileAwareArchiveStreamFactory extends ArchiveStreamFactory {
      * @param encoding the encoding of the entry names, ignored by all
      * formats except zip
      */
-    public ArchiveOutputStream getArchiveOutputStream(File file,
-                                                      String encoding)
+    ArchiveOutputStream getArchiveOutputStream(File file,
+                                               String encoding)
         throws IOException;
 
 }
