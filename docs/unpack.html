@@ -75,6 +75,62 @@ resource collection</h4>
 <p>Is an <a href="#unpack">uncompressing task</a> that uses the GZIP
   compression algorithm.</p>
 
+<h3><a name="unpack200">Unpack200</a></h3>
+
+<p>Is an <a href="#unpack">uncompressing task</a> that uses
+  the <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/jar/Pack200.html">Pack200</a>
+  compression algorithm.</p>
+
+<p>This task does not work on defalted archives, you need to wrap
+  defalted archives into <code>gunzipresource</code>s in order to use
+  them.
+
+  <h4>Parameters</h4>
+  <p>In addition to the attributes supported by all uncompressing task
+    this task also supports.</p>
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">pack200strategy</td>
+      <td valign="top">Apache Commons Compress' Pack200 streams cache
+        the archive data either in memory or in a temporary file.
+        User this attribute to control which strategy is chosen.
+        Valid values are "in-memory" and "temp-file".</td>
+      <td align="center" valign="top">No, defaults to in-memory.</td>
+    </tr>
+  </table>
+
+  <h4>Parameters specified as nested elements</h4>
+  <p>In addition to the nested elements supported by all uncompressing task
+    this task also supports.</p>
+
+  <h5>property</h5>
+
+  <p>Sets a property for the unpacker (see the Pack200 javadocs for
+    details).</p>
+
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">key</td>
+      <td valign="top">Name of the property.</td>
+      <td align="center" valign="top">Yes.</td>
+    </tr>
+    <tr>
+      <td valign="top">value</td>
+      <td valign="top">Value of the property.</td>
+      <td align="center" valign="top">Yes.</td>
+    </tr>
+  </table>
+
 <h3>Examples</h3>
 <blockquote><pre>
 &lt;cmp:gunzip src=&quot;test.tar.gz&quot; xmlns:cmp="antlib:org.apache.ant.compress"/&gt;
@@ -100,6 +156,15 @@ subdir is a directory).</p>
 </pre></blockquote>
 <p>downloads <i>http://example.org/archive.tar.gz</i> and expands it
 to <i>archive.tar</i> in the project's basedir on the fly.</p>
+<blockquote><pre>
+&lt;cmp:unpack200 dest=&quot;foo.jar&quot; xmlns:cmp="antlib:org.apache.ant.compress"&gt;
+  &lt;cmp:gzipresource&gt;
+    &lt;file file="foo.pack.gz"/&gt;
+  &lt;/cmp:gzipresource&gt;
+&lt;/cmp:unpack200&gt;
+</pre></blockquote>
+<p>Unpacks the deflated Pack200 archive <i>foo.pack.gz</i> and stores
+  it as <i>foo.jar</i>.</p>
 
 <h3>Related tasks</h3>
 

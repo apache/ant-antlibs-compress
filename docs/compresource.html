@@ -71,3 +71,24 @@
   some-archive.tar.gz where the <code>gzipresource</code> provides
   the decompression of the archive.</p>
 
+<h2><a name="pack200resource">pack200resource</a></h2>
+
+<p>This is a <a href="#compresource">compressed resource</a> using the
+  <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/jar/Pack200.html">Pack200</a>
+  compression.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:zipentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="SomeFile.class"&gt;
+  &lt;cmp:pack200resource&gt;
+    &lt;file file="some-archive.pack"/&gt;
+  &lt;/cmp:pack200resource&gt;
+&lt;/cmp:zipentry&gt;
+</pre>
+
+<p>Represents the entry named Somefile.class in the Pack200 compressed
+  JAR some-archive.pack where the <code>pack200resource</code>
+  provides the decompression of the archive.</p>
+

@@ -45,6 +45,9 @@
         extensions.
       </action>
       <action type="add">
+        Support for pack200 compression has been added.
+      </action>
+      <action type="add">
         Read-only support for the Unix dump format has been added in
         the form of an &lt;undump&gt; task and corresponding
         &lt;dumpentry&gt; and &lt;dumpfileset&gt; resources.
