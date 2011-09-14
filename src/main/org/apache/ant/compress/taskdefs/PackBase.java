@@ -139,6 +139,9 @@ public abstract class PackBase extends Task {
         srcArchiveTask = task;
     }
 
+    /**
+     * @since Apache Compress Antlib 1.1
+     */
     public void add(PackBase task) {
         if (src != null || srcArchiveTask != null || srcPackTask != null) {
             throw new BuildException("Can only have one source.");
