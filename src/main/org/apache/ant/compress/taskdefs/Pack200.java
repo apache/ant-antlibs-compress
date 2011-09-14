@@ -32,14 +32,17 @@ import org.apache.commons.compress.compressors.CompressorOutputStream;
 import org.apache.commons.compress.compressors.pack200.Pack200CompressorOutputStream;
 import org.apache.commons.compress.compressors.pack200.Pack200Strategy;
 import org.apache.tools.ant.types.EnumeratedAttribute;
+import org.apache.tools.ant.types.Environment;
 import org.apache.tools.ant.types.Resource;
 
 /**
  * Compresses using pack200.
+ * @since Apache Compress Antlib 1.1
  */
 public final class Pack200 extends PackBase {
 
     private Pack200StrategyEnum strategy = Pack200StrategyEnum.IN_MEMORY;
+    private final Map/*<String, String>*/ properties = new HashMap();
 
     public Pack200() {
         super(new PackBase.ResourceWrapper() {
@@ -53,7 +56,8 @@ public final class Pack200 extends PackBase {
                     throws IOException {
                     return new Pack200CompressorOutputStream(stream,
                                                              strategy
-                                                             .getStrategy());
+                                                             .getStrategy(),
+                                                             properties);
                 }
                 public CompressorInputStream
                     getCompressorStream(InputStream stream)
@@ -66,11 +70,17 @@ public final class Pack200 extends PackBase {
     /**
      * Whether to cache archive data in memory (the default) or a
      * temporary file.
-     *
-     * @since Commons Compress 1.1
      */
     public void setPack200Strategy(Pack200StrategyEnum s) {
         strategy = s;
+    }
+
+    /**
+     * Sets a property for the Pack200 packer.
+     */
+    public void addConfiguredProperty(Environment.Variable prop) {
+        prop.validate();
+        properties.put(prop.getKey(), prop.getValue());
     }
 
     /**

@@ -167,7 +167,7 @@ public class Zip extends ArchiveBase {
     /**
      * Whether to create Zip64 extended information.
      *
-     * @since Commons Compress 1.1
+     * @since Apache Compress Antlib 1.1
      */
     public void setZip64Mode(Zip64Enum mode) {
         zip64Mode = mode;
@@ -224,6 +224,7 @@ public class Zip extends ArchiveBase {
     /**
      * Policiy for creation of Zip64 extended information: never, always or
      * as-needed.
+     * @since Apache Compress Antlib 1.1
      */
     public static final class Zip64Enum extends EnumeratedAttribute {
         private static final Map POLICIES = new HashMap();

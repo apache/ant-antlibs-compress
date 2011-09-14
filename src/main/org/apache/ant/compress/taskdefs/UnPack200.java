@@ -21,10 +21,13 @@ package org.apache.ant.compress.taskdefs;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ant.compress.util.Pack200StreamFactory;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.pack200.Pack200CompressorInputStream;
+import org.apache.tools.ant.types.Environment;
 
 /**
  * Expands a pack200 archive.
@@ -34,6 +37,7 @@ public final class UnPack200 extends UnpackBase {
 
     private Pack200.Pack200StrategyEnum strategy =
         Pack200.Pack200StrategyEnum.IN_MEMORY;
+    private final Map/*<String, String>*/ properties = new HashMap();
 
     public UnPack200() {
         super(".pack");
@@ -43,13 +47,15 @@ public final class UnPack200 extends UnpackBase {
                     throws IOException {
                     return new Pack200CompressorInputStream(stream,
                                                             strategy
-                                                            .getStrategy());
+                                                            .getStrategy(),
+                                                            properties);
                 }
                 public CompressorInputStream getCompressorInputStream(File file)
                     throws IOException {
                     return new Pack200CompressorInputStream(file,
                                                             strategy
-                                                            .getStrategy());
+                                                            .getStrategy(),
+                                                            properties);
                 }
             });
     }
@@ -57,11 +63,17 @@ public final class UnPack200 extends UnpackBase {
     /**
      * Whether to cache archive data in memory (the default) or a
      * temporary file.
-     *
-     * @since Commons Compress 1.1
      */
     public void setPack200Strategy(Pack200.Pack200StrategyEnum s) {
         strategy = s;
+    }
+
+    /**
+     * Sets a property for the Pack200 unpacker.
+     */
+    public void addConfiguredProperty(Environment.Variable prop) {
+        prop.validate();
+        properties.put(prop.getKey(), prop.getValue());
     }
 
 }

@@ -76,4 +76,13 @@
     <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
   </target>
 
+  <target name="testProperties" depends="setUp">
+    <cmp:pack200 src="../resources/asf-logo.gif.zip"
+                 destfile="${output}/asf-logo.gif.pack">
+      <property key="pack.effort" value="9"/>
+    </cmp:pack200>
+    <au:assertLogContains text="Building: asf-logo.gif.pack"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
+  </target>
+
 </project>

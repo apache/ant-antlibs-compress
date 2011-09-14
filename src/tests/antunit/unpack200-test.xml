@@ -63,4 +63,18 @@
        expected="../resources/asf-logo.gif"
        />
   </target>
+
+  <target name="testProperties" depends="setUp">
+    <cmp:unpack200 src="../resources/asf-logo.gif.pack"
+                   dest="${input}/test.zip">
+      <property key="unpack.deflate.hint" value="keep"/>
+    </cmp:unpack200>
+    <cmp:unzip src="${input}/test.zip" dest="${output}" />
+    <au:assertFileExists file="${output}/asf-logo.gif"/>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
 </project>
