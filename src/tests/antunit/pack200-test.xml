@@ -85,4 +85,12 @@
     <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
   </target>
 
+  <target name="testNestingOfPackTasks" depends="setUp">
+    <cmp:gzip destfile="${output}/asf-logo.gif.pack.gz">
+      <cmp:pack200 src="../resources/asf-logo.gif.zip"/>
+    </cmp:gzip>
+    <au:assertLogContains text="Building: asf-logo.gif.pack.gz"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.pack.gz"/>
+  </target>
+
 </project>

@@ -49,7 +49,8 @@ public abstract class PackBase extends Task {
     private final ResourceWrapper wrapper;
 
     private Resource src;
-    private ArchiveBase srcTask;
+    private ArchiveBase srcArchiveTask;
+    private PackBase srcPackTask;
     private Resource dest;
 
     protected PackBase(CompressorStreamFactory factory,
@@ -112,7 +113,7 @@ public abstract class PackBase extends Task {
      * @param src resource to expand
      */
     public void setSrc(Resource src) {
-        if (this.src != null || srcTask != null) {
+        if (this.src != null || srcArchiveTask != null || srcPackTask != null) {
             throw new BuildException("Can only have one source.");
         }
         if (src.isDirectory()) {
@@ -132,10 +133,17 @@ public abstract class PackBase extends Task {
     }
 
     public void add(ArchiveBase task) {
-        if (src != null || srcTask != null) {
+        if (src != null || srcArchiveTask != null || srcPackTask != null) {
             throw new BuildException("Can only have one source.");
         }
-        srcTask = task;
+        srcArchiveTask = task;
+    }
+
+    public void add(PackBase task) {
+        if (src != null || srcArchiveTask != null || srcPackTask != null) {
+            throw new BuildException("Can only have one source.");
+        }
+        srcPackTask = task;
     }
 
     /**
@@ -143,7 +151,7 @@ public abstract class PackBase extends Task {
      * @throws BuildException if anything is invalid
      */
     private void validate() throws BuildException {
-        if (src == null && srcTask == null) {
+        if (src == null && srcArchiveTask == null && srcPackTask == null) {
             throw new BuildException("source is required.",
                                      getLocation());
         }
@@ -179,10 +187,14 @@ public abstract class PackBase extends Task {
     public void execute() throws BuildException {
         validate();
 
-        if (srcTask != null) {
-            srcTask.setDest(wrapper.wrap(dest));
-            srcTask.setTaskName(getTaskName());
-            srcTask.execute();
+        if (srcArchiveTask != null) {
+            srcArchiveTask.setDest(wrapper.wrap(dest));
+            srcArchiveTask.setTaskName(getTaskName());
+            srcArchiveTask.execute();
+        } else if (srcPackTask != null) {
+            srcPackTask.setDest(wrapper.wrap(dest));
+            srcPackTask.setTaskName(getTaskName());
+            srcPackTask.execute();
         } else if (dest.isExists()
                    && dest.getLastModified() > src.getLastModified()) {
             log("Nothing to do: " + dest.getName() + " is up to date.");
