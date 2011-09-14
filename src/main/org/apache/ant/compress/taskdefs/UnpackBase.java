@@ -39,11 +39,25 @@ public abstract class UnpackBase extends Unpack {
     private static final int BUFFER_SIZE = 8 * 1024;
 
     private final String defaultExtension;
-    private final CompressorStreamFactory factory;
+    private CompressorStreamFactory factory;
 
     protected UnpackBase(String defaultExtension,
                          CompressorStreamFactory factory) {
+        this(defaultExtension);
+        setFactory(factory);
+    }
+
+    /**
+     * @since Apache Compress Antlib 1.1
+     */
+    protected UnpackBase(String defaultExtension) {
         this.defaultExtension = defaultExtension;
+    }
+
+    /**
+     * @since Apache Compress Antlib 1.1
+     */
+    protected final void setFactory(CompressorStreamFactory factory) {
         this.factory = factory;
     }
 

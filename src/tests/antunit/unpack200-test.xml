@@ -51,4 +51,16 @@
        expected="../resources/asf-logo.gif"
        />
   </target>
+
+  <target name="testTempFileStrategy" depends="setUp">
+    <cmp:unpack200 src="../resources/asf-logo.gif.pack"
+                   dest="${input}/test.zip"
+                   pack200strategy="temp-file"/>
+    <cmp:unzip src="${input}/test.zip" dest="${output}" />
+    <au:assertFileExists file="${output}/asf-logo.gif"/>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
 </project>

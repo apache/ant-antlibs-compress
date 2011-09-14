@@ -18,15 +18,50 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.ant.compress.util.Pack200StreamFactory;
+import org.apache.commons.compress.compressors.CompressorInputStream;
+import org.apache.commons.compress.compressors.pack200.Pack200CompressorInputStream;
 
 /**
  * Expands a pack200 archive.
+ * @since Apache Compress Antlib 1.1
  */
 public final class UnPack200 extends UnpackBase {
 
+    private Pack200.Pack200StrategyEnum strategy =
+        Pack200.Pack200StrategyEnum.IN_MEMORY;
+
     public UnPack200() {
-        super(".pack", new Pack200StreamFactory());
+        super(".pack");
+        setFactory(new Pack200StreamFactory() {
+                public CompressorInputStream
+                    getCompressorStream(InputStream stream)
+                    throws IOException {
+                    return new Pack200CompressorInputStream(stream,
+                                                            strategy
+                                                            .getStrategy());
+                }
+                public CompressorInputStream getCompressorInputStream(File file)
+                    throws IOException {
+                    return new Pack200CompressorInputStream(file,
+                                                            strategy
+                                                            .getStrategy());
+                }
+            });
+    }
+
+    /**
+     * Whether to cache archive data in memory (the default) or a
+     * temporary file.
+     *
+     * @since Commons Compress 1.1
+     */
+    public void setPack200Strategy(Pack200.Pack200StrategyEnum s) {
+        strategy = s;
     }
 
 }

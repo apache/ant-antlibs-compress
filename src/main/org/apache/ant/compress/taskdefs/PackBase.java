@@ -45,7 +45,7 @@ public abstract class PackBase extends Task {
 
     private static final int BUFFER_SIZE = 8 * 1024;
 
-    private final CompressorStreamFactory factory;
+    private CompressorStreamFactory factory;
     private final ResourceWrapper wrapper;
 
     private Resource src;
@@ -54,8 +54,22 @@ public abstract class PackBase extends Task {
 
     protected PackBase(CompressorStreamFactory factory,
                        ResourceWrapper wrapper) {
-        this.factory = factory;
+        this(wrapper);
+        setFactory(factory);
+    }
+
+    /**
+     * @since Apache Compress Antlib 1.1
+     */
+    protected PackBase(ResourceWrapper wrapper) {
         this.wrapper = wrapper;
+    }
+
+    /**
+     * @since Apache Compress Antlib 1.1
+     */
+    protected final void setFactory(CompressorStreamFactory factory) {
+        this.factory = factory;
     }
 
     /**

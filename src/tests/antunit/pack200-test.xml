@@ -67,4 +67,13 @@
       </cond:islastmodified>
     </au:assertTrue>
   </target>
+
+  <target name="testTempFileStrategy" depends="setUp">
+    <cmp:pack200 src="../resources/asf-logo.gif.zip"
+                 destfile="${output}/asf-logo.gif.pack"
+                 pack200strategy="temp-file"/>
+    <au:assertLogContains text="Building: asf-logo.gif.pack"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
+  </target>
+
 </project>
