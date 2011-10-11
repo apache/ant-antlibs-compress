@@ -76,6 +76,10 @@
      name="pack200"
      classname="org.apache.ant.compress.taskdefs.Pack200"
      />
+  <taskdef
+     name="pack200normalize"
+     classname="org.apache.ant.compress.taskdefs.Pack200Normalize"
+     />
 
   <typedef
      name="arentry"
