@@ -23,7 +23,9 @@
 
   <target name="setUp">
     <mkdir dir="${output}" />
-    <jar destfile="${output}/foo.jar">
+    <property name="foo" location="${output}/foo.jar"/>
+    <property name="bar" location="${output}/bar.jar"/>
+    <jar destfile="${foo}">
       <file file="${ant.file}"/>
     </jar>
   </target>
@@ -35,16 +37,16 @@
   </target>
 
   <target name="testNormalizeSelfWithoutForceDoesntDoAnything">
-    <cmp:pack200normalize srcfile="${output}/foo.jar"/>
+    <cmp:pack200normalize srcfile="${foo}"/>
     <au:assertLogContains
         text=" not normalized as force attribute is false."
         level="verbose"/>
   </target>
 
   <target name="testNormalizeDoesntDoAnythingWhenTargetIsUpToDate" depends="setUp">
-    <touch file="${output}/bar.jar"/>
-    <cmp:pack200normalize srcfile="${output}/foo.jar"
-                          destfile="${output}/bar.jar"/>
+    <touch file="${bar}"/>
+    <cmp:pack200normalize srcfile="${foo}"
+                          destfile="${bar}"/>
     <au:assertLogContains
         text=" not normalized as "
         level="verbose"/>
@@ -52,4 +54,18 @@
         text="bar.jar is up-to-date."
         level="verbose"/>
   </target>
+
+  <target name="testNormalizeSelfWithForce">
+    <touch file="${bar}"/>
+    <sleep seconds="2"/>
+    <cmp:pack200normalize srcfile="${foo}" force="true"/>
+    <au:assertDestIsOutofdate src="${foo}" dest="${bar}"/>
+  </target>
+
+  <target name="testNormalize">
+    <sleep seconds="2"/>
+    <cmp:pack200normalize srcfile="${foo}" destfile="${bar}"/>
+    <au:assertDestIsOutofdate dest="${foo}" src="${bar}"/>
+  </target>
+
 </project>

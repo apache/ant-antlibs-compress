@@ -90,7 +90,8 @@ public class Pack200Normalize extends Task {
                 log("Normalizing " + src + ".");
             }
             try {
-                Pack200Utils.normalize(src, dest, properties);
+                Pack200Utils.normalize(src, dest != null ? dest : src,
+                                       properties);
             } catch (IOException ex) {
                 throw new BuildException("Caught an error normalizing "
                                          + src, ex);
