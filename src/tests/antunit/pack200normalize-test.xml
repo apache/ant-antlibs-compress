@@ -36,6 +36,24 @@
     </au:expectfailure>
   </target>
 
+  <target name="testSrcfileMustExist">
+    <au:expectfailure>
+      <cmp:pack200normalize srcfile="${bar}"/>
+    </au:expectfailure>
+  </target>
+
+  <target name="testSrcfileMustNotBeADirectory">
+    <au:expectfailure>
+      <cmp:pack200normalize srcfile="${output}"/>
+    </au:expectfailure>
+  </target>
+
+  <target name="testDestfileMustNotBeADirectory">
+    <au:expectfailure>
+      <cmp:pack200normalize srcfile="${foo}" destfile="${output}"/>
+    </au:expectfailure>
+  </target>
+
   <target name="testNormalizeSelfWithoutForceDoesntDoAnything">
     <cmp:pack200normalize srcfile="${foo}"/>
     <au:assertLogContains
@@ -62,8 +80,16 @@
     <au:assertDestIsOutofdate src="${foo}" dest="${bar}"/>
   </target>
 
-  <target name="testNormalize">
+  <target name="testNormalizeNonExistantTarget">
     <sleep seconds="2"/>
+    <cmp:pack200normalize srcfile="${foo}" destfile="${bar}"/>
+    <au:assertDestIsOutofdate dest="${foo}" src="${bar}"/>
+  </target>
+
+  <target name="testNormalizesOutOfDateTarget">
+    <touch file="${bar}"/>
+    <sleep seconds="2"/>
+    <touch file="${foo}"/>
     <cmp:pack200normalize srcfile="${foo}" destfile="${bar}"/>
     <au:assertDestIsOutofdate dest="${foo}" src="${bar}"/>
   </target>

@@ -85,6 +85,15 @@ public class Pack200Normalize extends Task {
         if (src == null) {
             throw new BuildException("srcFile attribute is required");
         }
+        if (!src.exists()) {
+            throw new BuildException(src + " doesn't exists");
+        }
+        if (!src.isFile()) {
+            throw new BuildException(src + " must be a file");
+        }
+        if (dest != null && dest.isDirectory()) {
+            throw new BuildException(dest + " must be a file");
+        }
         if (force ||
             (dest != null
              && SelectorUtils.isOutOfDate(new FileResource(src),
