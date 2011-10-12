@@ -82,6 +82,19 @@ public class Pack200Normalize extends Task {
     }
 
     public void execute() {
+        validate();
+        if (isOutOfDate()) {
+            normalize();
+        } else if (dest != null) {
+            log(src + " not normalized as " + dest + " is up-to-date.",
+                Project.MSG_VERBOSE);
+        } else {
+            log(src + " not normalized as force attribute is false.",
+                Project.MSG_VERBOSE);
+        }
+    }
+
+    private void validate() {
         if (src == null) {
             throw new BuildException("srcFile attribute is required");
         }
@@ -94,32 +107,29 @@ public class Pack200Normalize extends Task {
         if (dest != null && dest.isDirectory()) {
             throw new BuildException(dest + " must be a file");
         }
-        if (force ||
+    }
+
+    private boolean isOutOfDate() {
+        return force ||
             (dest != null
              && SelectorUtils.isOutOfDate(new FileResource(src),
                                           new FileResource(dest),
                                           FileUtils.getFileUtils()
                                           .getFileTimestampGranularity())
-             )
-            ) {
-            if (dest != null) {
-                log("Normalizing " + src + " to " + dest + ".");
-            } else {
-                log("Normalizing " + src + ".");
-            }
-            try {
-                Pack200Utils.normalize(src, dest != null ? dest : src,
-                                       properties);
-            } catch (IOException ex) {
-                throw new BuildException("Caught an error normalizing "
-                                         + src, ex);
-            }
-        } else if (dest != null) {
-            log(src + " not normalized as " + dest + " is up-to-date.",
-                Project.MSG_VERBOSE);
+             );
+    }
+
+    private void normalize() {
+        if (dest != null) {
+            log("Normalizing " + src + " to " + dest + ".");
         } else {
-            log(src + " not normalized as force attribute is false.",
-                Project.MSG_VERBOSE);
+            log("Normalizing " + src + ".");
+        }
+        try {
+            Pack200Utils.normalize(src, dest != null ? dest : src, properties);
+        } catch (IOException ex) {
+            throw new BuildException("Caught an error normalizing "
+                                     + src, ex);
         }
     }
 }
