@@ -31,25 +31,25 @@
   </target>
 
   <target name="testSrcfileIsRequired">
-    <au:expectfailure>
+    <au:expectfailure expectedMessage="is required">
       <cmp:pack200normalize/>
     </au:expectfailure>
   </target>
 
   <target name="testSrcfileMustExist">
-    <au:expectfailure>
+    <au:expectfailure expectedMessage="bar.jar doesn't exist">
       <cmp:pack200normalize srcfile="${bar}"/>
     </au:expectfailure>
   </target>
 
   <target name="testSrcfileMustNotBeADirectory">
-    <au:expectfailure>
+    <au:expectfailure expectedMessage="testoutput must be a file">
       <cmp:pack200normalize srcfile="${output}"/>
     </au:expectfailure>
   </target>
 
   <target name="testDestfileMustNotBeADirectory">
-    <au:expectfailure>
+    <au:expectfailure expectedMessage="testoutput must be a file">
       <cmp:pack200normalize srcfile="${foo}" destfile="${output}"/>
     </au:expectfailure>
   </target>
