@@ -27,6 +27,9 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Environment;
+import org.apache.tools.ant.types.resources.FileResource;
+import org.apache.tools.ant.types.selectors.SelectorUtils;
+import org.apache.tools.ant.util.FileUtils;
 
 /**
  * Task to "normalize" a JAR archive so that a signature applied to it
@@ -83,7 +86,13 @@ public class Pack200Normalize extends Task {
             throw new BuildException("srcFile attribute is required");
         }
         if (force ||
-            (dest != null && dest.lastModified() <= src.lastModified())) {
+            (dest != null
+             && SelectorUtils.isOutOfDate(new FileResource(src),
+                                          new FileResource(dest),
+                                          FileUtils.getFileUtils()
+                                          .getFileTimestampGranularity())
+             )
+            ) {
             if (dest != null) {
                 log("Normalizing " + src + " to " + dest + ".");
             } else {
