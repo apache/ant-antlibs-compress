@@ -90,6 +90,7 @@
     <touch file="${bar}"/>
     <sleep seconds="2"/>
     <touch file="${foo}"/>
+    <sleep seconds="2"/>
     <cmp:pack200normalize srcfile="${foo}" destfile="${bar}"/>
     <au:assertDestIsOutofdate dest="${foo}" src="${bar}"/>
   </target>
