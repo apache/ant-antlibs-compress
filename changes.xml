@@ -48,6 +48,12 @@
         Support for pack200 compression has been added.
       </action>
       <action type="add">
+        The new pack200normalize task allows you to prepare JAR
+        archives so they can be signed and compressed with pack200 and
+        the signature will still be valid after uncompressing them
+        again.
+      </action>
+      <action type="add">
         Read-only support for the Unix dump format has been added in
         the form of an &lt;undump&gt; task and corresponding
         &lt;dumpentry&gt; and &lt;dumpfileset&gt; resources.
