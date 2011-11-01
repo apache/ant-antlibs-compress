@@ -25,7 +25,7 @@ import org.apache.commons.compress.archivers.dump.DumpArchiveEntry;
 
 /**
  * A Resource representation of an entry in a dump archive.
- * @since Apache Commons Compress 1.1
+ * @since Apache Compress Antlib 1.1
  */
 public final class DumpResource extends CommonsCompressArchiveResource {
 

@@ -31,7 +31,8 @@ import org.apache.commons.compress.compressors.pack200.Pack200CompressorInputStr
 import org.apache.commons.compress.compressors.pack200.Pack200CompressorOutputStream;
 
 /**
- * Creates streams for the supported compression formats.
+ * Creates streams for the pack200 format.
+ * @since Apache Compress Antlib 1.1
  */
 public class Pack200StreamFactory implements FileAwareCompressorStreamFactory {
 

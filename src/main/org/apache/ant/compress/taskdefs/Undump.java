@@ -22,7 +22,7 @@ import org.apache.ant.compress.util.DumpStreamFactory;
 
 /**
  * Undump a file.
- * @since Apache Commons Compress 1.1
+ * @since Apache Compress Antlib 1.1
  */
 public class Undump extends ExpandBase {
     public Undump() {

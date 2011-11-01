@@ -22,6 +22,7 @@ import org.apache.tools.ant.types.ResourceCollection;
 
 /**
  * A Pack200 compressed resource.
+ * @since Apache Compress Antlib 1.1
  */
 public final class Pack200Resource extends CommonsCompressCompressorResource {
     private static final String NAME = "Pack200";

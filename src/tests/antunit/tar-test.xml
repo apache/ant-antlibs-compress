@@ -356,9 +356,7 @@
     </assertResourceDoesntExist>
   </target>
 
-  <!-- doesn't work because TarEntry strips leading slashes, will be
-       fixed for Apache Commons Compress 1.1 -->
-  <target name="fail-testPreserveLeadingSlashes" depends="setUp">
+  <target name="testPreserveLeadingSlashes" depends="setUp">
     <cmp:tar destfile="${dest}" preserveleadingslashes="true">
       <cmp:arfileset src="../resources/asf-logo.gif.ar"
                      fullpath="/logo.gif"

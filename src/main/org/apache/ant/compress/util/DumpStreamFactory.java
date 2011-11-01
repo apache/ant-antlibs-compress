@@ -29,7 +29,7 @@ import org.apache.commons.compress.archivers.dump.DumpArchiveInputStream;
 import org.apache.tools.ant.BuildException;
 
 /**
- * @since Apache Commons Compress 1.1
+ * @since Apache Compress Antlib 1.1
  */
 public class DumpStreamFactory implements ArchiveStreamFactory {
 

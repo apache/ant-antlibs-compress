@@ -38,7 +38,7 @@ import org.apache.tools.ant.types.Resource;
  * entries of a Dump file for inclusion in another Dump file.  It also includes
  * a prefix attribute which is prepended to each entry in the output Dump file.
  *
- * @since Apache Commons Compress 1.1
+ * @since Apache Compress Antlib 1.1
  */
 public class DumpFileSet extends ArchiveFileSet {
 
