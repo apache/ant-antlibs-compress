@@ -26,9 +26,9 @@
   <name>Apache Compress Antlib</name>
   <url>http://ant.apache.org/antlibs/compress/</url>
   <description>
-    Provides tasks and types that deal with AR, CPIO, TAR
-    and ZIP archives as well as BZIP2 and GZIP compressed files based on
-    Apache Commons Compress.
+    Provides tasks and types that deal with AR, CPIO, TAR, DUMP and
+    ZIP archives as well as BZIP2, PACK200 and GZIP compressed files
+    based on Apache Commons Compress.
   </description>
   <licenses>
     <license>
