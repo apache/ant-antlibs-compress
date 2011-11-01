@@ -238,6 +238,15 @@ public abstract class ArchiveBase extends Task {
     }
 
     /**
+     * Flag to indicates whether leading `/'s should
+     * be preserved in the file names.
+     * @since Apache Compress Antlib 1.1
+     */
+    public boolean getPreserveLeadingSlashes() {
+        return preserveLeadingSlashes;
+    }
+
+    /**
      * Sets behavior for when a duplicate file is about to be added -
      * one of <code>add</code>, <code>preserve</code> or <code>fail</code>.
      * Possible values are: <code>add</code> (keep both

@@ -55,10 +55,14 @@ public class Tar extends ArchiveBase {
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
+                    String name = r.getName();
+                    if (isDir && !name.endsWith("/")) {
+                        name += "/";
+                    } else if (!isDir && name.endsWith("/")) {
+                        name = name.substring(0, name.length() - 1);
+                    }
                     TarArchiveEntry ent =
-                        new TarArchiveEntry(r.getName(),
-                                            isDir ? TarConstants.LF_DIR
-                                            : TarConstants.LF_NORMAL);
+                        new TarArchiveEntry(name, getPreserveLeadingSlashes());
                     ent.setModTime(round(r.getResource().getLastModified(),
                                          1000));
                     ent.setSize(isDir ? 0 : r.getResource().getSize());

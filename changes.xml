@@ -79,5 +79,9 @@
         (like encrypted ZIP entries or sparse files in GNU tar
         archives).
       </action>
+      <action type="update">
+        The preserveLeadingSlashes attribute of the &lt;tar&gt; task
+        now works as expected.
+      </action>
     </release>
   </document>
