@@ -37,6 +37,17 @@
       <title>Apache Compress Ant Library</title>
     </properties>
 
+    <release version="1.2" date="unreleased">
+      <action type="update" breaks-bwc="true">
+        The Apache Compress Antlib now requires Apache Commons
+        Compress 1.4 and the public domain XZ for Java library if you
+        want to use the XZ format.
+      </action>
+      <action type="add">
+        Support for xz compression has been added.
+      </action>
+    </release>
+
     <release version="1.1" date="2011-11-05">
       <action type="update" breaks-bwc="true">
         The Apache Compress Antlib now requires Apache Commons

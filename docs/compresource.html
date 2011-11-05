@@ -92,3 +92,23 @@
   JAR some-archive.pack where the <code>pack200resource</code>
   provides the decompression of the archive.</p>
 
+<h2><a name="xzresource">xzresource</a></h2>
+
+<p>This is a <a href="#compresource">compressed resource</a> using the
+  XZ compression.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:tarentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="some-file.txt"&gt;
+  &lt;cmp:xzresource&gt;
+    &lt;file file="some-archive.tar.xz"/&gt;
+  &lt;/cmp:xzresource&gt;
+&lt;/cmp:tarentry&gt;
+</pre>
+
+<p>Represents the entry named some-file.txt in archive
+  some-archive.tar.xz where the <code>xzresource</code> provides
+  the decompression of the archive.</p>
+

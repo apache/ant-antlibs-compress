@@ -65,6 +65,10 @@
      classname="org.apache.ant.compress.taskdefs.UnPack200"
      />
   <taskdef
+     name="unxz"
+     classname="org.apache.ant.compress.taskdefs.UnXZ"
+     />
+  <taskdef
      name="bzip2"
      classname="org.apache.ant.compress.taskdefs.BZip2"
      />
@@ -79,6 +83,10 @@
   <taskdef
      name="pack200normalize"
      classname="org.apache.ant.compress.taskdefs.Pack200Normalize"
+     />
+  <taskdef
+     name="xz"
+     classname="org.apache.ant.compress.taskdefs.XZ"
      />
 
   <typedef
@@ -137,6 +145,10 @@
   <typedef
      name="pack200resource"
      classname="org.apache.ant.compress.resources.Pack200Resource"
+     />
+  <typedef
+     name="xzresource"
+     classname="org.apache.ant.compress.resources.XZResource"
      />
 
   <componentdef
