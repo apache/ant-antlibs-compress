@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.ant.compress.util.CompressorStreamFactory;
+import org.apache.ant.compress.util.CompressorWithConcatenatedStreamsFactory;
 import org.apache.ant.compress.util.StreamHelper;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.utils.IOUtils;
@@ -40,6 +41,7 @@ public abstract class UnpackBase extends Unpack {
 
     private final String defaultExtension;
     private CompressorStreamFactory factory;
+    private boolean decompressConcatenated = false;
 
     protected UnpackBase(String defaultExtension,
                          CompressorStreamFactory factory) {
@@ -69,7 +71,24 @@ public abstract class UnpackBase extends Unpack {
     }
 
     /**
-     * Implement the gunzipping.
+     * Whether to extract the whole resource if it contains multiple
+     * concatenated streams.
+     *
+     * <p>Defaults to false for backwards compatibility.</p>
+     *
+     * @since Apache Compress Antlib 1.2
+     */
+    public void setDecompressConcatenated(boolean b) {
+        if (!b || factory instanceof CompressorWithConcatenatedStreamsFactory) {
+            decompressConcatenated = b;
+        } else {
+            throw new BuildException("concatenated streams are not supported"
+                                     + "by this compression format.");
+        }
+    }
+
+    /**
+     * Implement the uncompression.
      */
     protected void extract() {
         if (source.lastModified() > dest.lastModified()) {
@@ -84,7 +103,14 @@ public abstract class UnpackBase extends Unpack {
                 zIn = StreamHelper.getInputStream(factory, srcResource);
                 if (zIn == null) {
                     fis = srcResource.getInputStream();
+                    if (factory instanceof CompressorWithConcatenatedStreamsFactory) {
+                        CompressorWithConcatenatedStreamsFactory f
+                            = (CompressorWithConcatenatedStreamsFactory) factory;
+                        zIn = f.getCompressorStream(new BufferedInputStream(fis),
+                                                    decompressConcatenated);
+                    } else {
                     zIn = factory.getCompressorStream(new BufferedInputStream(fis));
+                    }
                 }
                 IOUtils.copy(zIn, out, BUFFER_SIZE);
             } catch (IOException ioe) {

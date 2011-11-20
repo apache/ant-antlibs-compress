@@ -20,26 +20,16 @@ package org.apache.ant.compress.util;
 
 import java.io.InputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.commons.compress.compressors.CompressorInputStream;
-import org.apache.commons.compress.compressors.CompressorOutputStream;
-import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
-import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 
 /**
- * Creates streams for the supported compression formats.
+ * Creates input streams for the compression formats that support
+ * concatenated streams.
  * @since Apache Compress Antlib 1.2
  */
-public class XZStreamFactory implements CompressorWithConcatenatedStreamsFactory {
-
-    /**
-     * @param stream the stream to read from, should be buffered
-     */
-    public CompressorInputStream getCompressorStream(InputStream stream)
-        throws IOException {
-        return getCompressorStream(stream, false);
-    }
+public interface CompressorWithConcatenatedStreamsFactory
+    extends CompressorStreamFactory {
 
     /**
      * @param stream the stream to read from, should be buffered
@@ -50,15 +40,5 @@ public class XZStreamFactory implements CompressorWithConcatenatedStreamsFactory
      */
     public CompressorInputStream getCompressorStream(InputStream stream,
                                                      boolean decompressConcatenated)
-        throws IOException {
-        return new XZCompressorInputStream(stream, decompressConcatenated);
-    }
-
-    /**
-     * @param stream the stream to write to, should be buffered
-     */
-    public CompressorOutputStream getCompressorStream(OutputStream stream)
-        throws IOException {
-        return new XZCompressorOutputStream(stream);
-    }
+        throws IOException;
 }

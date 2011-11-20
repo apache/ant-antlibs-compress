@@ -62,4 +62,35 @@
                          actual="${output}/asf-logo.gif"/>
   </target>
 
+
+  <target name="testConcatenatedStreamsDefault"
+          depends="setUp">
+    <echo file="${output}/expected">a</echo>
+    <cmp:unxz dest="${output}/actual">
+      <file file="../resources/multiple.xz"/>
+    </cmp:unxz>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
+
+  <target name="testConcatenatedStreamsOnlyFirstStream"
+          depends="setUp">
+    <echo file="${output}/expected">a</echo>
+    <cmp:unxz dest="${output}/actual" decompressconcatenated="false">
+      <file file="../resources/multiple.xz"/>
+    </cmp:unxz>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
+
+  <target name="testConcatenatedStreamsAllStreams"
+          depends="setUp">
+    <echo file="${output}/expected">ab</echo>
+    <cmp:unxz dest="${output}/actual" decompressconcatenated="true">
+      <file file="../resources/multiple.xz"/>
+    </cmp:unxz>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
+
 </project>

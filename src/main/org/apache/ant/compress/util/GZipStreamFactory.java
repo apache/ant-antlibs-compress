@@ -30,14 +30,28 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 /**
  * Creates streams for the supported compression formats.
  */
-public class GZipStreamFactory implements CompressorStreamFactory {
+public class GZipStreamFactory implements CompressorWithConcatenatedStreamsFactory {
 
     /**
      * @param stream the stream to read from, should be buffered
      */
     public CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException {
-        return new GzipCompressorInputStream(stream);
+        return getCompressorStream(stream, false);
+    }
+
+    /**
+     * @param stream the stream to read from, should be buffered
+     * @param       decompressConcatenated
+     *                          if true, decompress until the end of the
+     *                          input; if false, stop after the first
+     *                          stream
+     * @since Apache Compress Antlib 1.2
+     */
+    public CompressorInputStream getCompressorStream(InputStream stream,
+                                                     boolean decompressConcatenated)
+        throws IOException {
+        return new GzipCompressorInputStream(stream, decompressConcatenated);
     }
 
 

@@ -77,4 +77,12 @@
        />
   </target>
 
+  <target name="testDoesntSupportConcatenatedStreams">
+    <au:expectfailure>
+      <cmp:unpack200 src="../resources/asf-logo.gif.pack"
+                     dest="${input}/test.zip"
+                     decompressconcatenated="true"/>
+    </au:expectfailure>
+  </target>
+
 </project>
