@@ -37,4 +37,43 @@
     <au:assertFilesMatch expected="../resources/asf-logo.gif"
                          actual="${output}/asf-logo.gif"/>
   </target>
+
+  <target name="testConcatenatedStreamsDefault"
+          depends="setUp">
+    <echo file="${output}/expected">a</echo>
+    <copy todir="${output}">
+      <cmp:xzresource>
+        <file file="../resources/multiple.xz"/>
+      </cmp:xzresource>
+      <mergemapper to="actual"/>
+    </copy>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
+
+  <target name="testConcatenatedStreamsOnlyFirstStream"
+          depends="setUp">
+    <echo file="${output}/expected">a</echo>
+    <copy todir="${output}">
+      <cmp:xzresource decompressconcatenated="false">
+        <file file="../resources/multiple.xz"/>
+      </cmp:xzresource>
+      <mergemapper to="actual"/>
+    </copy>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
+
+  <target name="testConcatenatedStreamsAllStreams"
+          depends="setUp">
+    <echo file="${output}/expected">ab</echo>
+    <copy todir="${output}">
+      <cmp:xzresource decompressconcatenated="true">
+        <file file="../resources/multiple.xz"/>
+      </cmp:xzresource>
+      <mergemapper to="actual"/>
+    </copy>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
 </project>

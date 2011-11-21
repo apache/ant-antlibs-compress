@@ -38,4 +38,17 @@
     <au:assertFilesMatch expected="../resources/asf-logo.gif"
                          actual="${output}/asf-logo.gif"/>
   </target>
+
+  <target name="testDoesntSupportConcatenatedStreams">
+    <au:expectfailure>
+      <copy todir="${output}">
+        <cmp:zipfileset>
+          <cmp:pack200resource decompressconcatenated="true">
+            <file file="../resources/asf-logo.gif.pack"/>
+          </cmp:pack200resource>
+        </cmp:zipfileset>
+      </copy>
+    </au:expectfailure>
+  </target>
+
 </project>

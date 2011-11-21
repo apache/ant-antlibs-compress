@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.ant.compress.util.CompressorStreamFactory;
+import org.apache.ant.compress.util.CompressorWithConcatenatedStreamsFactory;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.ResourceCollection;
 import org.apache.tools.ant.types.resources.ContentTransformingResource;
 
@@ -38,6 +40,7 @@ public abstract class CommonsCompressCompressorResource
 
     private final String name;
     private final CompressorStreamFactory factory;
+    private boolean decompressConcatenated = false;
 
     /** A no-arg constructor */
     protected CommonsCompressCompressorResource(String name,
@@ -59,13 +62,37 @@ public abstract class CommonsCompressCompressorResource
     }
 
     /**
+     * Whether to extract the whole resource if it contains multiple
+     * concatenated streams.
+     *
+     * <p>Defaults to false for backwards compatibility.</p>
+     *
+     * @since Apache Compress Antlib 1.2
+     */
+    public void setDecompressConcatenated(boolean b) {
+        if (!b || factory instanceof CompressorWithConcatenatedStreamsFactory) {
+            decompressConcatenated = b;
+        } else {
+            throw new BuildException("concatenated streams are not supported"
+                                     + "by this compression format.");
+        }
+    }
+
+    /**
      * Decompress on the fly.
      * @param in the stream to wrap.
      * @return the wrapped stream.
      * @throws IOException if there is a problem.
      */
     protected final InputStream wrapStream(InputStream in) throws IOException {
+        if (factory instanceof CompressorWithConcatenatedStreamsFactory) {
+            CompressorWithConcatenatedStreamsFactory f
+                = (CompressorWithConcatenatedStreamsFactory) factory;
+            return f.getCompressorStream(new BufferedInputStream(in),
+                                         decompressConcatenated);
+        } else {
         return factory.getCompressorStream(new BufferedInputStream(in));
+        }
     }
 
     /**
