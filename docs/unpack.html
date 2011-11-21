@@ -57,6 +57,16 @@ does not exist.</p>
     <td valign="top">the destination file or directory.</td>
     <td align="center" valign="top">No</td>
   </tr>
+  <tr>
+    <td valign="top">
+      <a name="decompressConcatenated">decompressConcatenated</a></td>
+    <td valign="top">Only for the formats that support files holding
+      multiple compressed streams (bzip2, gzip and xz).<br/>
+      If set to true all streams will be concatenated and treated as a
+      single resource.  With the default value false only the first
+      stream is uncompressed.</td>
+    <td align="center" valign="top">No</td>
+  </tr>
 </table>
 <h3>Parameters specified as nested elements</h3>
 
@@ -70,10 +80,18 @@ resource collection</h4>
 <p>Is an <a href="#unpack">uncompressing task</a> that uses the BZIP2
   compression algorithm.</p>
 
+<p>This task supports
+  the <a href="#decompressConcatenated">decompressConcatenated</a>
+  attribute.</p>
+
 <h3><a name="gunzip">GUnZip</a></h3>
 
 <p>Is an <a href="#unpack">uncompressing task</a> that uses the GZIP
   compression algorithm.</p>
+
+<p>This task supports
+  the <a href="#decompressConcatenated">decompressConcatenated</a>
+  attribute.</p>
 
 <h3><a name="unpack200">Unpack200</a></h3>
 
@@ -135,6 +153,10 @@ resource collection</h4>
 
 <p>Is an <a href="#unpack">uncompressing task</a> that uses the XZ
   compression algorithm.</p>
+
+<p>This task supports
+  the <a href="#decompressConcatenated">decompressConcatenated</a>
+  attribute.</p>
 
 <h3>Examples</h3>
 <blockquote><pre>

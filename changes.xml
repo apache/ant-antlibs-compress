@@ -46,6 +46,13 @@
       <action type="add">
         Support for xz compression has been added.
       </action>
+      <action type="add">
+        The gunzip and bunzip2 tasks as well as the corresponding
+        resources now support uncompressing resources that contain
+        multiple concatenated streams as a single stream.  This
+        behavior has to be enabled explicitly via the
+        decompressConcatenated attribute.
+      </action>
     </release>
 
     <release version="1.1" date="2011-11-05">

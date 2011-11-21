@@ -31,10 +31,22 @@
   compression or decompression on the fly.  A single element resource
   collection must be specified as a nested element.</p>
 
+<a name="decompressConcatenated">
+<p>Resources for the formats that support files holding multiple
+  compressed streams (bzip2, gzip and xz) support a boolean attribute
+  decompressConcatenated.  If set to true all streams will be
+  concatenated and treated as a single resource.  With the default
+  value false only the first stream is uncompressed.</p>
+</a>
+
 <h2><a name="bzip2resource">bzip2resource</a></h2>
 
 <p>This is a <a href="#compresource">compressed resource</a> using the
   BZIP2 compression.</p>
+
+<p>This resource supports
+  the <a href="#decompressConcatenated">decompressConcatenated</a>
+  attribute.</p>
 
 <h4>Examples</h4>
 
@@ -55,6 +67,10 @@
 
 <p>This is a <a href="#compresource">compressed resource</a> using the
   GZIP compression.</p>
+
+<p>This resource supports
+  the <a href="#decompressConcatenated">decompressConcatenated</a>
+  attribute.</p>
 
 <h4>Examples</h4>
 
@@ -96,6 +112,10 @@
 
 <p>This is a <a href="#compresource">compressed resource</a> using the
   XZ compression.</p>
+
+<p>This resource supports
+  the <a href="#decompressConcatenated">decompressConcatenated</a>
+  attribute.</p>
 
 <h4>Examples</h4>
 
