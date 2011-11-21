@@ -109,7 +109,7 @@ public abstract class UnpackBase extends Unpack {
                         zIn = f.getCompressorStream(new BufferedInputStream(fis),
                                                     decompressConcatenated);
                     } else {
-                    zIn = factory.getCompressorStream(new BufferedInputStream(fis));
+                        zIn = factory.getCompressorStream(new BufferedInputStream(fis));
                     }
                 }
                 IOUtils.copy(zIn, out, BUFFER_SIZE);

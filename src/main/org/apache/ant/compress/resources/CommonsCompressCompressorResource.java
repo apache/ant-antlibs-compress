@@ -91,7 +91,7 @@ public abstract class CommonsCompressCompressorResource
             return f.getCompressorStream(new BufferedInputStream(in),
                                          decompressConcatenated);
         } else {
-        return factory.getCompressorStream(new BufferedInputStream(in));
+            return factory.getCompressorStream(new BufferedInputStream(in));
         }
     }
 
