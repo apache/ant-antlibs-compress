@@ -620,4 +620,15 @@
       </cmp:tarentry>
     </assertResourceExists>
   </target>
+
+  <target name="testPaxLongFile" depends="-longFileSetUp">
+    <cmp:tar destfile="${dest}" format="pax">
+      <fileset dir="${input}"/>
+    </cmp:tar>
+    <assertResourceExists>
+      <cmp:tarentry name="${long}">
+        <file file="${dest}"/>
+      </cmp:tarentry>
+    </assertResourceExists>
+  </target>
 </project>

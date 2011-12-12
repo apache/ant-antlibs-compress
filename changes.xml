@@ -42,6 +42,9 @@
         The Apache Compress Antlib now requires Apache Commons
         Compress 1.4 and the public domain XZ for Java library if you
         want to use the XZ format.
+
+        Commons Compress 1.4 is also required for the GNU, STAR and
+        PAX formats of the tar task.
       </action>
       <action type="add">
         Support for xz compression has been added.
@@ -52,6 +55,20 @@
         multiple concatenated streams as a single stream.  This
         behavior has to be enabled explicitly via the
         decompressConcatenated attribute.
+      </action>
+      <action type="add">
+        The tar task now supports the POSIX 1003.1/PAX way of storing
+        long file names used by most modern tar implementations.
+      </action>
+      <action type="add">
+        The tar resources and the untar task read entries bigger than
+        8 GByte transparently now, if you use Commons Compress 1.4.
+      </action>
+      <action type="add">
+        The tar task writes entries bigger than 8 GByte using POSIX
+        1003.1/PAX headers or the star extension if you set the format
+        attribute to "star", "gnu" or "pax".  See the tar task's
+        documentation of details.
       </action>
     </release>
 

@@ -48,6 +48,18 @@ public class Tar extends ArchiveBase {
                     if (format.equals(Format.OLDGNU)) {
                         o.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
                     }
+                    else if (format.equals(Format.GNU)) {
+                        o.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
+                        o.setBigFileMode(TarArchiveOutputStream.BIGFILE_STAR);
+                    }
+                    else if (format.equals(Format.STAR)) {
+                        o.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
+                        o.setBigFileMode(TarArchiveOutputStream.BIGFILE_STAR);
+                    }
+                    else if (format.equals(Format.PAX)) {
+                        o.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
+                        o.setBigFileMode(TarArchiveOutputStream.BIGFILE_POSIX);
+                    }
                     return o;
                 }
             });
@@ -117,8 +129,7 @@ public class Tar extends ArchiveBase {
     }
 
     /**
-     * The format for entries with filenames longer than 100
-     * characters - any other entry will always use "ustar".
+     * The format to use.
      */
     public void setFormat(Format f) {
         format = f;
@@ -130,9 +141,15 @@ public class Tar extends ArchiveBase {
     public final static class Format extends EnumeratedAttribute {
         private static final String USTAR_NAME = "ustar";
         private static final String OLDGNU_NAME = "oldgnu";
+        private static final String GNU_NAME = "gnu";
+        private static final String STAR_NAME = "star";
+        private static final String PAX_NAME = "pax";
 
         public static final Format USTAR = new Format(USTAR_NAME);
         public static final Format OLDGNU = new Format(OLDGNU_NAME);
+        public static final Format GNU = new Format(GNU_NAME);
+        public static final Format STAR = new Format(STAR_NAME);
+        public static final Format PAX = new Format(PAX_NAME);
 
         public Format(String v) {
             setValue(v);
@@ -143,7 +160,10 @@ public class Tar extends ArchiveBase {
         }
 
         public String[] getValues() {
-            return new String[] {USTAR_NAME, OLDGNU_NAME};
+            return new String[] {
+                USTAR_NAME, OLDGNU_NAME, GNU_NAME,
+                STAR_NAME, PAX_NAME
+            };
         }
 
         public boolean equals(Object other) {

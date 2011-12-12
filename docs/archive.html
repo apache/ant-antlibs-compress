@@ -293,11 +293,73 @@
     </tr>
     <tr>
       <td valign="top">format</td>
-      <td valign="top">Tar format for entries with names longer than
-        100 characters.  Supported values are "ustar" which doesn't
-        support entries of that length and results in a build failure
-        and "oldgnu".</td>
+      <td valign="top">Tar format to use.
+        See <a href="#tarformat">the section below.  Supported values
+        are "ustar", "oldgnu", "gnu", "star" and "pax".</td>
       <td valign="top" align="center">No, default is "ustar"</td>
+    </tr>
+  </table>
+
+  <h4><a name="tarformat"></a>Tar format</h4>
+
+  <p>Over time the original tar format has seen various extensions and
+    revisions.  The Apache Commons Compress library supports the
+    original format (called "ustar") and some extensions added later,
+    but not all of them.  It supports a subset of features offered by
+    the POSIX 1003.1 standard (often referred to as PAX), but this
+    support is not complete.</p>
+
+  <p>The Compress Antlib follows Commons Compress' support.  Currently
+    the format affects two areas, files bigger than 8 GiB and entries
+    with names longer than 100 characters.  For Commons Compress these
+    areas can be configured separately while the Antlib chooses them
+    based on a single format attribute.</p>
+
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Format Attribute</b></td>
+      <td valign="top"><b>Files bigger 8GiB</b></td>
+      <td valign="top"><b>Entry Names longer 100 characters</b></td>
+      <td valign="top"><b>Notes</b></td>
+    </tr>
+    <tr>
+      <td valign="top">ustar</td>
+      <td valign="top">Not supported, throws an exception.</td>
+      <td valign="top">Not supported, throws an exception.</td>
+      <td valign="top">Default.</td>
+    </tr>
+    <tr>
+      <td valign="top">oldgnu</td>
+      <td valign="top">Not supported, throws an exception.</td>
+      <td valign="top">Uses a GNU tar specific extension.</td>
+      <td valign="top">Created archives may be unreadable on MacOS X,
+        Solaris or with other non-GNU implementations of tar.</td>
+    </tr>
+    <tr>
+      <td valign="top">star</td>
+      <td valign="top" rowspan="2">Uses an extension first introduced by J&#xf6;rg
+          Schilling's <a href="http://developer.berlios.de/projects/star">star</a>
+          and later adopted by GNU tar and BSD tar.</td>
+      <td valign="top">Uses a
+          PAX <a href="http://pubs.opengroup.org/onlinepubs/009695399/utilities/pax.html#tag_04_100_13_03">extended
+          header</a> as defined by POSIX 1003.1.</td>
+      <td valign="top">Created archives will be readable by star and
+        modern versions of GNU tar and BSD tar.</td>
+    </tr>
+    <tr>
+      <td valign="top">gnu</td>
+      <td valign="top">Uses a GNU tar specific extension.</td>
+      <td valign="top">Created archives may be unreadable on MacOS X,
+        Solaris or with other non-GNU implementations of tar.  The
+        archives are similar to what GNU tar would create by
+        default.</td>
+    </tr>
+    <tr>
+      <td valign="top">pax</td>
+      <td valign="top" colspan="2">Uses use a PAX extended header as
+          defined by POSIX 1003.1.</td>
+      <td valign="top">Created archives will be readable by all modern
+        implementations of tar.</td>
     </tr>
   </table>
 
