@@ -50,15 +50,18 @@ public class Tar extends ArchiveBase {
                     }
                     else if (format.equals(Format.GNU)) {
                         o.setLongFileMode(TarArchiveOutputStream.LONGFILE_GNU);
-                        o.setBigFileMode(TarArchiveOutputStream.BIGFILE_STAR);
+                        o.setBigNumberMode(TarArchiveOutputStream
+                                           .BIGNUMBER_STAR);
                     }
                     else if (format.equals(Format.STAR)) {
                         o.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
-                        o.setBigFileMode(TarArchiveOutputStream.BIGFILE_STAR);
+                        o.setBigNumberMode(TarArchiveOutputStream
+                                           .BIGNUMBER_STAR);
                     }
                     else if (format.equals(Format.PAX)) {
                         o.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
-                        o.setBigFileMode(TarArchiveOutputStream.BIGFILE_POSIX);
+                        o.setBigNumberMode(TarArchiveOutputStream
+                                           .BIGNUMBER_POSIX);
                     }
                     return o;
                 }

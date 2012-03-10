@@ -310,16 +310,17 @@
     support is not complete.</p>
 
   <p>The Compress Antlib follows Commons Compress' support.  Currently
-    the format affects two areas, files bigger than 8 GiB and entries
-    with names longer than 100 characters.  For Commons Compress these
-    areas can be configured separately while the Antlib chooses them
-    based on a single format attribute.</p>
+    the format affects two areas, files bigger than 8 GiB or that need
+    other numeric values not fitting into the traditional tar headers
+    and entries with names longer than 100 characters.  For Commons
+    Compress these areas can be configured separately while the Antlib
+    chooses them based on a single format attribute.</p>
 
   <table border="1" cellpadding="2" cellspacing="0">
     <tr>
       <td valign="top"><b>Format Attribute</b></td>
-      <td valign="top"><b>Files bigger 8GiB</b></td>
-      <td valign="top"><b>Entry Names longer 100 characters</b></td>
+      <td valign="top"><b>Numeric values too big like files bigger 8GiB</b></td>
+      <td valign="top"><b>Entry names longer 100 characters</b></td>
       <td valign="top"><b>Notes</b></td>
     </tr>
     <tr>
