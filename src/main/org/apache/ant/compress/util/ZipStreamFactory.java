@@ -56,8 +56,7 @@ public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
 
     /**
      * @param file the file to read from
-     * @param encoding the encoding of the entry names, ignored by all
-     * formats except zip
+     * @param encoding the encoding of the entry names
      */
     public ArchiveInputStream getArchiveInputStream(File file,
                                                     String encoding)
@@ -69,8 +68,7 @@ public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
 
     /**
      * @param file the file to write to
-     * @param encoding the encoding of the entry names, ignored by all
-     * formats except zip
+     * @param encoding the encoding of the entry names
      */
     public ArchiveOutputStream getArchiveOutputStream(File file,
                                                       String encoding)

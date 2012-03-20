@@ -62,6 +62,32 @@ public final class TarResource extends CommonsCompressArchiveResource {
     }
 
     /**
+     * Construct a TarResource representing the specified
+     * entry in the specified archive.
+     * @param a the archive as File.
+     * @param enc the encoding used for filenames.
+     * @param e the TarEntry.
+     * @since Compress Antlib 1.2
+     */
+    public TarResource(File a, String enc, TarArchiveEntry e) {
+        this(a, e);
+        setEncoding(enc);
+    }
+
+    /**
+     * Construct a TarResource representing the specified
+     * entry in the specified archive.
+     * @param a the archive as Resource.
+     * @param enc the encoding used for filenames.
+     * @param e the TarEntry.
+     * @since Compress Antlib 1.2
+     */
+    public TarResource(Resource a, String enc, TarArchiveEntry e) {
+        this(a, e);
+        setEncoding(enc);
+    }
+
+    /**
      * @return the user name for the tar entry
      */
     public String getUserName() {

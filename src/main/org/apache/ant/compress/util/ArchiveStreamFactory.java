@@ -33,7 +33,7 @@ public interface ArchiveStreamFactory {
     /**
      * @param stream the stream to read from, should be buffered
      * @param encoding the encoding of the entry names, ignored by all
-     * formats except zip
+     * formats except tar and zip
      */
     public ArchiveInputStream getArchiveStream(InputStream stream,
                                                String encoding)
@@ -43,7 +43,7 @@ public interface ArchiveStreamFactory {
     /**
      * @param stream the stream to write to, should be buffered
      * @param encoding the encoding of the entry names, ignored by all
-     * formats except zip
+     * formats except tar and zip
      */
     public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                 String encoding)

@@ -25,6 +25,17 @@
     <mkdir dir="${input}"/>
   </target>
 
+  <target name="test-refid-check-encoding">
+    <cmp:tarfileset id="test-refid2"
+                encoding="utf-8"
+                dir="${basedir}"/>
+    <au:expectfailure>
+      <cmp:tarfileset id="ref4"
+                  encoding="utf-8"
+                  refid="test-refid2"/>
+    </au:expectfailure>
+  </target>
+
   <target name="testMissingArchive">
     <mkdir dir="${output}"/>
     <au:expectfailure expectedMessage="The archive foo.tar doesn't exist">

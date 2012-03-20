@@ -52,6 +52,7 @@ public class TarFileSet extends ArchiveFileSet {
     private int    gid;
 
     private boolean skipUnreadable = false;
+    private String encoding = null;
 
     /** Constructor for TarFileSet */
     public TarFileSet() {
@@ -72,6 +73,34 @@ public class TarFileSet extends ArchiveFileSet {
      */
     protected TarFileSet(TarFileSet fileset) {
         super(fileset);
+        encoding = fileset.encoding;
+    }
+
+    /**
+     * Set the encoding used for this ZipFileSet.
+     * @param enc encoding as String.
+     * @since Compress Antlib 1.2
+     */
+    public void setEncoding(String enc) {
+        checkTarFileSetAttributesAllowed();
+        this.encoding = enc;
+    }
+
+    /**
+     * Get the encoding used for this ZipFileSet.
+     * @return String encoding.
+     * @since Compress Antlib 1.2
+     */
+    public String getEncoding() {
+        if (isReference()) {
+            AbstractFileSet ref = getRef(getProject());
+            if (ref instanceof ZipFileSet) {
+                return ((ZipFileSet) ref).getEncoding();
+            } else {
+                return null;
+            }
+        }
+        return encoding;
     }
 
     /**
@@ -200,13 +229,17 @@ public class TarFileSet extends ArchiveFileSet {
      * @return the created scanner.
      */
     protected ArchiveScanner newArchiveScanner() {
-        return new CommonsCompressArchiveScanner(new TarStreamFactory(),
+        CommonsCompressArchiveScanner cs =
+            new CommonsCompressArchiveScanner(new TarStreamFactory(),
                                                  new CommonsCompressArchiveScanner.ResourceBuilder() {
                 public Resource buildResource(Resource archive, String encoding,
                                               ArchiveEntry entry) {
-                    return new TarResource(archive, (TarArchiveEntry) entry);
+                    return new TarResource(archive, encoding,
+                                           (TarArchiveEntry) entry);
                 }
             }, skipUnreadable, getProject());
+        cs.setEncoding(encoding);
+        return cs;
     }
 
     /**

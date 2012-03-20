@@ -124,6 +124,28 @@ mapper</a>.</p>
 
 <p>An <a href="#expand">unarchiving task</a> for TAR archives.</p>
 
+<p>In addition to the parameters above, the untar tasks supports the
+  following attributes:</p>
+
+<table border="1" cellpadding="2" cellspacing="0">
+  <tr>
+    <td valign="top"><b>Attribute</b></td>
+    <td valign="top"><b>Description</b></td>
+    <td align="center" valign="top"><b>Required</b></td>
+  </tr>
+  <tr>
+    <td valign="top">encoding</td>
+    <td valign="top">
+    The character encoding that has been used for filenames
+    inside the tar file.  For a list of possible values see <a
+    href="http://java.sun.com/j2se/1.5.0/docs/guide/intl/encoding.doc.html">http://java.sun.com/j2se/1.5.0/docs/guide/intl/encoding.doc.html</a>.<br>
+    Defaults <code>native-encoding</code> which is the magic value for
+    the platform's default character encoding.<br/>
+    <em>since Compress Antlib 1.2</em></td>
+    <td align="center" valign="top">No</td>
+  </tr>
+</table>
+
 <h3><a name="unzip">UnZip</a></h3>
 
 <p>An <a href="#expand">unarchiving task</a> for ZIP archives.</p>
