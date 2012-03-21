@@ -77,7 +77,7 @@ public class TarFileSet extends ArchiveFileSet {
     }
 
     /**
-     * Set the encoding used for this ZipFileSet.
+     * Set the encoding used for this TarFileSet.
      * @param enc encoding as String.
      * @since Compress Antlib 1.2
      */
@@ -87,15 +87,15 @@ public class TarFileSet extends ArchiveFileSet {
     }
 
     /**
-     * Get the encoding used for this ZipFileSet.
+     * Get the encoding used for this TarFileSet.
      * @return String encoding.
      * @since Compress Antlib 1.2
      */
     public String getEncoding() {
         if (isReference()) {
             AbstractFileSet ref = getRef(getProject());
-            if (ref instanceof ZipFileSet) {
-                return ((ZipFileSet) ref).getEncoding();
+            if (ref instanceof TarFileSet) {
+                return ((TarFileSet) ref).getEncoding();
             } else {
                 return null;
             }
