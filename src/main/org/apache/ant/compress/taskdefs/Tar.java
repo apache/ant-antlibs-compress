@@ -62,6 +62,7 @@ public class Tar extends ArchiveBase {
                         o.setLongFileMode(TarArchiveOutputStream.LONGFILE_POSIX);
                         o.setBigNumberMode(TarArchiveOutputStream
                                            .BIGNUMBER_POSIX);
+                        o.setAddPaxHeadersForNonAsciiNames(true);
                     }
                     return o;
                 }
