@@ -28,8 +28,8 @@
     <asfext:pmc rdf:resource="http://ant.apache.org/" />
     <shortdesc>Provides Support for Some Archive Formats not Supported by Ant's Core</shortdesc>
     <description>This is a library of Ant tasks and types uses Apache
-      Commons Compress to support additional archive formats like ar, pack200
-      and cpio.</description>
+      Commons Compress to support additional archive formats like ar,
+      pack200, xz and cpio.</description>
     <bug-database rdf:resource="http://issues.apache.org/bugzilla/buglist.cgi?product=Ant" />
     <mailing-list rdf:resource="http://ant.apache.org/mail.html" />
     <download-page rdf:resource="http://ant.apache.org/antlibs/bindownload.cgi" />
@@ -47,6 +47,13 @@
         <name>Apache Compress Ant Library 1.1</name>
         <created>2011-11-05</created>
         <revision>1.1</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Compress Ant Library 1.2</name>
+        <created>2012-04-20</created>
+        <revision>1.2</revision>
       </Version>
     </release>
     <repository>
