@@ -79,7 +79,8 @@
         <code>native-encoding</code> can be used to explicitly select
         the platform's default character encoding.  Defaults to the
         platform's default character encoding.<br/>
-        Currently ignored by all but the zip task.
+        Currently ignored by all but the tar (<em>since Compress
+        Antlib 1.2</em>) and zip tasks.
       </td>
       <td align="center" valign="top">No</td>
     </tr>
@@ -297,17 +298,6 @@
         See <a href="#tarformat">the section below.  Supported values
         are "ustar", "oldgnu", "gnu", "star" and "pax".</td>
       <td valign="top" align="center">No, default is "ustar"</td>
-    </tr>
-    <tr>
-      <td valign="top">encoding</td>
-      <td valign="top">
-        The character encoding to use for filenames inside the tar
-        file.  For a list of possible values
-        see <a href="http://java.sun.com/j2se/1.5.0/docs/guide/intl/encoding.doc.html">http://java.sun.com/j2se/1.5.0/docs/guide/intl/encoding.doc.html</a>.<br>
-        Defaults <code>native-encoding</code> which is the magic value
-        for the platform's default character encoding.<br/>
-        <em>since Compress Antlib 1.2</em></td>
-      <td align="center" valign="top">No</td>
     </tr>
   </table>
 
