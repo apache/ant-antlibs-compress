@@ -21,13 +21,8 @@ import org.apache.ant.compress.util.CpioStreamFactory;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.AbstractFileSet;
-import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.FileSet;
-import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.Resource;
 
 /**
@@ -39,16 +34,7 @@ import org.apache.tools.ant.types.Resource;
  * a prefix attribute which is prepended to each entry in the output Cpio file.
  *
  */
-public class CpioFileSet extends ArchiveFileSet {
-
-    private boolean userIdSet;
-    private boolean groupIdSet;
-
-    private int    uid;
-    private int    gid;
-
-    private boolean skipUnreadable = false;
-    private String encoding = null;
+public class CpioFileSet extends CommonsCompressFileSet {
 
     /** Constructor for CpioFileSet */
     public CpioFileSet() {
@@ -56,7 +42,7 @@ public class CpioFileSet extends ArchiveFileSet {
     }
 
     /**
-     * Constructor using a fileset arguement.
+     * Constructor using a fileset argument.
      * @param fileset the fileset to use
      */
     protected CpioFileSet(FileSet fileset) {
@@ -64,87 +50,19 @@ public class CpioFileSet extends ArchiveFileSet {
     }
 
     /**
-     * Constructor using a cpiofileset arguement.
+     * Constructor using a cpiofileset argument.
      * @param fileset the cpiofileset to use
      */
     protected CpioFileSet(CpioFileSet fileset) {
         super(fileset);
-        encoding = fileset.encoding;
     }
 
     /**
-     * The uid for the cpio entry
-     * This is not the same as the User name.
-     * @param uid the id of the user for the cpio entry.
+     * Constructor using a CommonsCompressFileSet argument.
+     * @param fileset the fileset to use
      */
-    public void setUid(int uid) {
-        checkCpioFileSetAttributesAllowed();
-        userIdSet = true;
-        this.uid = uid;
-    }
-
-    /**
-     * @return the uid for the cpio entry
-     */
-    public int getUid() {
-        if (isReference()) {
-            return ((CpioFileSet) getCheckedRef()).getUid();
-        }
-        return uid;
-    }
-
-    /**
-     * @return whether the user id has been explicitly set.
-     */
-    public boolean hasUserIdBeenSet() {
-        return userIdSet;
-    }
-
-    /**
-     * The GID for the cpio entry; optional, default="0"
-     * This is not the same as the group name.
-     * @param gid the group id.
-     */
-    public void setGid(int gid) {
-        checkCpioFileSetAttributesAllowed();
-        groupIdSet = true;
-        this.gid = gid;
-    }
-
-    /**
-     * @return the group identifier.
-     */
-    public int getGid() {
-        if (isReference()) {
-            return ((CpioFileSet) getCheckedRef()).getGid();
-        }
-        return gid;
-    }
-
-    /**
-     * @return whether the group id has been explicitly set.
-     */
-    public boolean hasGroupIdBeenSet() {
-        return groupIdSet;
-    }
-
-    /**
-     * Whether to skip entries that Commons Compress signals it cannot read.
-     *
-     * @since Compress Antlib 1.1
-     */
-    public void setSkipUnreadableEntries(boolean b) {
-        skipUnreadable = b;
-    }
-
-    /**
-     * Set the encoding used for this CpioFileSet.
-     * @param enc encoding as String.
-     * @since Compress Antlib 1.3
-     */
-    public void setEncoding(String enc) {
-        checkCpioFileSetAttributesAllowed();
-        this.encoding = enc;
+    protected CpioFileSet(CommonsCompressFileSet fileset) {
+        super(fileset);
     }
 
     /**
@@ -159,89 +77,19 @@ public class CpioFileSet extends ArchiveFileSet {
                                               ArchiveEntry entry) {
                     return new CpioResource(archive, encoding, (CpioArchiveEntry) entry);
                 }
-            }, skipUnreadable, getProject());
-        cs.setEncoding(encoding);
+            }, getSkipUnreadableEntries(), getProject());
+        cs.setEncoding(getEncoding());
         return cs;
     }
 
-    /**
-     * Makes this instance in effect a reference to another instance.
-     *
-     * <p>You must not set another attribute or nest elements inside
-     * this element if you make it a reference.</p>
-     * @param r the <code>Reference</code> to use.
-     * @throws BuildException on error
-     */
-    public void setRefid(Reference r) throws BuildException {
-        if (userIdSet || groupIdSet) {
-            throw tooManyAttributes();
+    protected CommonsCompressFileSet newFileSet(FileSet fs) {
+        if (fs instanceof CpioFileSet) {
+            return new CpioFileSet((CpioFileSet) fs);
         }
-        super.setRefid(r);
-    }
-
-    /**
-     * A CpioFileset accepts another CpioFileSet or a FileSet as reference
-     * FileSets are often used by the war task for the lib attribute
-     * @param p the project to use
-     * @return the abstract fileset instance
-     */
-    protected AbstractFileSet getRef(Project p) {
-        dieOnCircularReference(p);
-        Object o = getRefid().getReferencedObject(p);
-        if (o instanceof CpioFileSet) {
-            return (AbstractFileSet) o;
-        } else if (o instanceof FileSet) {
-            CpioFileSet zfs = new CpioFileSet((FileSet) o);
-            configureFileSet(zfs);
-            return zfs;
-        } else {
-            String msg = getRefid().getRefId() + " doesn\'t denote a cpiofileset or a fileset";
-            throw new BuildException(msg);
+        if (fs instanceof CommonsCompressFileSet) {
+            return new CpioFileSet((CommonsCompressFileSet) fs);
         }
-    }
-
-    /**
-     * Configure a fileset based on this fileset.
-     * If the fileset is a CpioFileSet copy in the cpiofileset
-     * specific attributes.
-     * @param zfs the archive fileset to configure.
-     */
-    protected void configureFileSet(ArchiveFileSet zfs) {
-        super.configureFileSet(zfs);
-        if (zfs instanceof CpioFileSet) {
-            CpioFileSet tfs = (CpioFileSet) zfs;
-            tfs.setUid(uid);
-            tfs.setGid(gid);
-        }
-    }
-
-    /**
-     * Return a CpioFileSet that has the same properties
-     * as this one.
-     * @return the cloned cpioFileSet
-     */
-    public Object clone() {
-        if (isReference()) {
-            return ((CpioFileSet) getRef(getProject())).clone();
-        } else {
-            return super.clone();
-        }
-    }
-
-    /**
-     * A check attributes for CpioFileSet.
-     * If there is a reference, and
-     * it is a CpioFileSet, the cpio fileset attributes
-     * cannot be used.
-     */
-    private void checkCpioFileSetAttributesAllowed() {
-        if (getProject() == null
-            || (isReference()
-                && (getRefid().getReferencedObject(
-                        getProject())
-                    instanceof CpioFileSet))) {
-            checkAttributesAllowed();
-        }
+        return new CpioFileSet(fs);
     }
 
 }

@@ -22,8 +22,6 @@ import org.apache.ant.compress.util.TarStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.AbstractFileSet;
 import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.FileSet;
@@ -39,20 +37,13 @@ import org.apache.tools.ant.types.Resource;
  * a prefix attribute which is prepended to each entry in the output Tar file.
  *
  */
-public class TarFileSet extends ArchiveFileSet {
+public class TarFileSet extends CommonsCompressFileSet {
 
     private boolean userNameSet;
     private boolean groupNameSet;
-    private boolean userIdSet;
-    private boolean groupIdSet;
 
     private String userName = "";
     private String groupName = "";
-    private int    uid;
-    private int    gid;
-
-    private boolean skipUnreadable = false;
-    private String encoding = null;
 
     /** Constructor for TarFileSet */
     public TarFileSet() {
@@ -60,7 +51,7 @@ public class TarFileSet extends ArchiveFileSet {
     }
 
     /**
-     * Constructor using a fileset arguement.
+     * Constructor using a fileset argument.
      * @param fileset the fileset to use
      */
     protected TarFileSet(FileSet fileset) {
@@ -68,39 +59,19 @@ public class TarFileSet extends ArchiveFileSet {
     }
 
     /**
-     * Constructor using a tarfileset arguement.
+     * Constructor using a tarfileset argument.
      * @param fileset the tarfileset to use
      */
     protected TarFileSet(TarFileSet fileset) {
         super(fileset);
-        encoding = fileset.encoding;
     }
 
     /**
-     * Set the encoding used for this TarFileSet.
-     * @param enc encoding as String.
-     * @since Compress Antlib 1.2
+     * Constructor using a CommonsCompressFileSet argument.
+     * @param fileset the fileset to use
      */
-    public void setEncoding(String enc) {
-        checkTarFileSetAttributesAllowed();
-        this.encoding = enc;
-    }
-
-    /**
-     * Get the encoding used for this TarFileSet.
-     * @return String encoding.
-     * @since Compress Antlib 1.2
-     */
-    public String getEncoding() {
-        if (isReference()) {
-            AbstractFileSet ref = getRef(getProject());
-            if (ref instanceof TarFileSet) {
-                return ((TarFileSet) ref).getEncoding();
-            } else {
-                return null;
-            }
-        }
-        return encoding;
+    protected TarFileSet(CommonsCompressFileSet fileset) {
+        super(fileset);
     }
 
     /**
@@ -109,7 +80,7 @@ public class TarFileSet extends ArchiveFileSet {
      * @param userName the user name for the tar entry.
      */
     public void setUserName(String userName) {
-        checkTarFileSetAttributesAllowed();
+        checkCommonsCompressFileSetAttributesAllowed();
         userNameSet = true;
         this.userName = userName;
     }
@@ -132,40 +103,12 @@ public class TarFileSet extends ArchiveFileSet {
     }
 
     /**
-     * The uid for the tar entry
-     * This is not the same as the User name.
-     * @param uid the id of the user for the tar entry.
-     */
-    public void setUid(int uid) {
-        checkTarFileSetAttributesAllowed();
-        userIdSet = true;
-        this.uid = uid;
-    }
-
-    /**
-     * @return the uid for the tar entry
-     */
-    public int getUid() {
-        if (isReference()) {
-            return ((TarFileSet) getCheckedRef()).getUid();
-        }
-        return uid;
-    }
-
-    /**
-     * @return whether the user id has been explicitly set.
-     */
-    public boolean hasUserIdBeenSet() {
-        return userIdSet;
-    }
-
-    /**
      * The groupname for the tar entry; optional, default=""
      * This is not the same as the GID.
      * @param groupName the group name string.
      */
     public void setGroup(String groupName) {
-        checkTarFileSetAttributesAllowed();
+        checkCommonsCompressFileSetAttributesAllowed();
         groupNameSet = true;
         this.groupName = groupName;
     }
@@ -188,43 +131,6 @@ public class TarFileSet extends ArchiveFileSet {
     }
 
     /**
-     * The GID for the tar entry; optional, default="0"
-     * This is not the same as the group name.
-     * @param gid the group id.
-     */
-    public void setGid(int gid) {
-        checkTarFileSetAttributesAllowed();
-        groupIdSet = true;
-        this.gid = gid;
-    }
-
-    /**
-     * @return the group identifier.
-     */
-    public int getGid() {
-        if (isReference()) {
-            return ((TarFileSet) getCheckedRef()).getGid();
-        }
-        return gid;
-    }
-
-    /**
-     * @return whether the group id has been explicitly set.
-     */
-    public boolean hasGroupIdBeenSet() {
-        return groupIdSet;
-    }
-
-    /**
-     * Whether to skip entries that Commons Compress signals it cannot read.
-     *
-     * @since Compress Antlib 1.1
-     */
-    public void setSkipUnreadableEntries(boolean b) {
-        skipUnreadable = b;
-    }
-
-    /**
      * Create a new scanner.
      * @return the created scanner.
      */
@@ -237,8 +143,8 @@ public class TarFileSet extends ArchiveFileSet {
                     return new TarResource(archive, encoding,
                                            (TarArchiveEntry) entry);
                 }
-            }, skipUnreadable, getProject());
-        cs.setEncoding(encoding);
+            }, getSkipUnreadableEntries(), getProject());
+        cs.setEncoding(getEncoding());
         return cs;
     }
 
@@ -251,31 +157,10 @@ public class TarFileSet extends ArchiveFileSet {
      * @throws BuildException on error
      */
     public void setRefid(Reference r) throws BuildException {
-        if (userNameSet || userIdSet || groupNameSet || groupIdSet) {
+        if (userNameSet || groupNameSet) {
             throw tooManyAttributes();
         }
         super.setRefid(r);
-    }
-
-    /**
-     * A TarFileset accepts another TarFileSet or a FileSet as reference
-     * FileSets are often used by the war task for the lib attribute
-     * @param p the project to use
-     * @return the abstract fileset instance
-     */
-    protected AbstractFileSet getRef(Project p) {
-        dieOnCircularReference(p);
-        Object o = getRefid().getReferencedObject(p);
-        if (o instanceof TarFileSet) {
-            return (AbstractFileSet) o;
-        } else if (o instanceof FileSet) {
-            TarFileSet zfs = new TarFileSet((FileSet) o);
-            configureFileSet(zfs);
-            return zfs;
-        } else {
-            String msg = getRefid().getRefId() + " doesn\'t denote a tarfileset or a fileset";
-            throw new BuildException(msg);
-        }
     }
 
     /**
@@ -290,38 +175,16 @@ public class TarFileSet extends ArchiveFileSet {
             TarFileSet tfs = (TarFileSet) zfs;
             tfs.setUserName(userName);
             tfs.setGroup(groupName);
-            tfs.setUid(uid);
-            tfs.setGid(gid);
         }
     }
 
-    /**
-     * Return a TarFileSet that has the same properties
-     * as this one.
-     * @return the cloned tarFileSet
-     */
-    public Object clone() {
-        if (isReference()) {
-            return ((TarFileSet) getRef(getProject())).clone();
-        } else {
-            return super.clone();
+    protected CommonsCompressFileSet newFileSet(FileSet fs) {
+        if (fs instanceof TarFileSet) {
+            return new TarFileSet((TarFileSet) fs);
         }
-    }
-
-    /**
-     * A check attributes for TarFileSet.
-     * If there is a reference, and
-     * it is a TarFileSet, the tar fileset attributes
-     * cannot be used.
-     */
-    private void checkTarFileSetAttributesAllowed() {
-        if (getProject() == null
-            || (isReference()
-                && (getRefid().getReferencedObject(
-                        getProject())
-                    instanceof TarFileSet))) {
-            checkAttributesAllowed();
+        if (fs instanceof CommonsCompressFileSet) {
+            return new TarFileSet((CommonsCompressFileSet) fs);
         }
+        return new TarFileSet(fs);
     }
-
 }

@@ -17,13 +17,8 @@
  */
 package org.apache.ant.compress.resources;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.AbstractFileSet;
-import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.ArchiveScanner;
 import org.apache.tools.ant.types.FileSet;
-import org.apache.tools.ant.types.Reference;
 
 /**
  * A ZipFileSet is a FileSet with extra attributes useful in the context of
@@ -34,10 +29,7 @@ import org.apache.tools.ant.types.Reference;
  * a prefix attribute which is prepended to each entry in the output Zip file.
  *
  */
-public class ZipFileSet extends ArchiveFileSet {
-
-    private String encoding = null;
-    private boolean skipUnreadable = false;
+public class ZipFileSet extends CommonsCompressFileSet {
 
     /** Constructor for ZipFileSet */
     public ZipFileSet() {
@@ -45,7 +37,7 @@ public class ZipFileSet extends ArchiveFileSet {
     }
 
     /**
-     * Constructor using a fileset arguement.
+     * Constructor using a fileset argument.
      * @param fileset the fileset to use
      */
     protected ZipFileSet(FileSet fileset) {
@@ -53,46 +45,19 @@ public class ZipFileSet extends ArchiveFileSet {
     }
 
     /**
-     * Constructor using a zipfileset arguement.
+     * Constructor using a zipfileset argument.
      * @param fileset the zipfileset to use
      */
     protected ZipFileSet(ZipFileSet fileset) {
         super(fileset);
-        encoding = fileset.encoding;
     }
 
     /**
-     * Set the encoding used for this ZipFileSet.
-     * @param enc encoding as String.
+     * Constructor using a CommonsCompressFileSet argument.
+     * @param fileset the fileset to use
      */
-    public void setEncoding(String enc) {
-        checkZipFileSetAttributesAllowed();
-        this.encoding = enc;
-    }
-
-    /**
-     * Get the encoding used for this ZipFileSet.
-     * @return String encoding.
-     */
-    public String getEncoding() {
-        if (isReference()) {
-            AbstractFileSet ref = getRef(getProject());
-            if (ref instanceof ZipFileSet) {
-                return ((ZipFileSet) ref).getEncoding();
-            } else {
-                return null;
-            }
-        }
-        return encoding;
-    }
-
-    /**
-     * Whether to skip entries that Commons Compress signals it cannot read.
-     *
-     * @since Compress Antlib 1.1
-     */
-    public void setSkipUnreadableEntries(boolean b) {
-        skipUnreadable = b;
+    protected ZipFileSet(CommonsCompressFileSet fileset) {
+        super(fileset);
     }
 
     /**
@@ -100,59 +65,19 @@ public class ZipFileSet extends ArchiveFileSet {
      * @return a new ZipScanner with the same encoding as this one.
      */
     protected ArchiveScanner newArchiveScanner() {
-        ZipScanner zs = new ZipScanner(skipUnreadable, getProject());
-        zs.setEncoding(encoding);
+        ZipScanner zs = new ZipScanner(getSkipUnreadableEntries(), getProject());
+        zs.setEncoding(getEncoding());
         return zs;
     }
 
-    /**
-     * A ZipFileset accepts another ZipFileSet or a FileSet as reference
-     * FileSets are often used by the war task for the lib attribute
-     * @param p the project to use
-     * @return the abstract fileset instance
-     */
-    protected AbstractFileSet getRef(Project p) {
-        dieOnCircularReference(p);
-        Object o = getRefid().getReferencedObject(p);
-        if (o instanceof ZipFileSet) {
-            return (AbstractFileSet) o;
-        } else if (o instanceof FileSet) {
-            ZipFileSet zfs = new ZipFileSet((FileSet) o);
-            configureFileSet(zfs);
-            return zfs;
-        } else {
-            String msg = getRefid().getRefId() + " doesn\'t denote a zipfileset or a fileset";
-            throw new BuildException(msg);
+    protected CommonsCompressFileSet newFileSet(FileSet fs) {
+        if (fs instanceof ZipFileSet) {
+            return new ZipFileSet((ZipFileSet) fs);
         }
-    }
-
-    /**
-     * Return a ZipFileSet that has the same properties
-     * as this one.
-     * @return the cloned zipFileSet
-     */
-    public Object clone() {
-        if (isReference()) {
-            return ((ZipFileSet) getRef(getProject())).clone();
-        } else {
-            return super.clone();
+        if (fs instanceof CommonsCompressFileSet) {
+            return new ZipFileSet((CommonsCompressFileSet) fs);
         }
-    }
-
-    /**
-     * A check attributes for zipFileSet.
-     * If there is a reference, and
-     * it is a ZipFileSet, the zip fileset attributes
-     * cannot be used.
-     */
-    private void checkZipFileSetAttributesAllowed() {
-        if (getProject() == null
-            || (isReference()
-                && (getRefid().getReferencedObject(
-                        getProject())
-                    instanceof ZipFileSet))) {
-            checkAttributesAllowed();
-        }
+        return new ZipFileSet(fs);
     }
 
 }
