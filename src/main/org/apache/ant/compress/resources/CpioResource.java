@@ -42,8 +42,7 @@ public final class CpioResource extends CommonsCompressArchiveResource {
      * @param e the CpioEntry.
      */
     public CpioResource(File a, CpioArchiveEntry e) {
-        super(new CpioStreamFactory(), "cpio", a, e);
-        setEntry(e);
+        this(a, null, e);
     }
 
     /**
@@ -53,7 +52,34 @@ public final class CpioResource extends CommonsCompressArchiveResource {
      * @param e the CpioEntry.
      */
     public CpioResource(Resource a, CpioArchiveEntry e) {
+        this(a, null, e);
+    }
+
+    /**
+     * Construct a CpioResource representing the specified
+     * entry in the specified archive.
+     * @param a the archive as File.
+     * @param enc the encoding used for filenames.
+     * @param e the CpioEntry.
+     * @since Compress Antlib 1.3
+     */
+    public CpioResource(File a, String enc, CpioArchiveEntry e) {
         super(new CpioStreamFactory(), "cpio", a, e);
+        setEncoding(enc);
+        setEntry(e);
+    }
+
+    /**
+     * Construct a CpioResource representing the specified
+     * entry in the specified archive.
+     * @param a the archive as Resource.
+     * @param enc the encoding used for filenames.
+     * @param e the CpioEntry.
+     * @since Compress Antlib 1.3
+     */
+    public CpioResource(Resource a, String enc, CpioArchiveEntry e) {
+        super(new CpioStreamFactory(), "cpio", a, e);
+        setEncoding(enc);
         setEntry(e);
     }
 

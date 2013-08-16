@@ -35,13 +35,13 @@ public class DumpStreamFactory implements ArchiveStreamFactory {
 
     /**
      * @param stream the stream to read from, should be buffered
-     * @param encoding the encoding of the entry names, ignored
+     * @param encoding the encoding of the entry names
      */
     public ArchiveInputStream getArchiveStream(InputStream stream,
                                                String encoding)
         throws IOException {
         try {
-            return new DumpArchiveInputStream(stream);
+            return new DumpArchiveInputStream(stream, encoding);
         } catch (ArchiveException ex) {
             throw new BuildException(ex);
         }

@@ -91,7 +91,6 @@ public class StreamHelper {
      * one, returns an CompressorInputStream for it, otherwise returns
      * null.
      * @param r the resource to read from
-     * @param encoding the encoding of the entry names
      */
     public static
         CompressorInputStream getInputStream(CompressorStreamFactory factory,

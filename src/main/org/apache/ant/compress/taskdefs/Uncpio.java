@@ -27,4 +27,14 @@ public class Uncpio extends ExpandBase {
     public Uncpio() {
         super(new CpioStreamFactory());
     }
+
+    /**
+     * Set the file-name encoding for this archive, defaults to native
+     * encoding.
+     * @since Apache Compress Antlib 1.3
+     */
+    public void setEncoding(String encoding) {
+        internalSetEncoding(encoding);
+    }
+
 }

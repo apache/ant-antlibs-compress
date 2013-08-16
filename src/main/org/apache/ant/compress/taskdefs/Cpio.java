@@ -46,7 +46,8 @@ public class Cpio extends ArchiveBase {
                     throws IOException {
                     return new CpioArchiveOutputStream(stream,
                                                        format.getFormat(),
-                                                       blockSize);
+                                                       blockSize,
+                                                       encoding);
                 }
             });
         setEntryBuilder(

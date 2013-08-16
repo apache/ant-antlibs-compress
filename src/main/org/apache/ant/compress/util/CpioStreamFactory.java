@@ -31,21 +31,21 @@ public class CpioStreamFactory implements ArchiveStreamFactory {
 
     /**
      * @param stream the stream to read from, should be buffered
-     * @param encoding the encoding of the entry names, ignored
+     * @param encoding the encoding of the entry names
      */
     public ArchiveInputStream getArchiveStream(InputStream stream,
                                                String encoding)
         throws IOException {
-        return new CpioArchiveInputStream(stream);
+        return new CpioArchiveInputStream(stream, encoding);
     }
 
     /**
      * @param stream the stream to write to, should be buffered
-     * @param encoding the encoding of the entry names, ignored
+     * @param encoding the encoding of the entry names
      */
     public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                 String encoding)
         throws IOException {
-        return new CpioArchiveOutputStream(stream);
+        return new CpioArchiveOutputStream(stream, encoding);
     }
 }

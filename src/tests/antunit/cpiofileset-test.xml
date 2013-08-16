@@ -67,4 +67,16 @@
        expected="../resources/asf-logo.gif"
        />
   </target>
+
+  <target name="test-refid-check-encoding">
+    <cmp:cpiofileset id="test-refid2"
+                encoding="utf-8"
+                dir="${basedir}"/>
+    <au:expectfailure>
+      <cmp:cpiofileset id="ref4"
+                  encoding="utf-8"
+                  refid="test-refid2"/>
+    </au:expectfailure>
+  </target>
+
 </project>

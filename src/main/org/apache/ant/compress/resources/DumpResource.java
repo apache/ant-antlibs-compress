@@ -43,8 +43,7 @@ public final class DumpResource extends CommonsCompressArchiveResource {
      * @param e the DumpEntry.
      */
     public DumpResource(File a, DumpArchiveEntry e) {
-        super(new DumpStreamFactory(), "dump", a, e);
-        setEntry(e);
+        this(a, null, e);
     }
 
     /**
@@ -54,7 +53,34 @@ public final class DumpResource extends CommonsCompressArchiveResource {
      * @param e the DumpEntry.
      */
     public DumpResource(Resource a, DumpArchiveEntry e) {
+        this(a, null, e);
+    }
+
+    /**
+     * Construct a DumpResource representing the specified
+     * entry in the specified archive.
+     * @param a the archive as File.
+     * @param enc the encoding used for filenames.
+     * @param e the DumpEntry.
+     * @since Compress Antlib 1.3
+     */
+    public DumpResource(File a, String enc, DumpArchiveEntry e) {
         super(new DumpStreamFactory(), "dump", a, e);
+        setEncoding(enc);
+        setEntry(e);
+    }
+
+    /**
+     * Construct a DumpResource representing the specified
+     * entry in the specified archive.
+     * @param a the archive as Resource.
+     * @param enc the encoding used for filenames.
+     * @param e the DumpEntry.
+     * @since Compress Antlib 1.3
+     */
+    public DumpResource(Resource a, String enc, DumpArchiveEntry e) {
+        super(new DumpStreamFactory(), "dump", a, e);
+        setEncoding(enc);
         setEntry(e);
     }
 

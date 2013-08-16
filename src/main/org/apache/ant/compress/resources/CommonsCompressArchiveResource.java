@@ -85,7 +85,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
     }
 
     /**
-     * Set the encoding to use with the zipfile.
+     * Set the encoding to use with the archive.
      * @param enc the String encoding.
      */
     public void setEncoding(String enc) {

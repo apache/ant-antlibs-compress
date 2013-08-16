@@ -49,6 +49,7 @@ public class DumpFileSet extends ArchiveFileSet {
     private int    gid;
 
     private boolean skipUnreadable = false;
+    private String encoding = null;
 
     /** Constructor for DumpFileSet */
     public DumpFileSet() {
@@ -69,6 +70,7 @@ public class DumpFileSet extends ArchiveFileSet {
      */
     protected DumpFileSet(DumpFileSet fileset) {
         super(fileset);
+        encoding = fileset.encoding;
     }
 
     /**
@@ -135,17 +137,30 @@ public class DumpFileSet extends ArchiveFileSet {
     }
 
     /**
+     * Set the encoding used for this CpioFileSet.
+     * @param enc encoding as String.
+     * @since Compress Antlib 1.3
+     */
+    public void setEncoding(String enc) {
+        checkDumpFileSetAttributesAllowed();
+        this.encoding = enc;
+    }
+
+    /**
      * Create a new scanner.
      * @return the created scanner.
      */
     protected ArchiveScanner newArchiveScanner() {
-        return new CommonsCompressArchiveScanner(new DumpStreamFactory(),
-                                                 new CommonsCompressArchiveScanner.ResourceBuilder() {
+        CommonsCompressArchiveScanner cs =
+            new CommonsCompressArchiveScanner(new DumpStreamFactory(),
+                                              new CommonsCompressArchiveScanner.ResourceBuilder() {
                 public Resource buildResource(Resource archive, String encoding,
                                               ArchiveEntry entry) {
-                    return new DumpResource(archive, (DumpArchiveEntry) entry);
+                    return new DumpResource(archive, encoding, (DumpArchiveEntry) entry);
                 }
             }, skipUnreadable, getProject());
+        cs.setEncoding(encoding);
+        return cs;
     }
 
     /**

@@ -28,4 +28,14 @@ public class Undump extends ExpandBase {
     public Undump() {
         super(new DumpStreamFactory());
     }
+
+    /**
+     * Set the file-name encoding for this archive, defaults to the
+     * native encoding.
+     * @since Apache Compress Antlib 1.3
+     */
+    public void setEncoding(String encoding) {
+        internalSetEncoding(encoding);
+    }
+
 }
