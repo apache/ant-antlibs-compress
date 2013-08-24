@@ -24,6 +24,7 @@ import org.apache.tools.ant.BuildException;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
+import org.apache.commons.compress.archivers.arj.ArjArchiveEntry;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
 import org.apache.commons.compress.archivers.dump.DumpArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -47,6 +48,9 @@ public class EntryHelper {
 
         if (entry instanceof ArArchiveEntry) {
             return ((ArArchiveEntry) entry).getMode();
+        }
+        if (entry instanceof ArjArchiveEntry) {
+            return ((ArjArchiveEntry) entry).getUnixMode();
         }
         if (entry instanceof CpioArchiveEntry) {
             return (int) ((CpioArchiveEntry) entry).getMode();
@@ -77,6 +81,9 @@ public class EntryHelper {
         if (entry instanceof ArArchiveEntry) {
             return ((ArArchiveEntry) entry).getUserId();
         }
+        if (entry instanceof ArjArchiveEntry) {
+            return UNKNOWN_ID;
+        }
         if (entry instanceof CpioArchiveEntry) {
             return (int) ((CpioArchiveEntry) entry).getUID();
         }
@@ -103,6 +110,9 @@ public class EntryHelper {
 
         if (entry instanceof ArArchiveEntry) {
             return ((ArArchiveEntry) entry).getGroupId();
+        }
+        if (entry instanceof ArjArchiveEntry) {
+            return UNKNOWN_ID;
         }
         if (entry instanceof CpioArchiveEntry) {
             return (int) ((CpioArchiveEntry) entry).getGID();

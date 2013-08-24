@@ -21,6 +21,10 @@
      classname="org.apache.ant.compress.taskdefs.Unar"
      />
   <taskdef
+     name="unarj"
+     classname="org.apache.ant.compress.taskdefs.Unarj"
+     />
+  <taskdef
      name="uncpio"
      classname="org.apache.ant.compress.taskdefs.Uncpio"
      />
@@ -94,6 +98,10 @@
      classname="org.apache.ant.compress.resources.ArResource"
      />
   <typedef
+     name="arjentry"
+     classname="org.apache.ant.compress.resources.ArjResource"
+     />
+  <typedef
      name="cpioentry"
      classname="org.apache.ant.compress.resources.CpioResource"
      />
@@ -113,6 +121,10 @@
   <typedef
      name="arfileset"
      classname="org.apache.ant.compress.resources.ArFileSet"
+     />
+  <typedef
+     name="arjfileset"
+     classname="org.apache.ant.compress.resources.ArjFileSet"
      />
   <typedef
      name="cpiofileset"

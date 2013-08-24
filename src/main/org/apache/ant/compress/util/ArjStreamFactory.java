@@ -22,31 +22,37 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.arj.ArjArchiveInputStream;
+import org.apache.tools.ant.BuildException;
 
 /**
- * Creates streams for the supported archive formats.
+ * @since Apache Compress Antlib 1.3
  */
-public interface ArchiveStreamFactory {
+public class ArjStreamFactory implements ArchiveStreamFactory {
 
     /**
      * @param stream the stream to read from, should be buffered
-     * @param encoding the encoding of the entry names, ignored by all
-     * formats except arj, cpio, dump, tar and zip
+     * @param encoding the encoding of the entry names
      */
     public ArchiveInputStream getArchiveStream(InputStream stream,
                                                String encoding)
-        throws IOException;
-
+        throws IOException {
+        try {
+            return new ArjArchiveInputStream(stream, encoding);
+        } catch (ArchiveException ex) {
+            throw new BuildException(ex);
+        }
+    }
 
     /**
-     * @param stream the stream to write to, should be buffered
-     * @param encoding the encoding of the entry names, ignored by all
-     * formats except cpio, tar and zip
+     * Not implemented.
      */
     public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                 String encoding)
-        throws IOException;
-
+        throws IOException {
+        throw new UnsupportedOperationException();
+    }
 }
