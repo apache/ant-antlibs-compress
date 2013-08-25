@@ -38,6 +38,14 @@
     </properties>
 
     <release version="1.3" date="unreleased">
+      <action type="update" breaks-bwc="true">
+        The Apache Compress Antlib now requires Apache Commons
+        Compress 1.6 if you want to work with arj or 7z archives.
+
+        In addition XZ for Java 1.4 is required if you want to read 7z
+        archives using LZMA (not LZMA2) compression or stand-alone
+        LZMA files.
+      </action>
       <action type="add">
         Encoding support for dump and cpio archives and filesets.
       </action>
