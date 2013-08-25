@@ -42,7 +42,7 @@
         Encoding support for dump and cpio archives and filesets.
       </action>
       <action type="add">
-        Read-only upport for uncompress arj archives has been added.
+        Read-only support for uncompressed arj archives has been added.
       </action>
     </release>
 
