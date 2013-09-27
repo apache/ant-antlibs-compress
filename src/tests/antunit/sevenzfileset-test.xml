@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project default="antunit"
+         xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cmp="antlib:org.apache.ant.compress">
+  <import file="antunit-base.xml"/>
+
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+    <mkdir dir="${input}"/>
+  </target>
+
+  <target name="test-refid-modify">
+    <fileset id="modify-refid-1"
+             dir="${basedir}"
+             includes="*.xml"
+             />
+    <cmp:sevenzfileset id="modify-refid-2"
+                refid="modify-refid-1"
+                prefix="WEB-INF/lib/"/>
+    <delete quiet="yes" dir="${build.dir}"/>
+    <mkdir dir="${output}"/>
+    <jar jarfile="${output}/jar.jar">
+      <cmp:sevenzfileset refid="modify-refid-2"/>
+    </jar>
+    <unjar src="${output}/jar.jar"
+           dest="${output}"/>
+    <au:assertTrue>
+      <available file="${output}/WEB-INF/lib/sevenzfileset-test.xml"/>
+    </au:assertTrue>
+  </target>
+
+  <target name="test-refid-check-prefix">
+    <cmp:sevenzfileset id="test-refid"
+                       dir="${basedir}"/>
+    <au:expectfailure>
+      <cmp:sevenzfileset id="ref2"
+                         refid="test-refid"
+                         prefix="WEB-INF/lib/"/>
+    </au:expectfailure>
+    <au:expectfailure>
+      <cmp:sevenzfileset id="ref3"
+                         prefix="WEB-INF/lib/"
+                         ReFiD="test-refid"/>
+    </au:expectfailure>
+  </target>
+
+  <target name="test-refid-check-encoding">
+    <cmp:sevenzfileset id="test-refid2"
+                       encoding="utf-8"
+                       dir="${basedir}"/>
+    <au:expectfailure>
+      <cmp:sevenzfileset id="ref4"
+                         encoding="utf-8"
+                         refid="test-refid2"/>
+    </au:expectfailure>
+  </target>
+
+  <target name="testMissingArchive" depends="setUp">
+    <au:expectfailure expectedMessage="The archive foo.7z doesn't exist">
+      <copy todir="${output}">
+        <cmp:sevenzfileset src="foo.7z"/>
+      </copy>
+    </au:expectfailure>
+  </target>
+
+  <target name="testMissingArchiveDoesntMatter" depends="setUp">
+    <copy todir="${output}">
+      <cmp:sevenzfileset src="foo.7z" errorOnMissingArchive="false"/>
+    </copy>
+  </target>
+
+  <target name="testSevenZSource" depends="setUp">
+    <copy todir="${output}">
+      <cmp:sevenzfileset src="../resources/asf-logo.gif.7z"
+                         includes="*.gif"/>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+</project>

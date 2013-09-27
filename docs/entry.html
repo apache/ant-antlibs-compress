@@ -76,7 +76,23 @@
 &lt;/cmp:arentry&gt;
 </pre>
 
-<p>Represents the entry named some-file.txt in archive some-archive.ar.</p>
+<h2><a name="arjentry">arjentry</a></h2>
+
+<p><em>Since Apache Compress Antlib 1.3</em>.</p>
+
+<p>An <a href="#archiveentry">archive entry</a> representing an entry
+  in a ARJ archive.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:arjentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="some-file.txt"&gt;
+  &lt;file file="some-archive.arj"/&gt;
+&lt;/cmp:arjentry&gt;
+</pre>
+
+<p>Represents the entry named some-file.txt in archive some-archive.arj.</p>
 
 <h2><a name="cpioentry">cpioentry</a></h2>
 
@@ -111,6 +127,24 @@
 </pre>
 
 <p>Represents the entry named /some-file.txt in archive some-archive.dump.</p>
+
+<h2><a name="sevenzentry">sevenzentry</a></h2>
+
+<p><em>Since Apache Compress Antlib 1.3</em>.</p>
+
+<p>An <a href="#archiveentry">archive entry</a> representing an entry
+  in a 7z archive.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:sevenzentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="some-file.txt"&gt;
+  &lt;file file="some-archive.7z"/&gt;
+&lt;/cmp:sevenzentry&gt;
+</pre>
+
+<p>Represents the entry named some-file.txt in archive some-archive.7z.</p>
 
 <h2><a name="tarentry">tarentry</a></h2>
 

@@ -118,6 +118,10 @@
      classname="org.apache.ant.compress.resources.DumpResource"
      />
   <typedef
+     name="sevenzentry"
+     classname="org.apache.ant.compress.resources.SevenZResource"
+     />
+  <typedef
      name="tarentry"
      classname="org.apache.ant.compress.resources.TarResource"
      />
@@ -141,6 +145,10 @@
   <typedef
      name="dumpfileset"
      classname="org.apache.ant.compress.resources.DumpFileSet"
+     />
+  <typedef
+     name="sevenzfileset"
+     classname="org.apache.ant.compress.resources.SevenZFileSet"
      />
   <typedef
      name="tarfileset"

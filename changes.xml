@@ -56,6 +56,9 @@
         Read-only support for LZMA standalone compression has been
         added.
       </action>
+      <action type="add">
+        Read-only support for file based 7z archives has been added.
+      </action>
     </release>
 
     <release version="1.2" date="2012-04-20">

@@ -27,6 +27,7 @@ import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
 import org.apache.commons.compress.archivers.arj.ArjArchiveEntry;
 import org.apache.commons.compress.archivers.cpio.CpioArchiveEntry;
 import org.apache.commons.compress.archivers.dump.DumpArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 
@@ -54,6 +55,9 @@ public class EntryHelper {
         }
         if (entry instanceof CpioArchiveEntry) {
             return (int) ((CpioArchiveEntry) entry).getMode();
+        }
+        if (entry instanceof SevenZArchiveEntry) {
+            return UNKNOWN_ID;
         }
         if (entry instanceof TarArchiveEntry) {
             return ((TarArchiveEntry) entry).getMode();
@@ -87,6 +91,9 @@ public class EntryHelper {
         if (entry instanceof CpioArchiveEntry) {
             return (int) ((CpioArchiveEntry) entry).getUID();
         }
+        if (entry instanceof SevenZArchiveEntry) {
+            return UNKNOWN_ID;
+        }
         if (entry instanceof TarArchiveEntry) {
             return ((TarArchiveEntry) entry).getUserId();
         }
@@ -116,6 +123,9 @@ public class EntryHelper {
         }
         if (entry instanceof CpioArchiveEntry) {
             return (int) ((CpioArchiveEntry) entry).getGID();
+        }
+        if (entry instanceof SevenZArchiveEntry) {
+            return UNKNOWN_ID;
         }
         if (entry instanceof TarArchiveEntry) {
             return ((TarArchiveEntry) entry).getGroupId();
