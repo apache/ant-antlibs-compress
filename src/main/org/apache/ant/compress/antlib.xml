@@ -65,6 +65,10 @@
      classname="org.apache.ant.compress.taskdefs.GUnzip"
      />
   <taskdef
+     name="unlzma"
+     classname="org.apache.ant.compress.taskdefs.UnLZMA"
+     />
+  <taskdef
      name="unpack200"
      classname="org.apache.ant.compress.taskdefs.UnPack200"
      />
@@ -153,6 +157,10 @@
   <typedef
      name="gzipresource"
      classname="org.apache.ant.compress.resources.GZipResource"
+     />
+  <typedef
+     name="lzmaresource"
+     classname="org.apache.ant.compress.resources.LZMAResource"
      />
   <typedef
      name="pack200resource"

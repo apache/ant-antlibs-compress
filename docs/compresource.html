@@ -87,6 +87,26 @@
   some-archive.tar.gz where the <code>gzipresource</code> provides
   the decompression of the archive.</p>
 
+<h2><a name="lzmaresource">lzmaresource</a></h2>
+
+<p>This is a <a href="#compresource">compressed resource</a> using the
+  LZMA compression.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:tarentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="some-file.txt"&gt;
+  &lt;cmp:lzmaresource&gt;
+    &lt;file file="some-archive.tar.lzma"/&gt;
+  &lt;/cmp:lzmaresource&gt;
+&lt;/cmp:tarentry&gt;
+</pre>
+
+<p>Represents the entry named some-file.txt in archive
+  some-archive.tar.gz where the <code>lzmaresource</code> provides
+  the decompression of the archive.</p>
+
 <h2><a name="pack200resource">pack200resource</a></h2>
 
 <p>This is a <a href="#compresource">compressed resource</a> using the

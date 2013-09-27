@@ -27,9 +27,9 @@
     <ivyauthor name="Apache Ant Development Team"
                url="http://ant.apache.org/"/>
     <description homepage="http://ant.apache.org/antlibs/compress/">
-      Provides tasks and types that deal with AR, CPIO, TAR, DUMP and
-      ZIP archives as well as BZIP2, PACK200, GZIP and XZ compressed files
-      based on Apache Commons Compress.
+      Provides tasks and types that deal with AR, ARJ, CPIO, TAR, DUMP
+      and ZIP archives as well as BZIP2, PACK200, GZIP, LZMA and XZ
+      compressed files based on Apache Commons Compress.
     </description>
   </info>
   <publications xmlns:e="urn:ant.apache.org:ivy-extras">
@@ -52,7 +52,7 @@
   </publications>
   <dependencies>
     <dependency org="org.apache.commons" name="commons-compress"
-                rev="1.4"/>
-    <dependency org="org.tukaani" name="xz" rev="1.0"/>
+                rev="1.6"/>
+    <dependency org="org.tukaani" name="xz" rev="1.4"/>
   </dependencies>
 </ivy-module>
