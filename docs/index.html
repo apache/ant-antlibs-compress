@@ -28,9 +28,11 @@
     <p>This Antlib contains tasks and resources that provide
       compression/uncompression and archival/unarchival capabilities
       based on <a href="http://commons.apache.org/compress/">Apache
-      Commons Compress</a>.  Using Apache Commons Compress 1.4 this
-      Antlib supports gzip, bzip2, xz and pack200 compression and ar, cpio, Unix
-      dump, tar and zip archives.  Support for dump is read-only.</p>
+      Commons Compress</a>.  Using Apache Commons Compress 1.6 this
+      Antlib supports gzip, bzip2, lzma standalone, xz and pack200
+      compression and ar, arj, cpio, 7z, Unix dump, tar and zip
+      archives.  Support for lzma, arj and dump is read-only.  7z can
+      only be used on filesystem resources.</p>
 
     <h3>Known Limitations</h3>
 
@@ -52,9 +54,12 @@
       <li><a href="pack.html#pack200">pack200</a></li>
       <li><a href="pack200normalize.html">pack200normalize</a></li>
       <li><a href="archive.html#tar">tar</a></li>
+      <li><a href="expand.html#un7z">un7z</a></li>
       <li><a href="expand.html#unar">unar</a></li>
+      <li><a href="expand.html#unarj">unarj</a></li>
       <li><a href="expand.html#uncpio">uncpio</a></li>
       <li><a href="expand.html#undump">undump</a></li>
+      <li><a href="unpack.html#unlzma">unlzma</a></li>
       <li><a href="unpack.html#unpack200">unpack200</a></li>
       <li><a href="expand.html#untar">untar</a></li>
       <li><a href="unpack.html#unxz">unxz</a></li>
@@ -68,15 +73,20 @@
     <ul>
       <li><a href="archives.html">archives</a></li>
       <li><a href="entry.html#arentry">arentry</a></li>
+      <li><a href="entry.html#arentry">arentry</a></li>
       <li><a href="fileset.html#arfileset">arfileset</a></li>
+      <li><a href="fileset.html#arjfileset">arjfileset</a></li>
       <li><a href="compresource.html#bzip2resource">bzip2resource</a></li>
       <li><a href="entry.html#cpioentry">cpioentry</a></li>
       <li><a href="fileset.html#cpiofileset">cpiofileset</a></li>
       <li><a href="entry.html#dumpentry">dumpentry</a></li>
       <li><a href="fileset.html#dumpfileset">dumpfileset</a></li>
       <li><a href="compresource.html#gzipresource">gzipresource</a></li>
+      <li><a href="compresource.html#lzmaresource">lzmaresource</a></li>
       <li><a href="compresource.html#pack200resource">pack200resource</a></li>
       <li><a href="entry.html#tarentry">tarentry</a></li>
+      <li><a href="fileset.html#sevenzfileset">sevenzfileset</a></li>
+      <li><a href="entry.html#sevenzentry">sevenzentry</a></li>
       <li><a href="fileset.html#tarfileset">tarfileset</a></li>
       <li><a href="compresource.html#xzresource">xzresource</a></li>
       <li><a href="entry.html#zipentry">zipentry</a></li>
@@ -98,7 +108,7 @@
     <h3>Installing and Using</h3>
 
     <p>This Antlib requires Apache Ant 1.8.0 or higher, Apache
-      Commons Compress 1.3 or higher and Java5 or higher.</p>
+      Commons Compress 1.6 or higher and Java5 or higher.</p>
 
     <p>If you are building the Antlib from sources, run
       the <code>antlib</code> target and you'll get a
