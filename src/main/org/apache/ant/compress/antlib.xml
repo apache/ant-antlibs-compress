@@ -17,6 +17,10 @@
   -->
 <antlib>
   <taskdef
+     name="un7z"
+     classname="org.apache.ant.compress.taskdefs.Un7z"
+     />
+  <taskdef
      name="unar"
      classname="org.apache.ant.compress.taskdefs.Unar"
      />
