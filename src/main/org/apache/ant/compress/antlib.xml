@@ -97,6 +97,10 @@
      classname="org.apache.ant.compress.taskdefs.Pack200Normalize"
      />
   <taskdef
+     name="sevenz"
+     classname="org.apache.ant.compress.taskdefs.SevenZ"
+     />
+  <taskdef
      name="xz"
      classname="org.apache.ant.compress.taskdefs.XZ"
      />

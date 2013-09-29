@@ -1,0 +1,435 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project default="antunit"
+         xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
+         xmlns:cmp="antlib:org.apache.ant.compress">
+
+  <import file="antunit-base.xml" />
+
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+    <mkdir dir="${input}/subdir"/>
+    <copy todir="${input}/subdir" file="../resources/asf-logo.gif"/>
+    <property name="dest" location="${output}/test.7z"/>
+    <macrodef name="checkProperties">
+      <attribute name="pattern" default="yyyy-MM-dd-HH:mm:ss Z"/>
+      <attribute name="dateTime"/>
+      <sequential>
+        <au:assertTrue>
+          <cond:islastmodified datetime="@{dateTime}"
+                               pattern="@{pattern}">
+            <cmp:sevenzentry name="asf-logo.gif">
+              <file file="${dest}"/>
+            </cmp:sevenzentry>
+          </cond:islastmodified>
+        </au:assertTrue>
+      </sequential>
+    </macrodef>
+  </target>
+
+  <target name="testPlainFileSet" depends="setUp">
+    <mkdir dir="${input}"/>
+    <copy todir="${input}" file="../resources/asf-logo.gif"/>
+    <touch datetime="2009-08-19-05:49:21 +0200"
+           pattern="yyyy-MM-dd-HH:mm:ss Z"
+           file="${input}/asf-logo.gif"/>
+    <cmp:sevenz destfile="${dest}">
+      <fileset dir="${input}" includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <checkProperties dateTime="2009-08-19-05:49:21 +0200"/>
+  </target>
+
+  <target name="testCoreZipFileSet" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <zipfileset src="../resources/asf-logo.gif.zip"
+                  includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <checkProperties dateTime="2001-11-19-15:34:20"
+                     pattern="yyyy-MM-dd-HH:mm:ss"
+                     />
+  </target>
+
+  <target name="testAntlibZipFileSet" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"
+                      includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <checkProperties dateTime="2001-11-19-15:34:20"
+                     pattern="yyyy-MM-dd-HH:mm:ss"
+                     />
+  </target>
+
+  <target name="testSevenzFileSet" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <cmp:sevenzfileset src="../resources/asf-logo.gif.7z"
+                         includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <checkProperties dateTime="2013-09-27-20:54:32 +0200"/>
+  </target>
+
+  <target name="testNoDirectoriesByDefault" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <fileset dir="${input}"/>
+      <dirset dir="${input}"/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="subdir/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testWithDirectories" depends="setUp">
+    <cmp:sevenz destfile="${dest}" filesonly="false">
+      <dirset dir="${input}" excludes="."/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+  </target>
+
+  <target name="testWithImplicitDirectories" depends="setUp">
+    <cmp:sevenz destfile="${dest}" filesonly="false">
+      <fileset dir="${input}"/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="subdir/">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <assertResourceExists>
+      <cmp:sevenzentry name="subdir/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+  </target>
+
+  <target name="testFullpath" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithSlash" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x/"
+                     includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithBackslash" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x\"
+                     includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPrefixWithoutSlash" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     prefix="x"
+                     includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="x/asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="asf-logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testRemoveLeadingSlashes" depends="setUp">
+    <cmp:sevenz destfile="${dest}">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="/logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="/logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testPreserveLeadingSlashes" depends="setUp">
+    <cmp:sevenz destfile="${dest}" preserveleadingslashes="true">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"
+                     fullpath="/logo.gif"
+                     includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <assertResourceExists>
+      <cmp:sevenzentry name="/logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="logo.gif">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testAddDuplicates" depends="setUp">
+    <cmp:sevenz destfile="${dest}" duplicate="add">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+    </cmp:sevenz>
+    <au:assertLogContains text="duplicate entry asf-logo.gif found, adding."
+                          level="verbose"/>
+  </target>
+
+  <target name="testPreserveDuplicates" depends="setUp">
+    <cmp:sevenz destfile="${dest}" duplicate="preserve">
+      <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+      <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+    </cmp:sevenz>
+    <au:assertLogContains text="asf-logo.gif already added, skipping."
+                          level="verbose"/>
+  </target>
+
+  <target name="testFailDuplicates" depends="setUp">
+    <au:expectfailure
+       message="Duplicate entry asf-logo.gif was found and the duplicate attribute is 'fail'.">
+      <cmp:sevenz destfile="${dest}">
+        <cmp:arfileset src="../resources/asf-logo.gif.ar"/>
+        <cmp:zipfileset src="../resources/asf-logo.gif.zip"/>
+      </cmp:sevenz>
+    </au:expectfailure>
+  </target>
+
+  <target name="testFailEmpty" depends="setUp">
+    <au:expectfailure
+       message="No sources, nothing to do.">
+      <cmp:sevenz destfile="${dest}">
+        <fileset dir="." includes="not-there"/>
+      </cmp:sevenz>
+    </au:expectfailure>
+  </target>
+
+  <target name="testSkipEmpty" depends="setUp">
+    <cmp:sevenz destfile="${dest}" whenEmpty="skip">
+      <fileset dir="." includes="not-there"/>
+    </cmp:sevenz>
+    <au:assertLogContains text="No sources, nothing to do."
+                          level="warn"/>
+    <au:assertFileDoesntExist file="${dest}"/>
+  </target>
+
+  <target name="-prepareArchiveForModeTests" depends="setUp">
+    <mkdir dir="${input}"/>
+    <copy todir="${input}">
+      <fileset dir="." includes="*r-test.xml,zip-test.xml"/>
+    </copy>
+    <cmp:sevenz dest="${dest}">
+      <fileset dir="${input}"/>
+    </cmp:sevenz>
+    <copy tofile="${dest}.bak" file="${dest}"/>
+    <property name="timestamp" value="2000-01-01-00:00:00 +0000"/>
+    <touch datetime="${timestamp}" file="${input}/zip-test.xml"
+           pattern="yyyy-MM-dd-HH:mm:ss Z"/>
+    <sleep seconds="2"/>
+    <touch file="${dest}.bak"/>
+    <sleep seconds="2"/>
+  </target>
+
+  <target name="testCreateOfUpToDate" depends="-prepareArchiveForModeTests">
+    <cmp:sevenz dest="${dest}" mode="create">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:sevenz>
+    <au:assertLogContains
+       text="test.7z is up-to-date, nothing to do."/>
+    <au:assertDestIsUptodate
+       src="${dest}" dest="${dest}.bak"/>
+  </target>
+
+  <target name="testForceCreateOfUpToDate"
+          depends="-prepareArchiveForModeTests">
+    <cmp:sevenz dest="${dest}" mode="force-create">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:sevenz>
+    <au:assertLogDoesntContain
+       text="test.7z is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testCreateOfOutOfDate" depends="-prepareArchiveForModeTests">
+    <touch file="${input}/ar-test.xml"/>
+    <cmp:sevenz dest="${dest}" mode="create">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:sevenz>
+    <au:assertLogDoesntContain
+       text="test.7z is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+    <assertResourceDoesntExist>
+      <cmp:sevenzentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceDoesntExist>
+  </target>
+
+  <target name="testReplaceOfUpToDate" depends="-prepareArchiveForModeTests">
+    <cmp:sevenz dest="${dest}" mode="replace">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:sevenz>
+    <au:assertLogContains
+       text="test.7z is up-to-date, nothing to do."/>
+    <au:assertDestIsUptodate
+       src="${dest}" dest="${dest}.bak"/>
+  </target>
+
+  <target name="testForceReplaceOfUpToDate"
+          depends="-prepareArchiveForModeTests">
+    <cmp:sevenz dest="${dest}" mode="force-replace">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:sevenz>
+    <au:assertLogDoesntContain
+       text="test.7z is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+    <assertResourceExists>
+      <cmp:sevenzentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <au:assertTrue>
+      <cond:islastmodified datetime="${timestamp}"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:sevenzentry name="zip-test.xml">
+          <file file="${dest}"/>
+        </cmp:sevenzentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+
+  <target name="testReplaceOfOutOfDate" depends="-prepareArchiveForModeTests">
+    <touch file="${input}/ar-test.xml"/>
+    <cmp:sevenz dest="${dest}" mode="replace">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:sevenz>
+    <au:assertLogDoesntContain
+       text="test.7z is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+    <assertResourceExists>
+      <cmp:sevenzentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <au:assertTrue>
+      <cond:islastmodified datetime="${timestamp}"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:sevenzentry name="zip-test.xml">
+          <file file="${dest}"/>
+        </cmp:sevenzentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+
+  <target name="testUpdateOfUpToDate" depends="-prepareArchiveForModeTests">
+    <cmp:sevenz dest="${dest}" mode="update">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:sevenz>
+    <au:assertLogContains
+       text="test.7z is up-to-date, nothing to do."/>
+    <au:assertDestIsUptodate
+       src="${dest}" dest="${dest}.bak"/>
+  </target>
+
+  <target name="testUpdateOfOutOfDate" depends="-prepareArchiveForModeTests">
+    <touch file="${input}/ar-test.xml"/>
+    <cmp:sevenz dest="${dest}" mode="update">
+      <fileset dir="${input}" includes="ar-test.xml,zip-test.xml"/>
+    </cmp:sevenz>
+    <au:assertLogDoesntContain
+       text="test.7z is up-to-date, nothing to do."/>
+    <au:assertDestIsOutofdate
+       src="${dest}" dest="${dest}.bak"/>
+    <assertResourceExists>
+      <cmp:sevenzentry name="tar-test.xml">
+        <file file="${dest}"/>
+      </cmp:sevenzentry>
+    </assertResourceExists>
+    <au:assertFalse>
+      <cond:islastmodified datetime="${timestamp}"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:sevenzentry name="zip-test.xml">
+          <file file="${dest}"/>
+        </cmp:sevenzentry>
+      </cond:islastmodified>
+    </au:assertFalse>
+  </target>
+
+</project>

@@ -26,11 +26,10 @@
     <mkdir dir="${input}"/>
   </target>
 
-  <!--
   <target name="testAgainstAntlib7zTask" depends="setUp">
-    <cmp:7z destfile="${input}/test.7z">
+    <cmp:sevenz destfile="${input}/test.7z">
       <fileset dir="." includes="un7z-test.xml"/>
-    </cmp:7z>
+    </cmp:sevenz>
     <cmp:un7z src="${input}/test.7z" dest="${output}"/>
     <au:assertFileExists file="${output}/un7z-test.xml"/>
     <au:assertFilesMatch
@@ -38,7 +37,6 @@
        expected="un7z-test.xml"
        />
   </target>
-  -->
 
   <target name="testAgainstNative7z" depends="setUp">
     <cmp:un7z src="../resources/asf-logo.gif.7z" dest="${output}" />

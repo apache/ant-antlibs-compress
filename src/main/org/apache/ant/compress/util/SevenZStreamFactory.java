@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 
 /**
@@ -70,7 +71,7 @@ public class SevenZStreamFactory implements FileAwareArchiveStreamFactory {
     public ArchiveOutputStream getArchiveOutputStream(File file,
                                                       String encoding)
         throws IOException {
-        throw new UnsupportedOperationException();
+        return new SevenZArchiveOutputStream(file);
     }
 
     /**
@@ -96,6 +97,45 @@ public class SevenZStreamFactory implements FileAwareArchiveStreamFactory {
         public void close() throws IOException {
             zipFile.close();
         }
+    }
+
+    /**
+     * Not really a stream but provides an ArchiveOutputStream
+     * compatible interface over SevenZOutputFile.
+     */
+    private static class SevenZArchiveOutputStream extends ArchiveOutputStream {
+
+        private final SevenZOutputFile zipFile;
+
+        public SevenZArchiveOutputStream(File file) throws IOException {
+            zipFile = new SevenZOutputFile(file);
+        }
+
+        public void close() {
+            zipFile.close();
+        }
+
+        public void putArchiveEntry(ArchiveEntry entry) throws IOException {
+            zipFile.putArchiveEntry(entry);
+        }
+
+        public void closeArchiveEntry() throws IOException {
+            zipFile.closeArchiveEntry();
+        }
+
+        public void finish() throws IOException {
+            zipFile.finish();
+        }
+
+        public ArchiveEntry createArchiveEntry(File inputFile, String entryName) 
+            throws IOException {
+            return zipFile.createArchiveEntry(inputFile, entryName);
+        }
+
+        public void write(byte[] b,int  off, int len) throws IOException {
+            zipFile.write(b, off, len);
+        }
+                
     }
 
 }

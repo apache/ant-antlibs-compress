@@ -162,6 +162,7 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
                 }
                 ze = z.getNextEntry();
             }
+            setEntry(null);
         } catch (IOException e) {
             log(e.getMessage(), Project.MSG_DEBUG);
             throw new BuildException(e);

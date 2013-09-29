@@ -57,7 +57,9 @@
         added.
       </action>
       <action type="add">
-        Read-only support for file based 7z archives has been added.
+        Support for file based 7z archives has been added - most
+        compression algorithms used in 7z archives can be read but
+        only uncompressed archives can be written.
       </action>
     </release>
 
