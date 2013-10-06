@@ -38,21 +38,36 @@
        />
   </target>
 
-  <!-- reading of either seems to be wrong right now, or my archive is
-       broken-->
-  <target name="NotestResourceProperties">
+  <!-- asf-logo.gif.arj has been created on DOS, asf-logo.gif.unix.arj
+       on Linux -->
+  <target name="testResourceProperties">
     <au:assertTrue>
-      <cond:islastmodified datetime="2001-11-19-15:34:20 +0100"
-                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+      <cond:islastmodified datetime="2001-11-19-15:34:20"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
         <cmp:arjentry name="asf-logo.gif">
           <file file="../resources/asf-logo.gif.arj"/>
         </cmp:arjentry>
       </cond:islastmodified>
     </au:assertTrue>
     <au:assertTrue>
-      <cmp:hasmode mode="644">
+      <cmp:hasmode mode="0">
         <cmp:arjentry name="asf-logo.gif">
           <file file="../resources/asf-logo.gif.arj"/>
+        </cmp:arjentry>
+      </cmp:hasmode>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cond:islastmodified datetime="2001-11-19-15:34:20"
+                           pattern="yyyy-MM-dd-HH:mm:ss">
+        <cmp:arjentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.unix.arj"/>
+        </cmp:arjentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+    <au:assertTrue>
+      <cmp:hasmode mode="644">
+        <cmp:arjentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.unix.arj"/>
         </cmp:arjentry>
       </cmp:hasmode>
     </au:assertTrue>
