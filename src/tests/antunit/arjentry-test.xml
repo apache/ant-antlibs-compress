@@ -57,8 +57,8 @@
       </cmp:hasmode>
     </au:assertTrue>
     <au:assertTrue>
-      <cond:islastmodified datetime="2001-11-19-15:34:20"
-                           pattern="yyyy-MM-dd-HH:mm:ss">
+      <cond:islastmodified datetime="2001-11-19-15:34:20 Z"
+                           pattern="yyyy-MM-dd-HH:mm:ss +0100">
         <cmp:arjentry name="asf-logo.gif">
           <file file="../resources/asf-logo.gif.unix.arj"/>
         </cmp:arjentry>
