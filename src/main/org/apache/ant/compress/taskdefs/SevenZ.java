@@ -18,12 +18,18 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.IOException;
+import java.io.File;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.ant.compress.resources.SevenZFileSet;
 import org.apache.ant.compress.util.SevenZStreamFactory;
+import org.apache.ant.compress.util.SevenZStreamFactory.SevenZArchiveOutputStream;
 import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
+import org.apache.commons.compress.archivers.sevenz.SevenZMethod;
 import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.Resource;
 
@@ -32,8 +38,25 @@ import org.apache.tools.ant.types.Resource;
  */
 public class SevenZ extends ArchiveBase {
 
+    private String contentCompression;
+
     public SevenZ() {
-        setFactory(new SevenZStreamFactory());
+        setFactory(new SevenZStreamFactory() {
+                public ArchiveOutputStream getArchiveOutputStream(File f,
+                                                                  String encoding)
+                    throws IOException {
+                    SevenZArchiveOutputStream o = (SevenZArchiveOutputStream)
+                        super.getArchiveOutputStream(f, encoding);
+                    if (contentCompression != null) {
+                        SevenZMethod m = (SevenZMethod)
+                            Enum.valueOf(SevenZMethod.class,
+                                         contentCompression.toUpperCase(Locale
+                                                                        .US));
+                        o.setContentCompression(m);
+                    }
+                    return o;
+                }
+            });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
@@ -55,4 +78,14 @@ public class SevenZ extends ArchiveBase {
             });
     }
 
+    /**
+     * Sets the compression method to use for entry contents - the
+     * default is LZMA2.
+     *
+     * <p>As of Commons Compress 1.6 only COPY (which means no
+     * compression), LZMA2, BZIP2 and DEFLATE are supported.</p>
+     */
+    public void setContentCompression(String method) {
+        this.contentCompression = method;
+    }
 }

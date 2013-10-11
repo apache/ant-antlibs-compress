@@ -279,7 +279,25 @@
 
   <p>An <a href="#archive">archiving task</a> creating archives of the
     7z format.  As of Commons Compress 1.6 this task only supports
-    writing uncompressed archives.</p>
+    writing unencrypted archives.</p>
+
+  <h3>Parameters</h3>
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">contentCompression</td>
+      <td valign="top">compression algorithm to use for entry
+        contents.</td>
+      <td valign="top">As of Commons Compress 1.6 this can be "LZMA2",
+        "BZIP2", "DEFLATE" or "COPY" where "COPY" means no compression
+        at all.</td>
+      <td valign="top" align="center">No, default is LZMA2.</td>
+    </tr>
+  </table>
 
   <h3><a name="tar">Tar</a></h3>
 

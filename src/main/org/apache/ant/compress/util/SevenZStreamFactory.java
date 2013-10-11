@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.sevenz.SevenZMethod;
 import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 
@@ -103,7 +104,7 @@ public class SevenZStreamFactory implements FileAwareArchiveStreamFactory {
      * Not really a stream but provides an ArchiveOutputStream
      * compatible interface over SevenZOutputFile.
      */
-    private static class SevenZArchiveOutputStream extends ArchiveOutputStream {
+    public static class SevenZArchiveOutputStream extends ArchiveOutputStream {
 
         private final SevenZOutputFile zipFile;
 
@@ -136,6 +137,10 @@ public class SevenZStreamFactory implements FileAwareArchiveStreamFactory {
             zipFile.write(b, off, len);
         }
                 
+        public void setContentCompression(SevenZMethod method) {
+            zipFile.setContentCompression(method);
+        }
+
     }
 
 }

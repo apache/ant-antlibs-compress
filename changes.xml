@@ -42,9 +42,9 @@
         The Apache Compress Antlib now requires Apache Commons
         Compress 1.6 if you want to work with arj or 7z archives.
 
-        In addition XZ for Java 1.4 is required if you want to read 7z
-        archives using LZMA (not LZMA2) compression or stand-alone
-        LZMA files.
+        In addition XZ for Java 1.4 is required if you want to
+        read/write 7z archives using LZMA(2) compression or
+        stand-alone LZMA files.
       </action>
       <action type="add">
         Encoding support for dump and cpio archives and filesets.
@@ -57,9 +57,7 @@
         added.
       </action>
       <action type="add">
-        Support for file based 7z archives has been added - most
-        compression algorithms used in 7z archives can be read but
-        only uncompressed archives can be written.
+        Support for file based 7z archives has been added.
       </action>
     </release>
 

@@ -38,6 +38,54 @@
        />
   </target>
 
+  <target name="testAgainstAntlib7zTaskLZMA2" depends="setUp">
+    <cmp:sevenz destfile="${input}/test.7z" contentCompression="lzma2">
+      <fileset dir="." includes="un7z-test.xml"/>
+    </cmp:sevenz>
+    <cmp:un7z src="${input}/test.7z" dest="${output}"/>
+    <au:assertFileExists file="${output}/un7z-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/un7z-test.xml"
+       expected="un7z-test.xml"
+       />
+  </target>
+
+  <target name="testAgainstAntlib7zTaskBZIP2" depends="setUp">
+    <cmp:sevenz destfile="${input}/test.7z" contentCompression="bzip2">
+      <fileset dir="." includes="un7z-test.xml"/>
+    </cmp:sevenz>
+    <cmp:un7z src="${input}/test.7z" dest="${output}"/>
+    <au:assertFileExists file="${output}/un7z-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/un7z-test.xml"
+       expected="un7z-test.xml"
+       />
+  </target>
+
+  <target name="testAgainstAntlib7zTaskDeflate" depends="setUp">
+    <cmp:sevenz destfile="${input}/test.7z" contentCompression="deflate">
+      <fileset dir="." includes="un7z-test.xml"/>
+    </cmp:sevenz>
+    <cmp:un7z src="${input}/test.7z" dest="${output}"/>
+    <au:assertFileExists file="${output}/un7z-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/un7z-test.xml"
+       expected="un7z-test.xml"
+       />
+  </target>
+
+  <target name="testAgainstAntlib7zTaskCopy" depends="setUp">
+    <cmp:sevenz destfile="${input}/test.7z" contentCompression="copy">
+      <fileset dir="." includes="un7z-test.xml"/>
+    </cmp:sevenz>
+    <cmp:un7z src="${input}/test.7z" dest="${output}"/>
+    <au:assertFileExists file="${output}/un7z-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/un7z-test.xml"
+       expected="un7z-test.xml"
+       />
+  </target>
+
   <target name="testAgainstNative7z" depends="setUp">
     <cmp:un7z src="../resources/asf-logo.gif.7z" dest="${output}" />
     <au:assertFileExists file="${output}/asf-logo.gif"/>
