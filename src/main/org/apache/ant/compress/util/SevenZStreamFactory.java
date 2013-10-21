@@ -112,7 +112,7 @@ public class SevenZStreamFactory implements FileAwareArchiveStreamFactory {
             zipFile = new SevenZOutputFile(file);
         }
 
-        public void close() {
+        public void close() throws IOException {
             zipFile.close();
         }
 
