@@ -95,7 +95,11 @@ public class Un7z extends ExpandBase {
                 ioe);
         } finally {
             if (outer != null) {
-                outer.close();
+                try {
+                    outer.close();
+                } catch (IOException ex) {
+                    // swallow
+                }
             }
         }
     }
