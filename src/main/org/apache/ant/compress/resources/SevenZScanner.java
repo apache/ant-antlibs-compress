@@ -121,7 +121,11 @@ public class SevenZScanner extends CommonsCompressArchiveScanner {
             }
         } finally {
             if (zf != null) {
-                zf.close();
+                try {
+                    zf.close();
+                } catch (IOException ex) {
+                    // swallow
+                }
             }
         }
     }
