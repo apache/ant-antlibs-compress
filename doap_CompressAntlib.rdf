@@ -56,6 +56,13 @@
         <revision>1.2</revision>
       </Version>
     </release>
+    <release>
+      <Version>
+        <name>Apache Compress Ant Library 1.3</name>
+        <created>2013-11-07</created>
+        <revision>1.3</revision>
+      </Version>
+    </release>
     <repository>
       <SVNRepository>
         <location rdf:resource="http://svn.apache.org/repos/asf/ant/antlibs/compress"/>
