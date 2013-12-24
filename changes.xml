@@ -38,6 +38,10 @@
     </properties>
 
     <release version="1.4" date="unreleased">
+      <action type="add">
+        Read-only support for tradional Unix Compress (.Z) has been
+        added.
+      </action>
     </release>
 
     <release version="1.3" date="2013-11-07">

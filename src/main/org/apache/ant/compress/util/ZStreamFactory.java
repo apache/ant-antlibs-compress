@@ -24,20 +24,20 @@ import java.io.OutputStream;
 
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorOutputStream;
-import org.apache.commons.compress.compressors.lzma.LZMACompressorInputStream;
+import org.apache.commons.compress.compressors.z.ZCompressorInputStream;
 
 /**
- * Creates streams for the standalone LZMA format.
- * @since Apache Compress Antlib 1.3
+ * Creates streams for the traditional Unix compress format.
+ * @since Apache Compress Antlib 1.4
  */
-public class LZMAStreamFactory implements CompressorStreamFactory {
+public class ZStreamFactory implements CompressorStreamFactory {
 
     /**
      * @param stream the stream to read from, should be buffered
      */
     public CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException {
-        return new LZMACompressorInputStream(stream);
+        return new ZCompressorInputStream(stream);
     }
 
     /**

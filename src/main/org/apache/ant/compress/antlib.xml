@@ -81,6 +81,10 @@
      classname="org.apache.ant.compress.taskdefs.UnXZ"
      />
   <taskdef
+     name="unz"
+     classname="org.apache.ant.compress.taskdefs.UnZ"
+     />
+  <taskdef
      name="bzip2"
      classname="org.apache.ant.compress.taskdefs.BZip2"
      />
@@ -185,6 +189,10 @@
   <typedef
      name="xzresource"
      classname="org.apache.ant.compress.resources.XZResource"
+     />
+  <typedef
+     name="zresource"
+     classname="org.apache.ant.compress.resources.ZResource"
      />
 
   <componentdef
