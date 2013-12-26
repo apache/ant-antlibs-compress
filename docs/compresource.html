@@ -106,7 +106,7 @@
 </pre>
 
 <p>Represents the entry named some-file.txt in archive
-  some-archive.tar.gz where the <code>lzmaresource</code> provides
+  some-archive.tar.lzma where the <code>lzmaresource</code> provides
   the decompression of the archive.</p>
 
 <h2><a name="pack200resource">pack200resource</a></h2>
@@ -129,6 +129,29 @@
 <p>Represents the entry named Somefile.class in the Pack200 compressed
   JAR some-archive.pack where the <code>pack200resource</code>
   provides the decompression of the archive.</p>
+
+<h2><a name="snappyresource">snappyresource</a></h2>
+
+<p><em>Since Apache Compress Antlib 1.4</em>.</p>
+
+<p>This is a <a href="#compresource">compressed resource</a> using the
+  <a href="http://code.google.com/p/snappy/">Snappy</a>
+  compression.</p>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:tarentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="some-file.txt"&gt;
+  &lt;cmp:snappyresource&gt;
+    &lt;file file="some-archive.tar.sz"/&gt;
+  &lt;/cmp:snappyresource&gt;
+&lt;/cmp:tarentry&gt;
+</pre>
+
+<p>Represents the entry named some-file.txt in archive
+  some-archive.tar.sz where the <code>snappyresource</code> provides
+  the decompression of the archive.</p>
 
 <h2><a name="xzresource">xzresource</a></h2>
 
@@ -173,5 +196,5 @@
 </pre>
 
 <p>Represents the entry named some-file.txt in archive
-  some-archive.tar.gz where the <code>zresource</code> provides
+  some-archive.tar.Z where the <code>zresource</code> provides
   the decompression of the archive.</p>

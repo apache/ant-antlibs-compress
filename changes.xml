@@ -39,8 +39,11 @@
 
     <release version="1.4" date="unreleased">
       <action type="add">
-        Read-only support for tradional Unix Compress (.Z) has been
+        Read-only support for traditional Unix Compress (.Z) has been
         added.
+      </action>
+      <action type="add">
+        Read-only support for Snappy compression has been added.
       </action>
     </release>
 

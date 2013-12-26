@@ -77,6 +77,10 @@
      classname="org.apache.ant.compress.taskdefs.UnPack200"
      />
   <taskdef
+     name="unsnappy"
+     classname="org.apache.ant.compress.taskdefs.UnSnappy"
+     />
+  <taskdef
      name="unxz"
      classname="org.apache.ant.compress.taskdefs.UnXZ"
      />
@@ -185,6 +189,10 @@
   <typedef
      name="pack200resource"
      classname="org.apache.ant.compress.resources.Pack200Resource"
+     />
+  <typedef
+     name="snappyresource"
+     classname="org.apache.ant.compress.resources.SnappyResource"
      />
   <typedef
      name="xzresource"
