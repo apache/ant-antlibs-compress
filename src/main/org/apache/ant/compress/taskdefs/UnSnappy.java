@@ -26,8 +26,20 @@ import org.apache.ant.compress.util.SnappyStreamFactory;
  */
 public final class UnSnappy extends UnpackBase {
 
+    private final SnappyStreamFactory factory;
+
     public UnSnappy() {
-        super(".sz", new SnappyStreamFactory());
+        super(".sz");
+        setFactory(factory = new SnappyStreamFactory());
+    }
+
+    /**
+     * Whether to use the "framing format".
+     *
+     * <p>Defaults to true.</p>
+     */
+    public void setFramed(boolean framed) {
+        factory.setFramed(framed);
     }
 
 }

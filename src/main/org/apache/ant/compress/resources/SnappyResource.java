@@ -27,11 +27,24 @@ import org.apache.tools.ant.types.ResourceCollection;
 public final class SnappyResource extends CommonsCompressCompressorResource {
     private static final String NAME = "Snappy";
 
+    private final SnappyStreamFactory factory;
+
     public SnappyResource() {
-        super(NAME, new SnappyStreamFactory());
+        super(NAME);
+        setFactory(factory = new SnappyStreamFactory());
     }
 
     public SnappyResource(ResourceCollection other) {
-        super(NAME, new SnappyStreamFactory(), other);
+        super(NAME, other);
+        setFactory(factory = new SnappyStreamFactory());
+    }
+
+    /**
+     * Whether to use the "framing format".
+     *
+     * <p>Defaults to true.</p>
+     */
+    public void setFramed(boolean framed) {
+        factory.setFramed(framed);
     }
 }

@@ -39,14 +39,27 @@ public abstract class CommonsCompressCompressorResource
     extends ContentTransformingResource {
 
     private final String name;
-    private final CompressorStreamFactory factory;
+    private CompressorStreamFactory factory;
     private boolean decompressConcatenated = false;
 
-    /** A no-arg constructor */
+    protected CommonsCompressCompressorResource(String name) {
+        this.name = name;
+    }
+
     protected CommonsCompressCompressorResource(String name,
                                                 CompressorStreamFactory factory) {
+        this(name);
+        setFactory(factory);
+    }
+
+    /**
+     * Constructor with another resource to wrap.
+     * @param other the resource to wrap.
+     */
+    protected CommonsCompressCompressorResource(String name,
+                                                ResourceCollection other) {
+        super(other);
         this.name = name;
-        this.factory = factory;
     }
 
     /**
@@ -56,8 +69,14 @@ public abstract class CommonsCompressCompressorResource
     protected CommonsCompressCompressorResource(String name,
                                                 CompressorStreamFactory factory,
                                                 ResourceCollection other) {
-        super(other);
-        this.name = name;
+        this(name, other);
+        setFactory(factory);
+    }
+
+    /**
+     * @since Apache Compress Antlib 1.4
+     */
+    protected final void setFactory(CompressorStreamFactory factory) {
         this.factory = factory;
     }
 

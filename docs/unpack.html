@@ -105,7 +105,7 @@ resource collection</h4>
   compression algorithm.</p>
 
 <p>This task does not work on defalted archives, you need to wrap
-  defalted archives into <code>gunzipresource</code>s in order to use
+  deflated archives into <code>gunzipresource</code>s in order to use
   them.
 
   <h4>Parameters</h4>
@@ -160,6 +160,26 @@ resource collection</h4>
   the <a href="http://code.google.com/p/snappy/">Snappy</a>
   compression algorithm.</p>
 
+<p><em>Since Apache Compress Antlib 1.4</em>.</p>
+
+<h4>Parameters</h4>
+  <p>In addition to the attributes supported by all uncompressing task
+    this task also supports.</p>
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">framed</td>
+      <td valign="top">Whether the input is expected to use
+      the <a href="http://code.google.com/p/snappy/source/browse/trunk/framing_format.txt">framing
+     format</a>.</td>
+      <td align="center" valign="top">No, defaults to true.</td>
+    </tr>
+  </table>
+
 <h3><a name="unxz">UnXZ</a></h3>
 
 <p>Is an <a href="#unpack">uncompressing task</a> that uses the XZ
@@ -173,6 +193,8 @@ resource collection</h4>
 
 <p>Is an <a href="#unpack">uncompressing task</a> that uses the .Z
   compression algorithm.</p>
+
+<p><em>Since Apache Compress Antlib 1.4</em>.</p>
 
 <h3>Examples</h3>
 <blockquote><pre>

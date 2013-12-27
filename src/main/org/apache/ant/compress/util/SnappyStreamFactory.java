@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorOutputStream;
 import org.apache.commons.compress.compressors.snappy.FramedSnappyCompressorInputStream;
+import org.apache.commons.compress.compressors.snappy.SnappyCompressorInputStream;
 
 /**
  * Creates streams for the standalone Snappy format.
@@ -33,12 +34,24 @@ import org.apache.commons.compress.compressors.snappy.FramedSnappyCompressorInpu
  */
 public class SnappyStreamFactory implements CompressorStreamFactory {
 
+    private boolean framed = true;
+
+    /**
+     * Whether to use the "framing format".
+     *
+     * <p>Defaults to true.</p>
+     */
+    public void setFramed(boolean framed) {
+        this.framed = framed;
+    }
+
     /**
      * @param stream the stream to read from, should be buffered
      */
     public CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException {
-        return new FramedSnappyCompressorInputStream(stream);
+        return framed ? new FramedSnappyCompressorInputStream(stream)
+            : (CompressorInputStream) new SnappyCompressorInputStream(stream);
     }
 
     /**

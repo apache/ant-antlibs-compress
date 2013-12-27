@@ -38,4 +38,15 @@
                          actual="${output}/asf-logo.gif"/>
   </target>
 
+  <target name="testNativeSnappyUnframed" depends="setUp">
+    <copy todir="${output}">
+      <cmp:snappyresource framed="false">
+        <file file="../resources/asf-logo.gif.snappy"/>
+      </cmp:snappyresource>
+      <globmapper from="*.snappy" to="*"/>
+    </copy>
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
 </project>
