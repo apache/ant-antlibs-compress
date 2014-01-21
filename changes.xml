@@ -38,6 +38,11 @@
     </properties>
 
     <release version="1.4" date="unreleased">
+      <action type="update" breaks-bwc="true">
+        The Apache Compress Antlib now requires Apache Commons
+        Compress 1.7 if you want to work with Snappy or .Z compressed
+        resources.
+      </action>
       <action type="add">
         Read-only support for traditional Unix Compress (.Z) has been
         added.
