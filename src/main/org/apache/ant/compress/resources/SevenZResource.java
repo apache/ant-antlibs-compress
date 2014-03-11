@@ -40,6 +40,8 @@ import org.apache.commons.compress.archivers.sevenz.SevenZFile;
  */
 public final class SevenZResource extends CommonsCompressArchiveResource {
 
+    private Iterable/*<? extends SevenZMethodConfiguration>*/ contentMethods;
+
     /**
      * Default constructor.
      */
@@ -142,6 +144,15 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
     }
 
     /**
+     * Gets the (compression) methods to used for entry's content.
+     *
+     * @since 1.5
+     */
+    public Iterable/*<? extends SevenZMethodConfiguration>*/ getContentMethods() {
+        return contentMethods;
+    }
+
+    /**
      * fetches information from the named entry inside the archive.
      */
     protected void fetchEntry() {
@@ -174,6 +185,14 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
                     // swallow
                 }
             }
+        }
+    }
+
+    protected void setEntry(ArchiveEntry e) {
+        super.setEntry(e);
+        if (e != null) {
+            SevenZArchiveEntry ze = (SevenZArchiveEntry) e;
+            contentMethods = ze.getContentMethods();
         }
     }
 

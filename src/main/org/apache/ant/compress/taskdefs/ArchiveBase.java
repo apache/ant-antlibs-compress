@@ -913,6 +913,8 @@ public abstract class ArchiveBase extends Task {
      * Various flags a (archive) resource may hold in addition to
      * being a plain resource.
      */
+    // FIXME this isn't really scaling if it wants to be a catch all
+    // for all relevant flags of all formats.
     public class ResourceFlags {
         private final int mode;
         private final boolean modeSet;
@@ -922,6 +924,7 @@ public abstract class ArchiveBase extends Task {
         private final String userName;
         private final String groupName;
         private final int compressionMethod;
+        private Iterable/*<? extends SevenZMethodConfiguration>*/ contentMethods;
 
         public ResourceFlags() {
             this(-1);
@@ -935,22 +938,28 @@ public abstract class ArchiveBase extends Task {
                              int compressionMethod) {
             this(mode, extraFields, EntryHelper.UNKNOWN_ID,
                  EntryHelper.UNKNOWN_ID, null, null,
-                 compressionMethod);
+                 compressionMethod, null);
         }
 
         public ResourceFlags(int mode, int uid, int gid) {
-            this(mode, new ZipExtraField[0], uid, gid, null, null, -1);
+            this(mode, new ZipExtraField[0], uid, gid, null, null, -1, null);
         }
 
         public ResourceFlags(int mode, int uid, int gid, String userName,
                              String groupName) {
-            this(mode, new ZipExtraField[0], uid, gid, userName, groupName, -1);
+            this(mode, new ZipExtraField[0], uid, gid, userName, groupName, -1, null);
+        }
+
+        public ResourceFlags(Iterable/*<? extends SevenZMethodConfiguration>*/ contentMethods) {
+            this(-1, new ZipExtraField[0], EntryHelper.UNKNOWN_ID,
+                 EntryHelper.UNKNOWN_ID, null, null, -1, contentMethods);
         }
 
         private ResourceFlags(int mode, ZipExtraField[] extraFields,
                               int uid, int gid,
                               String userName, String groupName,
-                              int compressionMethod) {
+                              int compressionMethod,
+                              Iterable/*<? extends SevenZMethodConfiguration>*/ contentMethods) {
             this.mode = mode;
             this.extraFields = extraFields;
             this.gid = gid;
@@ -960,6 +969,7 @@ public abstract class ArchiveBase extends Task {
             int m = mode & UnixStat.PERM_MASK;
             modeSet = mode >= 0 && (m > 0 || (m == 0 && preserve0permissions));
             this.compressionMethod = compressionMethod;
+            this.contentMethods = contentMethods;
         }
 
         public boolean hasModeBeenSet() { return modeSet; }
@@ -985,6 +995,11 @@ public abstract class ArchiveBase extends Task {
 
         public boolean hasCompressionMethod() { return compressionMethod >= 0; }
         public int getCompressionMethod() { return compressionMethod; }
+
+        public boolean hasContentMethods() { return contentMethods != null; }
+        public Iterable/*<? extends SevenZMethodConfiguration>*/ getContentMethods() {
+            return contentMethods;
+        }
     }
 
     /**

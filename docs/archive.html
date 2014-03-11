@@ -297,6 +297,15 @@
         at all.</td>
       <td valign="top" align="center">No, default is LZMA2.</td>
     </tr>
+    <tr>
+      <td valign="top">keepcompression</td>
+      <td valign="top">For entries coming from existing archives (like
+        nested <em>sevenzfileset</em>s or while updating the archive), keep
+        the compression as it has been originally instead of using the
+        <em>contentCompression</em> attribute.  Defaults to false.
+        <em>since 1.5</em></td>
+      <td align="center" valign="top">No</td>
+    </tr>
   </table>
 
   <h3><a name="tar">Tar</a></h3>
@@ -516,7 +525,7 @@ the executable files and include all others. </p>
       <td valign="top">For entries coming from existing archives (like
         nested <em>zipfileset</em>s or while updating the archive), keep
         the compression as it has been originally instead of using the
-        <em>level</em> attribute.  Defaults false.</td>
+        <em>level</em> attribute.  Defaults to false.</td>
       <td align="center" valign="top">No</td>
     </tr>
     <tr>

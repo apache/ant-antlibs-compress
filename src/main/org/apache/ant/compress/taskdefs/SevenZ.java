@@ -38,6 +38,7 @@ import org.apache.tools.ant.types.Resource;
  */
 public class SevenZ extends ArchiveBase {
 
+    private boolean keepCompression = false;
     private String contentCompression;
 
     public SevenZ() {
@@ -66,6 +67,11 @@ public class SevenZ extends ArchiveBase {
                     entry.setLastModifiedDate(new Date(r.getResource()
                                                        .getLastModified()));
                     entry.setSize(r.getResource().getSize());
+                    if (keepCompression
+                        && r.getResourceFlags().hasContentMethods()) {
+                        entry.setContentMethods(r.getResourceFlags()
+                                                .getContentMethods());
+                    }
                     return entry;
                 }
             });
@@ -87,5 +93,16 @@ public class SevenZ extends ArchiveBase {
      */
     public void setContentCompression(String method) {
         this.contentCompression = method;
+    }
+
+    /**
+     * Whether the original compression of entries coming from a 7z
+     * archive should be kept (for example when updating an archive).
+     * Default is false.
+     * @param keep if true, keep the original compression
+     * @since 1.5
+     */
+    public void setKeepCompression(boolean keep) {
+        keepCompression = keep;
     }
 }
