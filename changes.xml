@@ -38,6 +38,19 @@
     </properties>
 
     <release version="1.5" date="unreleased">
+      <action type="update" breaks-bwc="true">
+        The Apache Compress Antlib now requires Apache Commons
+        Compress 1.8 or later for 7z, XZ for Java 1.5 is recommeded.
+      </action>
+      <action type="add">
+        A new keepCompression flag can be used to keep the content
+        compression methods the same they have been when updating a 7z
+        archive or adding entries from a sevenzfileset.
+      </action>
+      <action type="add">
+        Multiple content compression/encryption/filter methods can now
+        be specified via nested elements of the sevenz task.
+      </action>
     </release>
 
     <release version="1.4" date="2014-01-29">

@@ -278,7 +278,7 @@
   <p><em>Since Compress Antlib 1.3</em></p>
 
   <p>An <a href="#archive">archiving task</a> creating archives of the
-    7z format.  As of Commons Compress 1.6 this task only supports
+    7z format.  As of Commons Compress 1.8 this task only supports
     writing unencrypted archives.</p>
 
   <h3>Parameters</h3>
@@ -291,8 +291,8 @@
     <tr>
       <td valign="top">contentCompression</td>
       <td valign="top">compression algorithm to use for entry
-        contents.</td>
-      <td valign="top">As of Commons Compress 1.6 this can be "LZMA2",
+        contents.<br></br>
+        As of Commons Compress 1.8 this can be "LZMA2",
         "BZIP2", "DEFLATE" or "COPY" where "COPY" means no compression
         at all.</td>
       <td valign="top" align="center">No, default is LZMA2.</td>
@@ -304,6 +304,52 @@
         the compression as it has been originally instead of using the
         <em>contentCompression</em> attribute.  Defaults to false.
         <em>since 1.5</em></td>
+      <td align="center" valign="top">No</td>
+    </tr>
+  </table>
+
+  <h3>Parameters specified as nested elements</h3>
+
+  <h4>contentMethod</h4>
+
+  <p>Specifies and configures a content method to use when creating an
+  archive.  Multiple methods build a pipeline where the first method
+  is used to process the original input and its output is sent ot the
+  next method until the final output is written to the archive.</p>
+
+  <p>As of Commons Compress 1.8 in addition to the compression methods
+    "LZMA2", "BZIP2", "DEFLATE" or "COPY" filters can be used.  Names
+    of filter methods end with "_FILTER" and must not be used as final
+    method - this is neither enforced by this antlib or Commons
+    Compress but 7z may fail to extract the archive.  As of Commons
+    Compress 1.8 the supported filters are "BCJ_X86_FILTER",
+    "BCJ_PPC_FILTER", "BCJ_IA64_FILTER", "BCJ_ARM_FILTER",
+    "BCJ_ARM_THUMB_FILTER", "BCJ_SPARC_FILTER" and "DELTA_FILTER".
+    The "BCJ" filters may improve compression ratio for executables
+    for a given platform.</p>
+
+  <p>Some methods support additional options, "DELTA_FILTER" even
+    requires one.  The interpretation or even the type of an option
+    depends on the method -
+    see <a href="http://commons.apache.org/proper/commons-compress/javadocs/api-1.8/org/apache/commons/compress/archivers/sevenz/SevenZMethodConfiguration.html">Commons
+    Compress' documentation</a>.  As of version 1.5 only numeric
+    options are supported.</p>
+
+  <strong>Parameters of contentMethod</strong>
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">method</td>
+      <td valign="top">method to use.</td>
+      <td valign="top" align="center">Yes.</td>
+    </tr>
+    <tr>
+      <td valign="top">option</td>
+      <td valign="top">Numeric option for this method.</td>
       <td align="center" valign="top">No</td>
     </tr>
   </table>

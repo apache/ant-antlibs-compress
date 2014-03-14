@@ -20,7 +20,9 @@ package org.apache.ant.compress.taskdefs;
 
 import java.io.IOException;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.ant.compress.resources.SevenZFileSet;
@@ -30,6 +32,8 @@ import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZMethod;
+import org.apache.commons.compress.archivers.sevenz.SevenZMethodConfiguration;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.ArchiveFileSet;
 import org.apache.tools.ant.types.Resource;
 
@@ -40,6 +44,7 @@ public class SevenZ extends ArchiveBase {
 
     private boolean keepCompression = false;
     private String contentCompression;
+    private List/*<SevenZMethodConfiguration>*/ contentMethods;
 
     public SevenZ() {
         setFactory(new SevenZStreamFactory() {
@@ -49,11 +54,10 @@ public class SevenZ extends ArchiveBase {
                     SevenZArchiveOutputStream o = (SevenZArchiveOutputStream)
                         super.getArchiveOutputStream(f, encoding);
                     if (contentCompression != null) {
-                        SevenZMethod m = (SevenZMethod)
-                            Enum.valueOf(SevenZMethod.class,
-                                         contentCompression.toUpperCase(Locale
-                                                                        .US));
-                        o.setContentCompression(m);
+                        o.setContentCompression(asMethod(contentCompression));
+                    }
+                    if (contentMethods != null) {
+                        o.setContentMethods(contentMethods);
                     }
                     return o;
                 }
@@ -86,13 +90,31 @@ public class SevenZ extends ArchiveBase {
 
     /**
      * Sets the compression method to use for entry contents - the
-     * default is LZMA2.
+     * default is LZMA2 with no additional options.
      *
-     * <p>As of Commons Compress 1.6 only COPY (which means no
+     * <p>As of Commons Compress 1.8 only COPY (which means no
      * compression), LZMA2, BZIP2 and DEFLATE are supported.</p>
      */
     public void setContentCompression(String method) {
+        if (contentMethods != null && method != null) {
+            throw new BuildException("you must not specify contentCompression and nested contentMethod elements at the same time");
+        }
         this.contentCompression = method;
+    }
+
+    /**
+     * Adds a compression method to use for entry contents - the
+     * default is LZMA2 with no additional options.
+     * @since 1.5
+     */
+    public void addConfiguredContentMethod(ContentMethod cm) {
+        if (contentCompression != null) {
+            throw new BuildException("you must not specify contentCompression and nested contentMethod elements at the same time");
+        }
+        if (contentMethods == null) {
+            contentMethods = new ArrayList/*<SevenZMethodConfiguration>*/();
+        }
+        contentMethods.add(asMethodConfiguration(cm));
     }
 
     /**
@@ -104,5 +126,38 @@ public class SevenZ extends ArchiveBase {
      */
     public void setKeepCompression(boolean keep) {
         keepCompression = keep;
+    }
+
+    private static SevenZMethod asMethod(String method) {
+        return (SevenZMethod) Enum.valueOf(SevenZMethod.class,
+                                           method.toUpperCase(Locale.US));
+    }
+
+    private static SevenZMethodConfiguration
+        asMethodConfiguration(ContentMethod cm) {
+        return new SevenZMethodConfiguration(asMethod(cm.method), cm.option);
+    }
+
+    /**
+     * Container for a supported 7z method and its configuration.
+     * @since 1.5
+     */
+    public static class ContentMethod {
+        private String method;
+        private Integer option;
+
+        /**
+         * The "method" which can be a compression method, an
+         * encryption method or a filter.
+         */
+        public void setMethod(String m) {
+            method = m;
+        }
+        /**
+         * Option for the method, must be understood by the method.
+         */
+        public void setOption(int o) {
+            option = Integer.valueOf(o);
+        }
     }
 }

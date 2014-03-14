@@ -432,4 +432,29 @@
     </au:assertFalse>
   </target>
 
+  <target
+      name="testThrowsWhenAddingMethodViaAttributeAndNestedElements">
+    <au:expectfailure
+       message="you must not specify contentCompression and nested contentMethod elements at the same time">
+      <cmp:sevenz dest="${dest}" src="${input}"
+                  contentCompression="bzip2">
+        <contentMethod method="lzma2"/>
+      </cmp:sevenz>
+    </au:expectfailure>
+  </target>
+
+  <target name="testPlainFileSetWithFilter" depends="setUp">
+    <mkdir dir="${input}"/>
+    <copy todir="${input}" file="../resources/asf-logo.gif"/>
+    <touch datetime="2009-08-19-05:49:21 +0200"
+           pattern="yyyy-MM-dd-HH:mm:ss Z"
+           file="${input}/asf-logo.gif"/>
+    <cmp:sevenz destfile="${dest}">
+      <contentMethod method="delta_filter" option="4"/>
+      <contentMethod method="lzma2"/>
+      <fileset dir="${input}" includes="asf-logo.gif"/>
+    </cmp:sevenz>
+    <checkProperties dateTime="2009-08-19-05:49:21 +0200"/>
+  </target>
+
 </project>

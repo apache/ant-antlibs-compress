@@ -86,6 +86,20 @@
        />
   </target>
 
+  <target name="testAgainstAntlib7zTaskDeltaPlusLZMA2" depends="setUp">
+    <cmp:sevenz destfile="${input}/test.7z">
+      <contentMethod method="delta_filter" option="2"/>
+      <contentMethod method="lzma2"/>
+      <fileset dir="." includes="un7z-test.xml"/>
+    </cmp:sevenz>
+    <cmp:un7z src="${input}/test.7z" dest="${output}"/>
+    <au:assertFileExists file="${output}/un7z-test.xml"/>
+    <au:assertFilesMatch
+       actual="${output}/un7z-test.xml"
+       expected="un7z-test.xml"
+       />
+  </target>
+
   <target name="testAgainstNative7z" depends="setUp">
     <cmp:un7z src="../resources/asf-logo.gif.7z" dest="${output}" />
     <au:assertFileExists file="${output}/asf-logo.gif"/>

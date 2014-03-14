@@ -141,6 +141,10 @@ public class SevenZStreamFactory implements FileAwareArchiveStreamFactory {
             zipFile.setContentCompression(method);
         }
 
+        public void setContentMethods(Iterable methods) {
+            zipFile.setContentMethods(methods);
+        }
+
     }
 
 }
