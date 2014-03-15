@@ -18,23 +18,48 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.Deflater;
+
 import org.apache.ant.compress.resources.CommonsCompressCompressorResource;
 import org.apache.ant.compress.resources.GZipResource;
 import org.apache.ant.compress.util.GZipStreamFactory;
+import org.apache.commons.compress.compressors.CompressorOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.compress.compressors.gzip.GzipParameters;
 import org.apache.tools.ant.types.Resource;
 
 /**
  * Compresses using gzip.
  */
 public final class GZip extends PackBase {
+    private int level = Deflater.DEFAULT_COMPRESSION;
 
     public GZip() {
-        super(new GZipStreamFactory(),
-              new PackBase.ResourceWrapper() {
+        super(new PackBase.ResourceWrapper() {
                 public CommonsCompressCompressorResource wrap(Resource dest) {
                     return new GZipResource(dest);
                 }
             });
+        setFactory(new GZipStreamFactory() {
+                public CompressorOutputStream getCompressorStream(OutputStream stream)
+                    throws IOException {
+                    GzipParameters params = new GzipParameters();
+                    params.setCompressionLevel(level);
+                    return new GzipCompressorOutputStream(stream, params);
+                }
+            });
+    }
+
+    /**
+     * Set the compression level to use.  Default is
+     * Deflater.DEFAULT_COMPRESSION.
+     * @param level compression level.
+     * @since 1.5
+     */
+    public void setLevel(int level) {
+        this.level = level;
     }
 
 }

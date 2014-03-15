@@ -51,6 +51,10 @@
         Multiple content compression/encryption/filter methods can now
         be specified via nested elements of the sevenz task.
       </action>
+      <action type="add" issue="52414">
+        The gzip task has a new attribute that controls the level of
+        compression.
+      </action>
     </release>
 
     <release version="1.4" date="2014-01-29">

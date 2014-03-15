@@ -103,6 +103,24 @@
   <p>Is a <a href="#pack">compressing task</a> that uses the GZIP
     compression algorithm.</p>
 
+  <p>This task supports the following additional attributes:</p>
+
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">level</td>
+      <td valign="top">Non-default level at which file compression
+        should be performed. Valid values range from 0 (no
+        compression/fastest) to 9 (maximum
+        compression/slowest).  <em>Since Compress Antlib 1.5</em></td>
+      <td valign="top" align="center">No</td>
+    </tr>
+  </table>
+
   <h3><a name="pack200">Pack200</a></h3>
 
   <p>Is a <a href="#pack">compressing task</a> that uses
