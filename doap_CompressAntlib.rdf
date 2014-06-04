@@ -37,23 +37,9 @@
     <category rdf:resource="http://projects.apache.org/category/build-management" />
     <release>
       <Version>
-        <name>Apache Compress Ant Library 1.0</name>
-        <created>2010-08-30</created>
-        <revision>1.0</revision>
-      </Version>
-    </release>
-    <release>
-      <Version>
-        <name>Apache Compress Ant Library 1.1</name>
-        <created>2011-11-05</created>
-        <revision>1.1</revision>
-      </Version>
-    </release>
-    <release>
-      <Version>
-        <name>Apache Compress Ant Library 1.2</name>
-        <created>2012-04-20</created>
-        <revision>1.2</revision>
+        <name>Apache Compress Ant Library 1.4</name>
+        <created>2014-01-29</created>
+        <revision>1.4</revision>
       </Version>
     </release>
     <release>
@@ -65,9 +51,23 @@
     </release>
     <release>
       <Version>
-        <name>Apache Compress Ant Library 1.4</name>
-        <created>2014-01-29</created>
-        <revision>1.4</revision>
+        <name>Apache Compress Ant Library 1.2</name>
+        <created>2012-04-20</created>
+        <revision>1.2</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Compress Ant Library 1.1</name>
+        <created>2011-11-05</created>
+        <revision>1.1</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Apache Compress Ant Library 1.0</name>
+        <created>2010-08-30</created>
+        <revision>1.0</revision>
       </Version>
     </release>
     <repository>
