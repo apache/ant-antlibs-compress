@@ -82,7 +82,7 @@ public abstract class PackBase extends Task {
 
     /**
      * The resource to pack; required.
-     * @param src resource to expand
+     * @param dest resource to expand
      */
     public void setDest(Resource dest) {
         if (this.dest != null) {
