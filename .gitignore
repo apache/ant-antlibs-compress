@@ -21,3 +21,7 @@ lib/optional/*.jar
 src/tests/antunit/core/output
 .idea
 *.iml
+*~
+ivy
+lib
+docs/style.css
