@@ -19,67 +19,44 @@
          xmlns:au="antlib:org.apache.ant.antunit"
          xmlns:cmp="antlib:org.apache.ant.compress">
 
-  <import file="antunit-base.xml" />
-
-  <target name="setUp">
-    <mkdir dir="${output}"/>
-    <mkdir dir="${input}"/>
-  </target>
+  <import file="pack200-base.xml" />
 
   <target name="testAgainstPack200Task" depends="setUp">
-    <cmp:pack200 destfile="${input}/test.pack">
-      <cmp:zip>
-        <fileset dir="."/>
-      </cmp:zip>
-    </cmp:pack200>
     <cmp:unpack200 src="${input}/test.pack" dest="${input}/test.zip"/>
     <cmp:unzip src="${input}/test.zip" dest="${output}"/>
-    <au:assertFileExists file="${output}/untar-test.xml"/>
-    <au:assertFilesMatch
-       actual="${output}/untar-test.xml"
-       expected="untar-test.xml"
-       />
+    <assertFooMatches/>
   </target>
 
   <target name="testAgainstNativePack200" depends="setUp">
-    <cmp:unpack200 src="../resources/asf-logo.gif.pack"
+    <cmp:unpack200 src="../resources/Foo.pack"
                    dest="${input}/test.zip" />
     <cmp:unzip src="${input}/test.zip" dest="${output}" />
-    <au:assertFileExists file="${output}/asf-logo.gif"/>
+    <au:assertFileExists file="${output}/Foo.java"/>
     <au:assertFilesMatch
-       actual="${output}/asf-logo.gif"
-       expected="../resources/asf-logo.gif"
-       />
+        actual="${output}/Foo.java"
+        expected="${java.dir}/Foo.java"/>
   </target>
 
   <target name="testTempFileStrategy" depends="setUp">
-    <cmp:unpack200 src="../resources/asf-logo.gif.pack"
+    <cmp:unpack200 src="${input}/test.pack"
                    dest="${input}/test.zip"
                    pack200strategy="temp-file"/>
     <cmp:unzip src="${input}/test.zip" dest="${output}" />
-    <au:assertFileExists file="${output}/asf-logo.gif"/>
-    <au:assertFilesMatch
-       actual="${output}/asf-logo.gif"
-       expected="../resources/asf-logo.gif"
-       />
+    <assertFooMatches/>
   </target>
 
   <target name="testProperties" depends="setUp">
-    <cmp:unpack200 src="../resources/asf-logo.gif.pack"
+    <cmp:unpack200 src="${input}/test.pack"
                    dest="${input}/test.zip">
       <property key="unpack.deflate.hint" value="keep"/>
     </cmp:unpack200>
     <cmp:unzip src="${input}/test.zip" dest="${output}" />
-    <au:assertFileExists file="${output}/asf-logo.gif"/>
-    <au:assertFilesMatch
-       actual="${output}/asf-logo.gif"
-       expected="../resources/asf-logo.gif"
-       />
+    <assertFooMatches/>
   </target>
 
   <target name="testDoesntSupportConcatenatedStreams">
     <au:expectfailure>
-      <cmp:unpack200 src="../resources/asf-logo.gif.pack"
+      <cmp:unpack200 src="${input}/test.pack"
                      dest="${input}/test.zip"
                      decompressconcatenated="true"/>
     </au:expectfailure>

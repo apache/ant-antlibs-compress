@@ -15,36 +15,30 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-
 <project default="antunit"
+         name="pack200-base"
          xmlns:au="antlib:org.apache.ant.antunit"
-         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
          xmlns:cmp="antlib:org.apache.ant.compress">
 
-  <import file="pack200-base.xml" />
+  <import file="antunit-base.xml" />
 
-  <target name="testNativePack200" depends="setUp">
-    <copy todir="${output}">
-      <cmp:zipfileset>
-        <cmp:pack200resource>
-          <file file="../resources/Foo.pack"/>
-        </cmp:pack200resource>
-      </cmp:zipfileset>
-    </copy>
-    <au:assertFilesMatch expected="${java.dir}/Foo.java"
-                         actual="${output}/Foo.java"/>
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+    <property name="java.dir" value="${input}/java"/>
+    <mkdir dir="${java.dir}"/>
+    <echo file="${java.dir}/Foo.java">public class Foo {}</echo>
+    <javac srcdir="${java.dir}" destdir="${java.dir}"/>
+    <jar destfile="${input}/test.jar" basedir="${java.dir}"/>
+    <cmp:pack200 destfile="${input}/test.pack"
+                 src="${input}/test.jar"/>
+    <macrodef name="assertFooMatches">
+      <sequential>
+        <au:assertFileExists file="${output}/Foo.java"/>
+        <au:assertFilesMatch
+            actual="${output}/Foo.java"
+            expected="${java.dir}/Foo.java"
+            />
+      </sequential>
+    </macrodef>
   </target>
-
-  <target name="testDoesntSupportConcatenatedStreams">
-    <au:expectfailure>
-      <copy todir="${output}">
-        <cmp:zipfileset>
-          <cmp:pack200resource decompressconcatenated="true">
-            <file file="${input}/test.pack"/>
-          </cmp:pack200resource>
-        </cmp:zipfileset>
-      </copy>
-    </au:expectfailure>
-  </target>
-
 </project>

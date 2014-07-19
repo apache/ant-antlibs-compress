@@ -20,48 +20,45 @@
          xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
          xmlns:cmp="antlib:org.apache.ant.compress">
 
-  <import file="antunit-base.xml" />
-
-  <target name="setUp">
-    <mkdir dir="${output}" />
-  </target>
+  <import file="pack200-base.xml" />
 
   <target name="testRealTest" depends="setUp">
-    <cmp:pack200 src="../resources/asf-logo.gif.zip"
-              destfile="${output}/asf-logo.gif.pack" />
-    <au:assertLogContains text="Building: asf-logo.gif.pack"/>
-    <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
+    <cmp:pack200 destfile="${output}/test.pack"
+                 src="${input}/test.jar"/>
+    <au:assertLogContains text="Building: test.pack"/>
+    <au:assertFileExists file="${output}/test.pack"/>
   </target>
 
   <target name="testRealTestWithResource" depends="setUp">
-    <cmp:pack200 destfile="${output}/asf-logo.gif.pack">
-      <file file="../resources/asf-logo.gif.zip"/>
+    <cmp:pack200 destfile="${output}/test.pack">
+      <file file="${input}/test.jar"/>
     </cmp:pack200>
-    <au:assertLogContains text="Building: asf-logo.gif.pack"/>
-    <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
+    <au:assertLogContains text="Building: test.pack"/>
+    <au:assertFileExists file="${output}/test.pack"/>
   </target>
 
   <target name="testDateCheck" depends="setUp">
-    <touch file="${output}/asf-logo.gif.pack"/>
-    <cmp:pack200 src="../resources/asf-logo.gif.zip"
-              destfile="${output}/asf-logo.gif.pack" />
-    <au:assertLogContains text="Nothing to do: asf-logo.gif.pack is up to date."/>
+    <sleep seconds="2"/>
+    <touch file="${input}/test.pack"/>
+    <cmp:pack200 destfile="${input}/test.pack"
+                 src="${input}/test.jar"/>
+    <au:assertLogContains text="Nothing to do: test.pack is up to date."/>
   </target>
 
   <target name="testNestedTask" depends="setUp">
-    <cmp:pack200 destfile="${output}/asf-logo.zip.pack">
+    <cmp:pack200 destfile="${output}/test.pack">
       <cmp:zip>
         <cmp:cpiofileset src="../resources/asf-logo.gif.bin.cpio"
                          includes="asf-logo.gif"/>
       </cmp:zip>
     </cmp:pack200>
-    <au:assertFileExists file="${output}/asf-logo.zip.pack"/>
+    <au:assertFileExists file="${output}/test.pack"/>
     <au:assertTrue>
       <cond:islastmodified datetime="2009-07-31-20:11:14 +0200"
                            pattern="yyyy-MM-dd-HH:mm:ss Z">
         <cmp:zipentry name="asf-logo.gif">
           <cmp:pack200resource>
-            <file file="${output}/asf-logo.zip.pack"/>
+            <file file="${output}/test.pack"/>
           </cmp:pack200resource>
         </cmp:zipentry>
       </cond:islastmodified>
@@ -69,28 +66,28 @@
   </target>
 
   <target name="testTempFileStrategy" depends="setUp">
-    <cmp:pack200 src="../resources/asf-logo.gif.zip"
-                 destfile="${output}/asf-logo.gif.pack"
+    <cmp:pack200 src="${input}/test.jar"
+                 destfile="${output}/test.pack"
                  pack200strategy="temp-file"/>
-    <au:assertLogContains text="Building: asf-logo.gif.pack"/>
-    <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
+    <au:assertLogContains text="Building: test.pack"/>
+    <au:assertFileExists file="${output}/test.pack"/>
   </target>
 
   <target name="testProperties" depends="setUp">
-    <cmp:pack200 src="../resources/asf-logo.gif.zip"
-                 destfile="${output}/asf-logo.gif.pack">
+    <cmp:pack200 src="${input}/test.jar"
+                 destfile="${output}/test.pack">
       <property key="pack.effort" value="9"/>
     </cmp:pack200>
-    <au:assertLogContains text="Building: asf-logo.gif.pack"/>
-    <au:assertFileExists file="${output}/asf-logo.gif.pack"/>
+    <au:assertLogContains text="Building: test.pack"/>
+    <au:assertFileExists file="${output}/test.pack"/>
   </target>
 
   <target name="testNestingOfPackTasks" depends="setUp">
-    <cmp:gzip destfile="${output}/asf-logo.gif.pack.gz">
+    <cmp:gzip destfile="${output}/test.pack.gz">
       <cmp:pack200 src="../resources/asf-logo.gif.zip"/>
     </cmp:gzip>
-    <au:assertLogContains text="Building: asf-logo.gif.pack.gz"/>
-    <au:assertFileExists file="${output}/asf-logo.gif.pack.gz"/>
+    <au:assertLogContains text="Building: test.pack.gz"/>
+    <au:assertFileExists file="${output}/test.pack.gz"/>
   </target>
 
 </project>
