@@ -44,7 +44,7 @@ public class SevenZ extends ArchiveBase {
 
     private boolean keepCompression = false;
     private String contentCompression;
-    private List/*<SevenZMethodConfiguration>*/ contentMethods;
+    private List<SevenZMethodConfiguration> contentMethods;
 
     public SevenZ() {
         setFactory(new SevenZStreamFactory() {
@@ -112,7 +112,7 @@ public class SevenZ extends ArchiveBase {
             throw new BuildException("you must not specify contentCompression and nested contentMethod elements at the same time");
         }
         if (contentMethods == null) {
-            contentMethods = new ArrayList/*<SevenZMethodConfiguration>*/();
+            contentMethods = new ArrayList<>();
         }
         contentMethods.add(asMethodConfiguration(cm));
     }

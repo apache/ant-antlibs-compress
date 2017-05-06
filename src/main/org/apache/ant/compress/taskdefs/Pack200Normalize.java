@@ -46,7 +46,7 @@ import org.apache.tools.ant.util.FileUtils;
 public class Pack200Normalize extends Task {
     private File src, dest;
     private boolean force = false;
-    private Map/*<String, String>*/ properties = new HashMap();
+    private Map<String, String> properties = new HashMap();
 
     /**
      * The JAR archive to normalize.

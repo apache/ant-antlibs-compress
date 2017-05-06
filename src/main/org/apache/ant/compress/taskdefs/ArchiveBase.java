@@ -82,7 +82,7 @@ public abstract class ArchiveBase extends Task {
     private EntryBuilder entryBuilder;
 
     private Resource dest;
-    private List/*<ResourceCollection>*/ sources = new ArrayList();
+    private List<ResourceCollection> sources = new ArrayList();
     private Mode mode = new Mode();
     private String encoding;
     private boolean filesOnly = true;
@@ -358,8 +358,8 @@ public abstract class ArchiveBase extends Task {
     protected Collection/*<ResourceWithFlags>*/ findSources()
         throws IOException {
 
-        List/*<ResourceWithFlags>*/ l = new ArrayList/*<ResourceWithFlags>*/();
-        Set/*<String>*/ addedNames = new HashSet/*<String>*/();
+        List<ResourceWithFlags> l = new ArrayList<>();
+        Set<String> addedNames = new HashSet<>();
         for (Iterator rcs = sources.iterator(); rcs.hasNext(); ) {
             ResourceCollection rc = (ResourceCollection) rcs.next();
             ResourceCollectionFlags rcFlags = getFlags(rc);
@@ -428,7 +428,7 @@ public abstract class ArchiveBase extends Task {
                                     existingEntries
                                     .getDirectoryScanner(getProject()));
         if (outOfDate.length > 0 && Mode.UPDATE.equals(getMode().getValue())) {
-            HashSet/*<String>*/ oodNames = new HashSet/*<String>*/();
+            HashSet<String> oodNames = new HashSet<>();
             for (int i = 0; i < outOfDate.length; i++) {
                 oodNames.add(outOfDate[i].getName());
             }
@@ -471,7 +471,7 @@ public abstract class ArchiveBase extends Task {
                              Collection/*<ResourceWithFlags>*/ src)
         throws IOException {
 
-        List/*<ResourceWithFlags>*/ l = new ArrayList/*<ResourceWithFlags>*/();
+        List<ResourceWithFlags> l = new ArrayList<>();
         ResourceCollectionFlags rcFlags = getFlags(target);
 
         Restrict res = new Restrict();

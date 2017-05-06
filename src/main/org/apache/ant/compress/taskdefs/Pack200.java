@@ -42,7 +42,7 @@ import org.apache.tools.ant.types.Resource;
 public final class Pack200 extends PackBase {
 
     private Pack200StrategyEnum strategy = Pack200StrategyEnum.IN_MEMORY;
-    private final Map/*<String, String>*/ properties = new HashMap();
+    private final Map<String, String> properties = new HashMap<>();
 
     public Pack200() {
         super(new PackBase.ResourceWrapper() {

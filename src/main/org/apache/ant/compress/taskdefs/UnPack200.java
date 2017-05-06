@@ -37,7 +37,7 @@ public final class UnPack200 extends UnpackBase {
 
     private Pack200.Pack200StrategyEnum strategy =
         Pack200.Pack200StrategyEnum.IN_MEMORY;
-    private final Map/*<String, String>*/ properties = new HashMap();
+    private final Map<String, String> properties = new HashMap();
 
     public UnPack200() {
         super(".pack");

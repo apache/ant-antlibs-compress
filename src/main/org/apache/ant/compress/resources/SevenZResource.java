@@ -32,6 +32,7 @@ import org.apache.ant.compress.util.SevenZStreamFactory;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
+import org.apache.commons.compress.archivers.sevenz.SevenZMethodConfiguration;
 
 /**
  * A Resource representation of an entry in a sevenzfile.
@@ -40,7 +41,7 @@ import org.apache.commons.compress.archivers.sevenz.SevenZFile;
  */
 public final class SevenZResource extends CommonsCompressArchiveResource {
 
-    private Iterable/*<? extends SevenZMethodConfiguration>*/ contentMethods;
+    private Iterable<? extends SevenZMethodConfiguration> contentMethods;
 
     /**
      * Default constructor.
