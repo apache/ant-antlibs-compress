@@ -101,7 +101,7 @@ public class Cpio extends ArchiveBase {
 
     /**
      * The format to use.
-     * <p>Default is binary</b>
+     * <p>Default is binary</p>
      */
     public void setFormat(Format f) {
         format = f;
