@@ -172,15 +172,11 @@ public final class ZipResource extends CommonsCompressArchiveResource {
             return;
         }
 
-        ZipFile z = null;
-        try {
-            z = new ZipFile(getZipfile(), getEncoding());
+        try (ZipFile z = new ZipFile(getZipfile(), getEncoding())) {
             setEntry(z.getEntry(getName()));
         } catch (IOException e) {
             log(e.getMessage(), Project.MSG_DEBUG);
             throw new BuildException(e);
-        } finally {
-            ZipFile.closeQuietly(z);
         }
     }
 

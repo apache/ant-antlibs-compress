@@ -134,27 +134,20 @@ public abstract class ExpandBase extends Expand {
                                      getLocation());
         }
 
-        InputStream i = null;
-        try {
-            i = srcR.getInputStream();
+        try (InputStream i = srcR.getInputStream()) {
             expandStream(srcR.getName(), i, dir);
         } catch (IOException ioe) {
             throw new BuildException("Error while expanding " + srcR.getName(),
                                      ioe, getLocation());
-        } finally {
-            FileUtils.close(i);
         }
     }
 
     private void expandStream(String name, InputStream stream, File dir)
         throws IOException {
-        ArchiveInputStream is = null;
-        try {
-            is = factory.getArchiveStream(new BufferedInputStream(stream),
-                                          getEncoding());
+        try (ArchiveInputStream is =
+                 factory.getArchiveStream(new BufferedInputStream(stream),
+                                          getEncoding())) {
             expandArchiveStream(name, is, dir);
-        } finally {
-            FileUtils.close(is);
         }
     }
 

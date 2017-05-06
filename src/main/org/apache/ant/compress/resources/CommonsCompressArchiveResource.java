@@ -185,9 +185,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      */
     @Override
     protected void fetchEntry() {
-        ArchiveInputStream i = null;
-        try {
-            i = getStream();
+        try (ArchiveInputStream i = getStream()) {
             ArchiveEntry ae = null;
             while ((ae = i.getNextEntry()) != null) {
                 if (ae.getName().equals(getName())) {
@@ -198,10 +196,6 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
         } catch (IOException e) {
             log(e.getMessage(), Project.MSG_DEBUG);
             throw new BuildException(e);
-        } finally {
-            if (i != null) {
-                FileUtils.close(i);
-            }
         }
         setEntry(null);
     }

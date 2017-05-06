@@ -67,21 +67,17 @@ public class Un7z extends ExpandBase {
                 }
                 */
                 log("extracting " + ze.getName(), Project.MSG_DEBUG);
-                InputStream is = null;
-                try {
-                    extractFile(fileUtils, srcF, dir,
-                                is = new InputStream() {
-                                        public int read() throws IOException {
-                                            return zf.read();
-                                        }
-                                        public int read(byte[] b) throws IOException {
-                                            return zf.read(b);
-                                        }
-                                    },
+                try (InputStream is = new InputStream() {
+                         public int read() throws IOException {
+                             return zf.read();
+                         }
+                         public int read(byte[] b) throws IOException {
+                             return zf.read(b);
+                         }
+                    }) {
+                    extractFile(fileUtils, srcF, dir, is,
                                 ze.getName(), ze.getLastModifiedDate(),
                                 ze.isDirectory(), mapper);
-                } finally {
-                    FileUtils.close(is);
                 }
                 ze = zf.getNextEntry();
             }

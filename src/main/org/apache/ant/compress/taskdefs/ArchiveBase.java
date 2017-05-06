@@ -543,12 +543,8 @@ public abstract class ArchiveBase extends Task {
                 ArchiveEntry ent = entryBuilder.buildEntry(r);
                 out.putArchiveEntry(ent);
                 if (!r.getResource().isDirectory()) {
-                    InputStream in = null;
-                    try {
-                        in = r.getResource().getInputStream();
+                    try (InputStream in = r.getResource().getInputStream()) {
                         IOUtils.copy(in, out);
-                    } finally {
-                        FILE_UTILS.close(in);
                     }
                 } else {
                     addedDirectories.add(r.getName());

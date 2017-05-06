@@ -164,9 +164,7 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
             return;
         }
 
-        SevenZFile z = null;
-        try {
-            z = new SevenZFile(f);
+        try (SevenZFile z = new SevenZFile(f)) {
             SevenZArchiveEntry ze = z.getNextEntry();
             while (ze != null) {
                 if (ze.getName().equals(getName())) {
@@ -179,14 +177,6 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
         } catch (IOException e) {
             log(e.getMessage(), Project.MSG_DEBUG);
             throw new BuildException(e);
-        } finally {
-            if (z != null) {
-                try {
-                    z.close();
-                } catch (IOException ex) {
-                    // swallow
-                }
-            }
         }
     }
 

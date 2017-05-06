@@ -88,11 +88,8 @@ public class SevenZScanner extends CommonsCompressArchiveScanner {
 
         File srcFile = fp.getFile();
         SevenZArchiveEntry entry = null;
-        SevenZFile zf = null;
 
-        try {
-            try {
-                zf = new SevenZFile(srcFile);
+        try (SevenZFile zf = new SevenZFile(srcFile)) {
                 entry = zf.getNextEntry();
                 while (entry != null) {
                     /* TODO implement canReadEntryData in CC
@@ -120,14 +117,5 @@ public class SevenZScanner extends CommonsCompressArchiveScanner {
             } catch (IOException ex) {
                 throw new BuildException("Problem opening " + srcFile, ex);
             }
-        } finally {
-            if (zf != null) {
-                try {
-                    zf.close();
-                } catch (IOException ex) {
-                    // swallow
-                }
-            }
-        }
     }
 }

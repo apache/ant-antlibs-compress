@@ -19,9 +19,10 @@
 package org.apache.ant.compress.taskdefs;
 
 import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import org.apache.ant.compress.util.CompressorStreamFactory;
 import org.apache.ant.compress.util.CompressorWithConcatenatedStreamsFactory;
@@ -96,11 +97,9 @@ public abstract class UnpackBase extends Unpack {
             log("Expanding " + source.getAbsolutePath() + " to "
                 + dest.getAbsolutePath());
 
-            FileOutputStream out = null;
             CompressorInputStream zIn = null;
             InputStream fis = null;
-            try {
-                out = new FileOutputStream(dest);
+            try (OutputStream out = Files.newOutputStream(dest.toPath())) {
                 zIn = StreamHelper.getInputStream(factory, srcResource);
                 if (zIn == null) {
                     fis = srcResource.getInputStream();
@@ -119,7 +118,6 @@ public abstract class UnpackBase extends Unpack {
                 throw new BuildException(msg, ioe, getLocation());
             } finally {
                 FileUtils.close(fis);
-                FileUtils.close(out);
                 FileUtils.close(zIn);
             }
         }
