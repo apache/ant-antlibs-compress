@@ -101,6 +101,7 @@ public class Ar extends ArchiveBase {
             });
     }
 
+    @Override
     public void setFilesOnly(boolean b) {
         if (!b) {
             throw new BuildException(NO_DIRS_MESSAGE);

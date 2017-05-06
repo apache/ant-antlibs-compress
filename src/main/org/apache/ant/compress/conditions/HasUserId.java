@@ -60,6 +60,7 @@ public class HasUserId extends ProjectComponent implements Condition {
         }
     }
 
+    @Override
     public boolean eval() throws BuildException {
         validate();
         int actual = ccResource != null

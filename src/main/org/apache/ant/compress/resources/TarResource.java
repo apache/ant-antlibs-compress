@@ -109,6 +109,7 @@ public final class TarResource extends CommonsCompressArchiveResource {
         return groupName;
     }
 
+    @Override
     protected void setEntry(ArchiveEntry e) {
         super.setEntry(e);
         if (e != null) {

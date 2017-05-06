@@ -90,6 +90,7 @@ public abstract class UnpackBase extends Unpack {
     /**
      * Implement the uncompression.
      */
+    @Override
     protected void extract() {
         if (source.lastModified() > dest.lastModified()) {
             log("Expanding " + source.getAbsolutePath() + " to "
@@ -127,6 +128,7 @@ public abstract class UnpackBase extends Unpack {
     /**
      * Yes, we can.
      */
+    @Override
     protected final boolean supportsNonFileResources() {
         return true;
     }

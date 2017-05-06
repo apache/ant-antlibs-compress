@@ -72,6 +72,7 @@ public class ZipScanner extends CommonsCompressArchiveScanner {
      * resources found inside the archive that matched all include
      * patterns and didn't match any exclude patterns.
      */
+    @Override
     protected void fillMapsFromArchive(Resource src, String encoding,
                                        Map fileEntries, Map matchFileEntries,
                                        Map dirEntries, Map matchDirEntries) {

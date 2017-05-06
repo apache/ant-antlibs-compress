@@ -107,6 +107,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * Overrides the super version.
      * @param r the Reference to set.
      */
+    @Override
     public void setRefid(Reference r) {
         if (getEncoding() != null) {
             throw tooManyAttributes();
@@ -120,6 +121,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * @throws IOException if the archive cannot be opened,
      *         or the entry cannot be read.
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         if (isReference()) {
             return ((Resource) getCheckedRef()).getInputStream();
@@ -145,6 +147,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
      * @throws UnsupportedOperationException if OutputStreams are not
      *         supported for this Resource type.
      */
+    @Override
     public OutputStream getOutputStream() throws IOException {
         if (isReference()) {
             return ((Resource) getCheckedRef()).getOutputStream();
@@ -180,6 +183,7 @@ public abstract class CommonsCompressArchiveResource extends ArchiveResource {
     /**
      * fetches information from the named entry inside the archive.
      */
+    @Override
     protected void fetchEntry() {
         ArchiveInputStream i = null;
         try {

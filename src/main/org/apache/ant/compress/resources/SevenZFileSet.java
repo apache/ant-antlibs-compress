@@ -65,10 +65,12 @@ public class SevenZFileSet extends CommonsCompressFileSet {
      * Return a new archive scanner based on this one.
      * @return a new SevenZScanner with the same encoding as this one.
      */
+    @Override
     protected ArchiveScanner newArchiveScanner() {
         return new SevenZScanner(getSkipUnreadableEntries(), getProject());
     }
 
+    @Override
     protected CommonsCompressFileSet newFileSet(FileSet fs) {
         if (fs instanceof SevenZFileSet) {
             return new SevenZFileSet((SevenZFileSet) fs);

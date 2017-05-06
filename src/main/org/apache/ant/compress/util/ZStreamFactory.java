@@ -35,6 +35,7 @@ public class ZStreamFactory implements CompressorStreamFactory {
     /**
      * @param stream the stream to read from, should be buffered
      */
+    @Override
     public CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException {
         return new ZCompressorInputStream(stream);
@@ -43,6 +44,7 @@ public class ZStreamFactory implements CompressorStreamFactory {
     /**
      * Not implemented.
      */
+    @Override
     public CompressorOutputStream getCompressorStream(OutputStream stream)
         throws IOException {
         throw new UnsupportedOperationException();

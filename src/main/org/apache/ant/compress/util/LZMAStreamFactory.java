@@ -35,6 +35,7 @@ public class LZMAStreamFactory implements CompressorStreamFactory {
     /**
      * @param stream the stream to read from, should be buffered
      */
+    @Override
     public CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException {
         return new LZMACompressorInputStream(stream);
@@ -43,6 +44,7 @@ public class LZMAStreamFactory implements CompressorStreamFactory {
     /**
      * Not implemented.
      */
+    @Override
     public CompressorOutputStream getCompressorStream(OutputStream stream)
         throws IOException {
         throw new UnsupportedOperationException();

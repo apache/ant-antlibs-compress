@@ -35,6 +35,7 @@ public class BZip2StreamFactory implements CompressorWithConcatenatedStreamsFact
     /**
      * @param stream the stream to read from, should be buffered
      */
+    @Override
     public CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException {
         return getCompressorStream(stream, false);
@@ -48,6 +49,7 @@ public class BZip2StreamFactory implements CompressorWithConcatenatedStreamsFact
      *                          stream
      * @since Apache Compress Antlib 1.2
      */
+    @Override
     public CompressorInputStream getCompressorStream(InputStream stream,
                                                      boolean decompressConcatenated)
         throws IOException {
@@ -58,6 +60,7 @@ public class BZip2StreamFactory implements CompressorWithConcatenatedStreamsFact
     /**
      * @param stream the stream to write to, should be buffered
      */
+    @Override
     public CompressorOutputStream getCompressorStream(OutputStream stream)
         throws IOException {
         return new BZip2CompressorOutputStream(stream);

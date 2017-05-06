@@ -39,6 +39,7 @@ public class Pack200StreamFactory implements FileAwareCompressorStreamFactory {
     /**
      * @param stream the stream to read from, should be buffered
      */
+    @Override
     public CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException {
         return new Pack200CompressorInputStream(stream);
@@ -47,6 +48,7 @@ public class Pack200StreamFactory implements FileAwareCompressorStreamFactory {
     /**
      * @param stream the stream to write to, should be buffered
      */
+    @Override
     public CompressorOutputStream getCompressorStream(OutputStream stream)
         throws IOException {
         return new Pack200CompressorOutputStream(stream);
@@ -55,6 +57,7 @@ public class Pack200StreamFactory implements FileAwareCompressorStreamFactory {
     /**
      * @param file the file to read from
      */
+    @Override
     public CompressorInputStream getCompressorInputStream(File file)
         throws IOException {
         return new Pack200CompressorInputStream(file);
@@ -63,6 +66,7 @@ public class Pack200StreamFactory implements FileAwareCompressorStreamFactory {
     /**
      * @param file the file to write to
      */
+    @Override
     public CompressorOutputStream getCompressorOutputStream(File file)
         throws IOException {
         return

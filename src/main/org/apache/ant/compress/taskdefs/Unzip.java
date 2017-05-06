@@ -44,6 +44,7 @@ public class Unzip extends ExpandBase {
         super(new ZipStreamFactory());
     }
 
+    @Override
     public void setEncoding(String encoding) {
         internalSetEncoding(encoding);
     }

@@ -31,6 +31,7 @@ import java.util.Arrays;
  */
 public class DevZeroResource extends Resource {
 
+    @Override
     public InputStream getInputStream() {
         final long size = getSize();
         return new InputStream() {

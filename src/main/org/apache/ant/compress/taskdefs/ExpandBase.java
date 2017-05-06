@@ -98,6 +98,7 @@ public abstract class ExpandBase extends Expand {
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void expandFile(FileUtils fileUtils, File srcF, File dir) {
         if (!srcF.exists()) {
             throw new BuildException("Unable to expand " + srcF
@@ -125,6 +126,7 @@ public abstract class ExpandBase extends Expand {
     }
 
     /** {@inheritDoc} */
+    @Override
     protected void expandResource(Resource srcR, File dir) {
         if (!srcR.isExists()) {
             throw new BuildException("Unable to expand " + srcR.getName()

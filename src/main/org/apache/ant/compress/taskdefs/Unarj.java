@@ -33,6 +33,7 @@ public class Unarj extends ExpandBase {
      * Set the file-name encoding for this archive, defaults to the
      * native encoding.
      */
+    @Override
     public void setEncoding(String encoding) {
         internalSetEncoding(encoding);
     }

@@ -36,6 +36,7 @@ public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
      * @param stream the stream to read from, should be buffered
      * @param encoding the encoding of the entry names
      */
+    @Override
     public ArchiveInputStream getArchiveStream(InputStream stream,
                                                String encoding)
         throws IOException {
@@ -46,6 +47,7 @@ public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
      * @param stream the stream to write to, should be buffered
      * @param encoding the encoding of the entry names
      */
+    @Override
     public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                 String encoding)
         throws IOException {
@@ -58,6 +60,7 @@ public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
      * @param file the file to read from
      * @param encoding the encoding of the entry names
      */
+    @Override
     public ArchiveInputStream getArchiveInputStream(File file,
                                                     String encoding)
         throws IOException {
@@ -70,6 +73,7 @@ public class ZipStreamFactory implements FileAwareArchiveStreamFactory {
      * @param file the file to write to
      * @param encoding the encoding of the entry names
      */
+    @Override
     public ArchiveOutputStream getArchiveOutputStream(File file,
                                                       String encoding)
         throws IOException {

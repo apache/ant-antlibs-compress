@@ -94,6 +94,7 @@ public class Archives extends DataType
     /**
      * Sums the sizes of nested archives.
      */
+    @Override
     public int size() {
         if (isReference()) {
             return ((Archives) getCheckedRef()).size();
@@ -109,6 +110,7 @@ public class Archives extends DataType
     /**
      * Merges the nested collections.
      */
+    @Override
     public Iterator iterator() {
         if (isReference()) {
             return ((Archives) getCheckedRef()).iterator();
@@ -125,6 +127,7 @@ public class Archives extends DataType
     /**
      * @return false
      */
+    @Override
     public boolean isFilesystemOnly() {
         if (isReference()) {
             return ((Archives) getCheckedRef()).isFilesystemOnly();
@@ -137,6 +140,7 @@ public class Archives extends DataType
      * Overrides the base version.
      * @param r the Reference to set.
      */
+    @Override
     public void setRefid(Reference r) {
         if (zips.getResourceCollections().size() > 0
             || ars.getResourceCollections().size() > 0
@@ -152,6 +156,7 @@ public class Archives extends DataType
      * well.
      * @return a cloned instance.
      */
+    @Override
     public Object clone() {
         try {
             Archives a = (Archives) super.clone();
@@ -210,6 +215,7 @@ public class Archives extends DataType
      * @param p   the project to use to dereference the references.
      * @throws BuildException on error.
      */
+    @Override
     protected synchronized void dieOnCircularReference(Stack stk, Project p)
         throws BuildException {
         if (isChecked()) {

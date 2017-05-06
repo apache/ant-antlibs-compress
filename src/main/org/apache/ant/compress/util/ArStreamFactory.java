@@ -33,6 +33,7 @@ public class ArStreamFactory implements ArchiveStreamFactory {
      * @param stream the stream to read from, should be buffered
      * @param encoding the encoding of the entry names, ignored
      */
+    @Override
     public ArchiveInputStream getArchiveStream(InputStream stream,
                                                String encoding)
         throws IOException {
@@ -43,6 +44,7 @@ public class ArStreamFactory implements ArchiveStreamFactory {
      * @param stream the stream to write to, should be buffered
      * @param encoding the encoding of the entry names, ignored
      */
+    @Override
     public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                 String encoding)
         throws IOException {

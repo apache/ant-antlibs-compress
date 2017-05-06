@@ -48,6 +48,7 @@ public class SnappyStreamFactory implements CompressorStreamFactory {
     /**
      * @param stream the stream to read from, should be buffered
      */
+    @Override
     public CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException {
         return framed ? new FramedSnappyCompressorInputStream(stream)
@@ -57,6 +58,7 @@ public class SnappyStreamFactory implements CompressorStreamFactory {
     /**
      * Not implemented.
      */
+    @Override
     public CompressorOutputStream getCompressorStream(OutputStream stream)
         throws IOException {
         throw new UnsupportedOperationException();

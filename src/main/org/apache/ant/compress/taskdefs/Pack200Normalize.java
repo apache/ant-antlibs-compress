@@ -81,6 +81,7 @@ public class Pack200Normalize extends Task {
         properties.put(prop.getKey(), prop.getValue());
     }
 
+    @Override
     public void execute() {
         validate();
         if (isOutOfDate()) {

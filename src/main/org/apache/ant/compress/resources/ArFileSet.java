@@ -69,6 +69,7 @@ public class ArFileSet extends CommonsCompressFileSet {
      * Create a new scanner.
      * @return the created scanner.
      */
+    @Override
     protected ArchiveScanner newArchiveScanner() {
         return new CommonsCompressArchiveScanner(new ArStreamFactory(),
                                                  new CommonsCompressArchiveScanner.ResourceBuilder() {
@@ -79,6 +80,7 @@ public class ArFileSet extends CommonsCompressFileSet {
             }, getSkipUnreadableEntries(), getProject());
     }
 
+    @Override
     protected CommonsCompressFileSet newFileSet(FileSet fs) {
         if (fs instanceof ArFileSet) {
             return new ArFileSet((ArFileSet) fs);

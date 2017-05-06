@@ -104,6 +104,7 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
      * @throws IOException if the sevenz file cannot be opened,
      *         or the entry cannot be read.
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         if (isReference()) {
             return ((Resource) getCheckedRef()).getInputStream();
@@ -155,6 +156,7 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
     /**
      * fetches information from the named entry inside the archive.
      */
+    @Override
     protected void fetchEntry() {
         File f = getSevenZFile();
         if (f == null) {
@@ -188,6 +190,7 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
         }
     }
 
+    @Override
     protected void setEntry(ArchiveEntry e) {
         super.setEntry(e);
         if (e != null) {

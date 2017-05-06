@@ -70,6 +70,7 @@ public class DumpFileSet extends CommonsCompressFileSet {
      * Create a new scanner.
      * @return the created scanner.
      */
+    @Override
     protected ArchiveScanner newArchiveScanner() {
         CommonsCompressArchiveScanner cs =
             new CommonsCompressArchiveScanner(new DumpStreamFactory(),
@@ -83,6 +84,7 @@ public class DumpFileSet extends CommonsCompressFileSet {
         return cs;
     }
 
+    @Override
     protected CommonsCompressFileSet newFileSet(FileSet fs) {
         if (fs instanceof DumpFileSet) {
             return new DumpFileSet((DumpFileSet) fs);

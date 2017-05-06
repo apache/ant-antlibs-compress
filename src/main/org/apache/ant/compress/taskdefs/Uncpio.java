@@ -33,6 +33,7 @@ public class Uncpio extends ExpandBase {
      * encoding.
      * @since Apache Compress Antlib 1.3
      */
+    @Override
     public void setEncoding(String encoding) {
         internalSetEncoding(encoding);
     }

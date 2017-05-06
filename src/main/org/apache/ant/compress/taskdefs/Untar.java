@@ -28,6 +28,7 @@ public class Untar extends ExpandBase {
         super(new TarStreamFactory());
     }
 
+    @Override
     public void setEncoding(String encoding) {
         internalSetEncoding(encoding);
     }

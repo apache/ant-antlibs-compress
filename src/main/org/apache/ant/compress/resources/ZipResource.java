@@ -107,6 +107,7 @@ public final class ZipResource extends CommonsCompressArchiveResource {
      * @throws IOException if the zip file cannot be opened,
      *         or the entry cannot be read.
      */
+    @Override
     public InputStream getInputStream() throws IOException {
         if (isReference()) {
             return ((Resource) getCheckedRef()).getInputStream();
@@ -163,6 +164,7 @@ public final class ZipResource extends CommonsCompressArchiveResource {
     /**
      * fetches information from the named entry inside the archive.
      */
+    @Override
     protected void fetchEntry() {
         File f = getZipfile();
         if (f == null) {

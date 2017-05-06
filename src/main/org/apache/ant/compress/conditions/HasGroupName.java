@@ -59,6 +59,7 @@ public class HasGroupName extends ProjectComponent implements Condition {
         }
     }
 
+    @Override
     public boolean eval() throws BuildException {
         validate();
         String actual = ccResource != null

@@ -134,6 +134,7 @@ public class TarFileSet extends CommonsCompressFileSet {
      * Create a new scanner.
      * @return the created scanner.
      */
+    @Override
     protected ArchiveScanner newArchiveScanner() {
         CommonsCompressArchiveScanner cs =
             new CommonsCompressArchiveScanner(new TarStreamFactory(),
@@ -156,6 +157,7 @@ public class TarFileSet extends CommonsCompressFileSet {
      * @param r the <code>Reference</code> to use.
      * @throws BuildException on error
      */
+    @Override
     public void setRefid(Reference r) throws BuildException {
         if (userNameSet || groupNameSet) {
             throw tooManyAttributes();
@@ -169,6 +171,7 @@ public class TarFileSet extends CommonsCompressFileSet {
      * specific attributes.
      * @param zfs the archive fileset to configure.
      */
+    @Override
     protected void configureFileSet(ArchiveFileSet zfs) {
         super.configureFileSet(zfs);
         if (zfs instanceof TarFileSet) {
@@ -178,6 +181,7 @@ public class TarFileSet extends CommonsCompressFileSet {
         }
     }
 
+    @Override
     protected CommonsCompressFileSet newFileSet(FileSet fs) {
         if (fs instanceof TarFileSet) {
             return new TarFileSet((TarFileSet) fs);

@@ -70,6 +70,7 @@ public class ArjFileSet extends CommonsCompressFileSet {
      * Create a new scanner.
      * @return the created scanner.
      */
+    @Override
     protected ArchiveScanner newArchiveScanner() {
         CommonsCompressArchiveScanner cs =
             new CommonsCompressArchiveScanner(new ArjStreamFactory(),
@@ -83,6 +84,7 @@ public class ArjFileSet extends CommonsCompressFileSet {
         return cs;
     }
 
+    @Override
     protected CommonsCompressFileSet newFileSet(FileSet fs) {
         if (fs instanceof ArjFileSet) {
             return new ArjFileSet((ArjFileSet) fs);

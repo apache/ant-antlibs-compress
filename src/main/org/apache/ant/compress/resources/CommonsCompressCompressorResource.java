@@ -103,6 +103,7 @@ public abstract class CommonsCompressCompressorResource
      * @return the wrapped stream.
      * @throws IOException if there is a problem.
      */
+    @Override
     protected final InputStream wrapStream(InputStream in) throws IOException {
         if (factory instanceof CompressorWithConcatenatedStreamsFactory) {
             CompressorWithConcatenatedStreamsFactory f
@@ -120,6 +121,7 @@ public abstract class CommonsCompressCompressorResource
      * @return the wrapped stream.
      * @throws IOException if there is a problem.
      */
+    @Override
     protected final OutputStream wrapStream(OutputStream out)
         throws IOException {
         return factory.getCompressorStream(new BufferedOutputStream(out));
@@ -129,6 +131,7 @@ public abstract class CommonsCompressCompressorResource
      * Get the string representation of this Resource.
      * @return this Resource formatted as a String.
      */
+    @Override
     public String toString() {
         return name + " compressed " + super.toString();
     }

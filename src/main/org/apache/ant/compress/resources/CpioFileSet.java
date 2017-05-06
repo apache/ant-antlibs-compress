@@ -69,6 +69,7 @@ public class CpioFileSet extends CommonsCompressFileSet {
      * Create a new scanner.
      * @return the created scanner.
      */
+    @Override
     protected ArchiveScanner newArchiveScanner() {
         CommonsCompressArchiveScanner cs =
             new CommonsCompressArchiveScanner(new CpioStreamFactory(),
@@ -82,6 +83,7 @@ public class CpioFileSet extends CommonsCompressFileSet {
         return cs;
     }
 
+    @Override
     protected CommonsCompressFileSet newFileSet(FileSet fs) {
         if (fs instanceof CpioFileSet) {
             return new CpioFileSet((CpioFileSet) fs);
