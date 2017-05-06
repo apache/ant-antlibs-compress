@@ -90,32 +90,32 @@ public class SevenZScanner extends CommonsCompressArchiveScanner {
         SevenZArchiveEntry entry = null;
 
         try (SevenZFile zf = new SevenZFile(srcFile)) {
-                entry = zf.getNextEntry();
-                while (entry != null) {
-                    /* TODO implement canReadEntryData in CC
-                    if (getSkipUnreadableEntries() && !zf.canReadEntryData(entry)) {
-                        log(Messages.skippedIsUnreadable(entry));
-                        continue;
-                    }
-                    */
-                    Resource r = new SevenZResource(srcFile, encoding, entry);
-                    String name = entry.getName();
-                    if (entry.isDirectory()) {
-                        name = trimSeparator(name);
-                        dirEntries.put(name, r);
-                        if (match(name)) {
-                            matchDirEntries.put(name, r);
-                        }
-                    } else {
-                        fileEntries.put(name, r);
-                        if (match(name)) {
-                            matchFileEntries.put(name, r);
-                        }
-                    }
-                    entry = zf.getNextEntry();
+            entry = zf.getNextEntry();
+            while (entry != null) {
+                /* TODO implement canReadEntryData in CC
+                if (getSkipUnreadableEntries() && !zf.canReadEntryData(entry)) {
+                   log(Messages.skippedIsUnreadable(entry));
+                   continue;
                 }
-            } catch (IOException ex) {
-                throw new BuildException("Problem opening " + srcFile, ex);
+                */
+                Resource r = new SevenZResource(srcFile, encoding, entry);
+                String name = entry.getName();
+                if (entry.isDirectory()) {
+                    name = trimSeparator(name);
+                    dirEntries.put(name, r);
+                    if (match(name)) {
+                        matchDirEntries.put(name, r);
+                    }
+                } else {
+                    fileEntries.put(name, r);
+                    if (match(name)) {
+                        matchFileEntries.put(name, r);
+                    }
+                }
+                entry = zf.getNextEntry();
             }
+        } catch (IOException ex) {
+            throw new BuildException("Problem opening " + srcFile, ex);
+        }
     }
 }
