@@ -223,11 +223,11 @@ public abstract class CommonsCompressFileSet extends ArchiveFileSet {
      * as this one.
      * @return the cloned tarFileSet
      */
-    public Object clone() {
+    public CommonsCompressFileSet clone() {
         if (isReference()) {
             return ((CommonsCompressFileSet) getRef(getProject())).clone();
         } else {
-            return super.clone();
+            return (CommonsCompressFileSet) super.clone();
         }
     }
 
