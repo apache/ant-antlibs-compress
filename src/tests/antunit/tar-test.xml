@@ -22,7 +22,7 @@
 
   <import file="antunit-base.xml" />
 
-  <target name="setUp">
+  <target name="setUp" depends="-set-zip-ts-properties">
     <mkdir dir="${output}"/>
     <property name="dest" location="${output}/test.tar"/>
     <mkdir dir="${input}/subdir"/>
@@ -100,8 +100,8 @@
       <zipfileset src="../resources/asf-logo.gif.zip"
                   includes="asf-logo.gif"/>
     </cmp:tar>
-    <checkProperties dateTime="2001-11-19-15:34:20"
-                     pattern="yyyy-MM-dd-HH:mm:ss"
+    <checkProperties dateTime="${zip-ts-value}"
+                     pattern="${zip-ts-pattern}"
                      mode="644"/>
   </target>
 
@@ -110,8 +110,8 @@
       <cmp:zipfileset src="../resources/asf-logo.gif.zip"
                       includes="asf-logo.gif"/>
     </cmp:tar>
-    <checkProperties dateTime="2001-11-19-15:34:20"
-                     pattern="yyyy-MM-dd-HH:mm:ss"
+    <checkProperties dateTime="${zip-ts-value}"
+                     pattern="${zip-ts-pattern}"
                      mode="644"/>
   </target>
 
