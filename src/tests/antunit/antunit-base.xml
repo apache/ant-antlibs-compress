@@ -17,6 +17,7 @@
 -->
 <project name="antunit-base"
          xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
+         xmlns:cmp="antlib:org.apache.ant.compress"
          xmlns:au="antlib:org.apache.ant.antunit">
 
   <property name="input" location="${java.io.tmpdir}/testinput"/>
@@ -55,4 +56,40 @@
       </au:assertFalse>
     </sequential>
   </macrodef>
+
+  <target name="-detect-zip-usage-of-extra-field">
+    <!-- startig with a patch release of Java8
+         java.util.zip.ZipEntry#getTime has started to use extended
+         timestamp extra fields contained within ZIP archives, which
+         leads to the timestamps contained within our tests to depend
+         onthe local timezone and the version of Java.
+         This target tries to detect whether the newer version is used
+         (in which case the pattern including the timezone is
+         required).
+         The change in OpenJDK is
+         http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/rev/90df6756406f
+         -->
+    <condition property="zip-uses-extra-field">
+      <cond:islastmodified datetime="2001-11-19-15:34:20 +0100"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:zipentry name="asf-logo.gif">
+          <file file="../resources/asf-logo.gif.zip"/>
+        </cmp:zipentry>
+      </cond:islastmodified>
+    </condition>
+  </target>
+  <target name="-zip-with-extra-field"
+          depends="-detect-zip-usage-of-extra-field"
+          if="zip-uses-extra-field">
+    <property name="zip-ts-pattern" value="yyyy-MM-dd-HH:mm:ss Z"/>
+    <property name="zip-ts-value" value="2001-11-19-15:34:20 +0100"/>
+  </target>
+  <target name="-zip-without-extra-field"
+          depends="-detect-zip-usage-of-extra-field"
+          unless="zip-uses-extra-field">
+    <property name="zip-ts-pattern" value="yyyy-MM-dd-HH:mm:ss"/>
+    <property name="zip-ts-value" value="2001-11-19-15:34:20"/>
+  </target>
+  <target name="-set-zip-ts-properties"
+          depends="-zip-with-extra-field, -zip-without-extra-field"/>
 </project>
