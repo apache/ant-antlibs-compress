@@ -119,6 +119,10 @@
     <p>This Antlib requires Apache Ant 1.8.0 or higher, Apache
       Commons Compress 1.13 or higher and Java7 or higher.</p>
 
+    <p>In order to use LZMA, XZ or most of the 7z support
+      the <a href="https://tukaani.org/xz/java.html">XZ for Java</a>
+      version 1.6 or later is required.
+
     <p>If you are building the Antlib from sources, run
       the <code>antlib</code> target and you'll get a
       file <code>ant-compress-VERSION.jar</code>.  If you've
@@ -145,6 +149,8 @@
         &lt;classpath&gt;
           &lt;pathelement location="YOUR-PATH-TO/ant-compress-VERSION1.jar"/&gt;
           &lt;pathelement location="YOUR-PATH-TO/commons-compress-VERSION2.jar"/&gt;
+          &lt;!-- optional dependencies --&gt;
+          &lt;pathelement location="YOUR-PATH-TO/xz-VERSION3.jar"/&gt;
         &lt;/classpath&gt;
       &lt;/taskdef&gt;
 </pre>
