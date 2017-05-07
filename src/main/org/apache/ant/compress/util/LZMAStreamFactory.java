@@ -29,7 +29,7 @@ import org.apache.commons.compress.compressors.lzma.LZMACompressorOutputStream;
 
 /**
  * Creates streams for the standalone LZMA format.
- * @since Apache Compress Antlib 1.3, write support added with 1.4
+ * @since Apache Compress Antlib 1.3, write support added with 1.5
  */
 public class LZMAStreamFactory implements CompressorStreamFactory {
 
