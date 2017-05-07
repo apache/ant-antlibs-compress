@@ -25,10 +25,11 @@ import java.io.OutputStream;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorOutputStream;
 import org.apache.commons.compress.compressors.lzma.LZMACompressorInputStream;
+import org.apache.commons.compress.compressors.lzma.LZMACompressorOutputStream;
 
 /**
  * Creates streams for the standalone LZMA format.
- * @since Apache Compress Antlib 1.3
+ * @since Apache Compress Antlib 1.3, write support added with 1.4
  */
 public class LZMAStreamFactory implements CompressorStreamFactory {
 
@@ -42,11 +43,11 @@ public class LZMAStreamFactory implements CompressorStreamFactory {
     }
 
     /**
-     * Not implemented.
+     * @param stream the stream to write to, should be buffered
      */
     @Override
     public CompressorOutputStream getCompressorStream(OutputStream stream)
         throws IOException {
-        throw new UnsupportedOperationException();
+        return new LZMACompressorOutputStream(stream);
     }
 }

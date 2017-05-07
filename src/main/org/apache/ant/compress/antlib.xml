@@ -112,6 +112,10 @@
      name="xz"
      classname="org.apache.ant.compress.taskdefs.XZ"
      />
+  <taskdef
+     name="lzma"
+     classname="org.apache.ant.compress.taskdefs.LZMA"
+     />
 
   <typedef
      name="arentry"

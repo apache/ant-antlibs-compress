@@ -39,6 +39,14 @@
     </au:expectfailure>
   </target>
 
+  <target name="testLZMATask" depends="setUp">
+    <cmp:lzma src="../resources/asf-logo.gif"
+              destfile="${output}/asf-logo.gif.lzma"/>
+    <cmp:unlzma src="${output}/asf-logo.gif.lzma" dest="${output}/asf-logo.gif" />
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
   <target name="testNativeLZMA" depends="setUp">
     <cmp:unlzma src="../resources/asf-logo.gif.lzma"
                 dest="${output}/asf-logo.gif" />
