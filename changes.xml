@@ -40,8 +40,9 @@
     <release version="1.5" date="unreleased">
       <action type="update" breaks-bwc="true">
         The Apache Compress Antlib now requires Apache Commons
-        Compress 1.13 or later for 7z and write support for LZMA, XZ
-        for Java 1.6 is required for write support for LZMA.
+        Compress 1.13 or later for 7z, DEFLATE and write support
+        for LZMA.
+        XZ for Java 1.6 is required for write support for LZMA.
       </action>
       <action type="add">
         A new keepCompression flag can be used to keep the content
@@ -58,6 +59,9 @@
       </action>
       <action type="add">
         Added write support for the LZMA format.
+      </action>
+      <action type="add">
+        Added support for the DEFLATE format with and without ZLIB headers.
       </action>
     </release>
 

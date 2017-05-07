@@ -63,6 +63,30 @@
   some-archive.tar.bz2 where the <code>bzip2resource</code> provides
   the decompression of the archive.</p>
 
+<h2><a name="deflateresource">deflateresource</a></h2>
+
+<p><em>Since Apache Compress Antlib 1.5</em>.</p>
+
+<p>This is a <a href="#compresource">compressed resource</a> using the
+  DEFLATE compression.</p>
+
+  <p>This resource supports the following additional attributes:</p>
+
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">zlibheader</td>
+      <td valign="top">Whether to write or expect ZLIB headers. Unfortunately
+      it is currently not possible to detect whether zlib headers have
+      been used when reading.</td>
+      <td valign="top" align="center">No, defaults to <code>true</code></td>
+    </tr>
+  </table>
+
 <h2><a name="gzipresource">gzipresource</a></h2>
 
 <p>This is a <a href="#compresource">compressed resource</a> using the

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+  -->
+<project default="antunit"
+         xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
+         xmlns:cmp="antlib:org.apache.ant.compress">
+
+  <import file="antunit-base.xml" />
+
+  <target name="setUp">
+    <mkdir dir="${output}" />
+    <mkdir dir="${output}/empty" />
+    <touch file="${output}/fileone" />
+    <touch file="${output}/filetwo" />
+  </target>
+
+  <target name="testFailNone" depends="setUp">
+    <au:expectfailure expectedmessage="source is required.">
+      <cmp:deflate destfile="${output}/file.dfl">
+        <fileset dir="${output}/empty" />
+      </cmp:deflate>
+    </au:expectfailure>
+  </target>
+
+  <target name="testFailTwo" depends="setUp">
+    <au:expectfailure expectedmessage="Can only have one source.">
+      <cmp:deflate destfile="${output}/file.dfl">
+        <fileset dir="${output}" />
+      </cmp:deflate>
+    </au:expectfailure>
+  </target>
+
+  <target name="testFailNoDest" depends="setUp">
+    <au:expectfailure expectedmessage="dest resource is required.">
+      <cmp:deflate src="${output}/fileone">
+        <dest>
+          <fileset dir="${output}/empty" />
+        </dest>
+      </cmp:deflate>
+    </au:expectfailure>
+  </target>
+
+  <target name="testFailTwoDests" depends="setUp">
+    <au:expectfailure expectedmessage="Can only have one destination resource.">
+      <cmp:deflate src="${output}/fileone">
+        <dest>
+          <fileset dir="${output}" />
+        </dest>
+      </cmp:deflate>
+    </au:expectfailure>
+  </target>
+
+  <target name="testRealTest" depends="setUp">
+    <cmp:deflate src="../resources/asf-logo.gif"
+              destfile="${output}/asf-logo.gif.dfl" />
+    <au:assertLogContains text="Building: asf-logo.gif.dfl"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.dfl"/>
+  </target>
+
+  <target name="testRealTestWithResource" depends="setUp">
+    <cmp:deflate destfile="${output}/asf-logo.gif.dfl">
+      <file file="../resources/asf-logo.gif"/>
+    </cmp:deflate>
+    <au:assertLogContains text="Building: asf-logo.gif.dfl"/>
+    <au:assertFileExists file="${output}/asf-logo.gif.dfl"/>
+  </target>
+
+  <target name="testDateCheck" depends="setUp">
+    <touch file="${output}/asf-logo.gif.dfl"/>
+    <cmp:deflate src="../resources/asf-logo.gif"
+              destfile="${output}/asf-logo.gif.dfl" />
+    <au:assertLogContains text="Nothing to do: asf-logo.gif.dfl is up to date."/>
+  </target>
+
+  <target name="testNestedTask" depends="setUp">
+    <cmp:deflate destfile="${output}/asf-logo.tar.dfl">
+      <cmp:tar>
+        <cmp:cpiofileset src="../resources/asf-logo.gif.bin.cpio"
+                         includes="asf-logo.gif"/>
+      </cmp:tar>
+    </cmp:deflate>
+    <au:assertFileExists file="${output}/asf-logo.tar.dfl"/>
+    <au:assertTrue>
+      <cond:islastmodified datetime="2009-07-31-20:11:13 +0200"
+                           pattern="yyyy-MM-dd-HH:mm:ss Z">
+        <cmp:tarentry name="asf-logo.gif">
+          <cmp:deflateresource>
+            <file file="${output}/asf-logo.tar.dfl"/>
+          </cmp:deflateresource>
+        </cmp:tarentry>
+      </cond:islastmodified>
+    </au:assertTrue>
+  </target>
+
+</project>

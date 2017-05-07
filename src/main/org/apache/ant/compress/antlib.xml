@@ -33,6 +33,10 @@
      classname="org.apache.ant.compress.taskdefs.Uncpio"
      />
   <taskdef
+     name="undeflate"
+     classname="org.apache.ant.compress.taskdefs.Undeflate"
+     />
+  <taskdef
      name="undump"
      classname="org.apache.ant.compress.taskdefs.Undump"
      />
@@ -91,6 +95,10 @@
   <taskdef
      name="bzip2"
      classname="org.apache.ant.compress.taskdefs.BZip2"
+     />
+  <taskdef
+     name="deflate"
+     classname="org.apache.ant.compress.taskdefs.Deflate"
      />
   <taskdef
      name="gzip"
@@ -181,6 +189,10 @@
   <typedef
      name="bzip2resource"
      classname="org.apache.ant.compress.resources.BZip2Resource"
+     />
+  <typedef
+     name="deflateresource"
+     classname="org.apache.ant.compress.resources.DeflateResource"
      />
   <typedef
      name="gzipresource"
