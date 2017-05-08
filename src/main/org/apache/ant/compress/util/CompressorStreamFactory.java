@@ -33,14 +33,14 @@ public interface CompressorStreamFactory {
     /**
      * @param stream the stream to read from, should be buffered
      */
-    public CompressorInputStream getCompressorStream(InputStream stream)
+    CompressorInputStream getCompressorStream(InputStream stream)
         throws IOException;
 
 
     /**
      * @param stream the stream to write to, should be buffered
      */
-    public CompressorOutputStream getCompressorStream(OutputStream stream)
+    CompressorOutputStream getCompressorStream(OutputStream stream)
         throws IOException;
 
 }

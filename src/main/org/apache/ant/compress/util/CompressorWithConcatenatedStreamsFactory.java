@@ -38,7 +38,7 @@ public interface CompressorWithConcatenatedStreamsFactory
      *                          input; if false, stop after the first
      *                          stream
      */
-    public CompressorInputStream getCompressorStream(InputStream stream,
-                                                     boolean decompressConcatenated)
+    CompressorInputStream getCompressorStream(InputStream stream,
+                                              boolean decompressConcatenated)
         throws IOException;
 }

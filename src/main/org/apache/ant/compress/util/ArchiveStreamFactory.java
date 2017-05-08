@@ -35,8 +35,7 @@ public interface ArchiveStreamFactory {
      * @param encoding the encoding of the entry names, ignored by all
      * formats except arj, cpio, dump, tar and zip
      */
-    public ArchiveInputStream getArchiveStream(InputStream stream,
-                                               String encoding)
+    ArchiveInputStream getArchiveStream(InputStream stream, String encoding)
         throws IOException;
 
 
@@ -45,8 +44,7 @@ public interface ArchiveStreamFactory {
      * @param encoding the encoding of the entry names, ignored by all
      * formats except cpio, tar and zip
      */
-    public ArchiveOutputStream getArchiveStream(OutputStream stream,
-                                                String encoding)
+    ArchiveOutputStream getArchiveStream(OutputStream stream, String encoding)
         throws IOException;
 
 }
