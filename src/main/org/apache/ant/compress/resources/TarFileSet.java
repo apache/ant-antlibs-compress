@@ -139,6 +139,7 @@ public class TarFileSet extends CommonsCompressFileSet {
         CommonsCompressArchiveScanner cs =
             new CommonsCompressArchiveScanner(new TarStreamFactory(),
                                                  new CommonsCompressArchiveScanner.ResourceBuilder() {
+                @Override
                 public Resource buildResource(Resource archive, String encoding,
                                               ArchiveEntry entry) {
                     return new TarResource(archive, encoding,

@@ -47,6 +47,7 @@ public class SevenZScanner extends CommonsCompressArchiveScanner {
     public SevenZScanner(boolean skipUnreadable, Project project) {
         super(new SevenZStreamFactory(),
               new CommonsCompressArchiveScanner.ResourceBuilder() {
+                @Override
                 public Resource buildResource(Resource archive, String encoding,
                                               ArchiveEntry entry) {
                     return new SevenZResource(archive, encoding,

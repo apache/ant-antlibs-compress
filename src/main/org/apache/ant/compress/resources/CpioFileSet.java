@@ -74,6 +74,7 @@ public class CpioFileSet extends CommonsCompressFileSet {
         CommonsCompressArchiveScanner cs =
             new CommonsCompressArchiveScanner(new CpioStreamFactory(),
                                               new CommonsCompressArchiveScanner.ResourceBuilder() {
+                @Override
                 public Resource buildResource(Resource archive, String encoding,
                                               ArchiveEntry entry) {
                     return new CpioResource(archive, encoding, (CpioArchiveEntry) entry);

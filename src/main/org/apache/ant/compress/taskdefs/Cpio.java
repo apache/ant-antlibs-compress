@@ -41,6 +41,7 @@ public class Cpio extends ArchiveBase {
 
     public Cpio() {
         setFactory(new CpioStreamFactory() {
+                @Override
                 public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                             String encoding)
                     throws IOException {
@@ -52,6 +53,7 @@ public class Cpio extends ArchiveBase {
             });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
+                @Override
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
                     CpioArchiveEntry ent =
@@ -91,6 +93,7 @@ public class Cpio extends ArchiveBase {
                 }
             });
         setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                @Override
                 public ArchiveFileSet buildFileSet(Resource dest) {
                     ArchiveFileSet afs = new CpioFileSet();
                     afs.setSrcResource(dest);
@@ -142,6 +145,7 @@ public class Cpio extends ArchiveBase {
             setValue(BINARY_NAME);
         }
 
+        @Override
         public String[] getValues() {
             return new String[] {
                 BINARY_NAME, OLD_ASCII_NAME, ODC_NAME, NEW_ASCII_NAME, //CRC_NAME

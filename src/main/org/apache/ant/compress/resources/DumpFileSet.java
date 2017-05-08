@@ -75,6 +75,7 @@ public class DumpFileSet extends CommonsCompressFileSet {
         CommonsCompressArchiveScanner cs =
             new CommonsCompressArchiveScanner(new DumpStreamFactory(),
                                               new CommonsCompressArchiveScanner.ResourceBuilder() {
+                @Override
                 public Resource buildResource(Resource archive, String encoding,
                                               ArchiveEntry entry) {
                     return new DumpResource(archive, encoding, (DumpArchiveEntry) entry);

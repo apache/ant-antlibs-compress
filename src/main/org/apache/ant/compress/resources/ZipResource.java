@@ -125,10 +125,12 @@ public final class ZipResource extends CommonsCompressArchiveResource {
                                      + getArchive());
         }
         return new FilterInputStream(z.getInputStream(ze)) {
+            @Override
             public void close() throws IOException {
                 FileUtils.close(in);
                 z.close();
             }
+            @Override
             protected void finalize() throws Throwable {
                 try {
                     close();

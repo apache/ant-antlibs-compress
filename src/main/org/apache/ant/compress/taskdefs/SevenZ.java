@@ -48,6 +48,7 @@ public class SevenZ extends ArchiveBase {
 
     public SevenZ() {
         setFactory(new SevenZStreamFactory() {
+                @Override
                 public ArchiveOutputStream getArchiveOutputStream(File f,
                                                                   String encoding)
                     throws IOException {
@@ -64,6 +65,7 @@ public class SevenZ extends ArchiveBase {
             });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
+                @Override
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     SevenZArchiveEntry entry = new SevenZArchiveEntry();
                     entry.setName(r.getName());
@@ -80,6 +82,7 @@ public class SevenZ extends ArchiveBase {
                 }
             });
         setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                @Override
                 public ArchiveFileSet buildFileSet(Resource dest) {
                     ArchiveFileSet afs = new SevenZFileSet();
                     afs.setSrcResource(dest);

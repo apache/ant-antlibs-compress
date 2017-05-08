@@ -31,6 +31,7 @@ public final class BZip2 extends PackBase {
     public BZip2() {
         super(new BZip2StreamFactory(),
               new PackBase.ResourceWrapper() {
+                @Override
                 public CommonsCompressCompressorResource wrap(Resource dest) {
                     return new BZip2Resource(dest);
                 }

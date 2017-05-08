@@ -68,12 +68,14 @@ public class Un7z extends ExpandBase {
                 */
                 log("extracting " + ze.getName(), Project.MSG_DEBUG);
                 try (InputStream is = new InputStream() {
-                         public int read() throws IOException {
-                             return zf.read();
-                         }
-                         public int read(byte[] b) throws IOException {
-                             return zf.read(b);
-                         }
+                        @Override
+                        public int read() throws IOException {
+                            return zf.read();
+                        }
+                        @Override
+                        public int read(byte[] b) throws IOException {
+                            return zf.read(b);
+                        }
                     }) {
                     extractFile(fileUtils, srcF, dir, is,
                                 ze.getName(), ze.getLastModifiedDate(),

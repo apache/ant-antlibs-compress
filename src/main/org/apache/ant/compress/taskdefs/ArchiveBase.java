@@ -508,6 +508,7 @@ public abstract class ArchiveBase extends Task {
      */
     protected void sort(List/*<ResourceWithFlags>*/ l) {
         Collections.sort(l, new Comparator/*<ResourceWithFlags>*/() {
+                @Override
                 public int compare(Object o1, Object o2) {
                     ResourceWithFlags r1 = (ResourceWithFlags) o1;
                     ResourceWithFlags r2 = (ResourceWithFlags) o2;

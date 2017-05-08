@@ -47,6 +47,7 @@ public class ZipScanner extends CommonsCompressArchiveScanner {
     public ZipScanner(boolean skipUnreadable, Project project) {
         super(new ZipStreamFactory(),
               new CommonsCompressArchiveScanner.ResourceBuilder() {
+                @Override
                 public Resource buildResource(Resource archive, String encoding,
                                             ArchiveEntry entry) {
                     return new ZipResource(archive, encoding,

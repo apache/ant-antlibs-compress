@@ -46,11 +46,13 @@ public final class Pack200 extends PackBase {
 
     public Pack200() {
         super(new PackBase.ResourceWrapper() {
+                @Override
                 public CommonsCompressCompressorResource wrap(Resource dest) {
                     return new Pack200Resource(dest);
                 }
             });
         setFactory(new CompressorStreamFactory() {
+                @Override
                 public CompressorOutputStream
                     getCompressorStream(OutputStream stream)
                     throws IOException {
@@ -59,6 +61,7 @@ public final class Pack200 extends PackBase {
                                                              .getStrategy(),
                                                              properties);
                 }
+                @Override
                 public CompressorInputStream
                     getCompressorStream(InputStream stream)
                     throws IOException {
@@ -97,6 +100,7 @@ public final class Pack200 extends PackBase {
             STRATEGIES.put(TEMP_FILE_KEY, Pack200Strategy.TEMP_FILE);
         }
 
+        @Override
         public String[] getValues() {
             return new String[] {IN_MEMORY_KEY, TEMP_FILE_KEY};
         }

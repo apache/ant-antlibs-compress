@@ -43,6 +43,7 @@ public class Ar extends ArchiveBase {
 
     public Ar() {
         setFactory(new ArStreamFactory() {
+                @Override
                 public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                             String encoding)
                     throws IOException {
@@ -57,6 +58,7 @@ public class Ar extends ArchiveBase {
             });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
+                @Override
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
                     if (isDir) {
@@ -93,6 +95,7 @@ public class Ar extends ArchiveBase {
                 }
             });
         setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                @Override
                 public ArchiveFileSet buildFileSet(Resource dest) {
                     ArchiveFileSet afs = new ArFileSet();
                     afs.setSrcResource(dest);
@@ -136,10 +139,12 @@ public class Ar extends ArchiveBase {
             setValue(AR_NAME);
         }
 
+        @Override
         public String[] getValues() {
             return new String[] {AR_NAME, BSD_NAME};
         }
 
+        @Override
         public boolean equals(Object other) {
             return other instanceof Format
                 && ((Format) other).getValue().equals(getValue());

@@ -50,6 +50,7 @@ public class Zip extends ArchiveBase {
 
     public Zip() {
         setFactory(new ZipStreamFactory() {
+                @Override
                 public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                             String encoding)
                     throws IOException {
@@ -59,6 +60,7 @@ public class Zip extends ArchiveBase {
                     configure(o);
                     return o;
                 }
+                @Override
                 public ArchiveOutputStream getArchiveOutputStream(File f,
                                                                   String encoding)
                     throws IOException {
@@ -70,6 +72,7 @@ public class Zip extends ArchiveBase {
             });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
+                @Override
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
                     ZipArchiveEntry ent = new ZipArchiveEntry(r.getName());
@@ -104,6 +107,7 @@ public class Zip extends ArchiveBase {
                 }
             });
         setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                @Override
                 public ArchiveFileSet buildFileSet(Resource dest) {
                     ArchiveFileSet afs = new ZipFileSet();
                     afs.setSrcResource(dest);
@@ -201,6 +205,7 @@ public class Zip extends ArchiveBase {
                          .NOT_ENCODEABLE);
         }
 
+        @Override
         public String[] getValues() {
             return new String[] {NEVER_KEY, ALWAYS_KEY, N_E_KEY};
         }
@@ -237,6 +242,7 @@ public class Zip extends ArchiveBase {
             POLICIES.put(A_N_KEY, Zip64Mode.AsNeeded);
         }
 
+        @Override
         public String[] getValues() {
             return new String[] {NEVER_KEY, ALWAYS_KEY, A_N_KEY};
         }

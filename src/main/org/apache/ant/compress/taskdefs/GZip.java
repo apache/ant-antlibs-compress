@@ -38,11 +38,13 @@ public final class GZip extends PackBase {
 
     public GZip() {
         super(new PackBase.ResourceWrapper() {
+                @Override
                 public CommonsCompressCompressorResource wrap(Resource dest) {
                     return new GZipResource(dest);
                 }
             });
         setFactory(new GZipStreamFactory() {
+                @Override
                 public CompressorOutputStream getCompressorStream(OutputStream stream)
                     throws IOException {
                     GzipParameters params = new GzipParameters();

@@ -39,6 +39,7 @@ public class Tar extends ArchiveBase {
 
     public Tar() {
         setFactory(new TarStreamFactory(){
+                @Override
                 public ArchiveOutputStream getArchiveStream(OutputStream stream,
                                                             String encoding)
                     throws IOException {
@@ -69,6 +70,7 @@ public class Tar extends ArchiveBase {
             });
         setEntryBuilder(
               new ArchiveBase.EntryBuilder() {
+                @Override
                 public ArchiveEntry buildEntry(ArchiveBase.ResourceWithFlags r) {
                     boolean isDir = r.getResource().isDirectory();
                     String name = r.getName();
@@ -124,6 +126,7 @@ public class Tar extends ArchiveBase {
                 }
             });
         setFileSetBuilder(new ArchiveBase.FileSetBuilder() {
+                @Override
                 public ArchiveFileSet buildFileSet(Resource dest) {
                     ArchiveFileSet afs = new TarFileSet();
                     afs.setSrcResource(dest);
@@ -163,6 +166,7 @@ public class Tar extends ArchiveBase {
             setValue(USTAR_NAME);
         }
 
+        @Override
         public String[] getValues() {
             return new String[] {
                 USTAR_NAME, OLDGNU_NAME, GNU_NAME,

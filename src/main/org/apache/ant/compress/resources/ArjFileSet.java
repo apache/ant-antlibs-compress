@@ -75,6 +75,7 @@ public class ArjFileSet extends CommonsCompressFileSet {
         CommonsCompressArchiveScanner cs =
             new CommonsCompressArchiveScanner(new ArjStreamFactory(),
                                               new CommonsCompressArchiveScanner.ResourceBuilder() {
+                @Override
                 public Resource buildResource(Resource archive, String encoding,
                                               ArchiveEntry entry) {
                     return new ArjResource(archive, encoding, (ArjArchiveEntry) entry);

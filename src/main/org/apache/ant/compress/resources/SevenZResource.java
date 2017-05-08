@@ -120,15 +120,19 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
         while (ze != null) {
             if (ze.getName().equals(getName())) {
                 return new InputStream() {
+                    @Override
                     public int read() throws IOException {
                         return z.read();
                     }
+                    @Override
                     public int read(byte[] b) throws IOException {
                         return z.read(b);
                     }
+                    @Override
                     public void close() throws IOException {
                         z.close();
                     }
+                    @Override
                     protected void finalize() throws Throwable {
                         try {
                             close();

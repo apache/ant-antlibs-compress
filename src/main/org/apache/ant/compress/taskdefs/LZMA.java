@@ -32,6 +32,7 @@ public final class LZMA extends PackBase {
     public LZMA() {
         super(new LZMAStreamFactory(),
               new PackBase.ResourceWrapper() {
+                @Override
                 public CommonsCompressCompressorResource wrap(Resource dest) {
                     return new LZMAResource(dest);
                 }

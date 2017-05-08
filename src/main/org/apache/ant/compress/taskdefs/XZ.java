@@ -32,6 +32,7 @@ public final class XZ extends PackBase {
     public XZ() {
         super(new XZStreamFactory(),
               new PackBase.ResourceWrapper() {
+                @Override
                 public CommonsCompressCompressorResource wrap(Resource dest) {
                     return new XZResource(dest);
                 }

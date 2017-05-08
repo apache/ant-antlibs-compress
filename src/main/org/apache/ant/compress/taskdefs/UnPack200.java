@@ -42,6 +42,7 @@ public final class UnPack200 extends UnpackBase {
     public UnPack200() {
         super(".pack");
         setFactory(new Pack200StreamFactory() {
+                @Override
                 public CompressorInputStream
                     getCompressorStream(InputStream stream)
                     throws IOException {
@@ -50,6 +51,7 @@ public final class UnPack200 extends UnpackBase {
                                                             .getStrategy(),
                                                             properties);
                 }
+                @Override
                 public CompressorInputStream getCompressorInputStream(File file)
                     throws IOException {
                     return new Pack200CompressorInputStream(file,
