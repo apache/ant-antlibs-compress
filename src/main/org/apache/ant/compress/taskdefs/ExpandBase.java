@@ -75,7 +75,7 @@ public abstract class ExpandBase extends Expand {
      */
     public void setScanForUnicodeExtraFields(boolean b) {
         throw new BuildException("The " + getTaskName()
-                                 + " task doesn't support the encoding"
+                                 + " task doesn't support the scanForUnicodeExtraFields"
                                  + " attribute", getLocation());
     }
 
