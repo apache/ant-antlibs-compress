@@ -36,6 +36,7 @@ import java.util.zip.ZipException;
 import org.apache.ant.compress.resources.ArFileSet;
 import org.apache.ant.compress.resources.CommonsCompressArchiveResource;
 import org.apache.ant.compress.resources.CpioFileSet;
+import org.apache.ant.compress.resources.SevenZResource;
 import org.apache.ant.compress.resources.TarFileSet;
 import org.apache.ant.compress.resources.TarResource;
 import org.apache.ant.compress.resources.ZipFileSet;
@@ -610,6 +611,9 @@ public abstract class ArchiveBase extends Task {
                     ZipResource zr = (ZipResource) r;
                     return new ResourceFlags(zr.getMode(), zr.getExtraFields(),
                                              zr.getMethod());
+                } else if (r instanceof SevenZResource) {
+                    SevenZResource zr = (SevenZResource) r;
+                    return new ResourceFlags(zr.getContentMethods());
                 } else {
                     CommonsCompressArchiveResource cr =
                         (CommonsCompressArchiveResource) r;
