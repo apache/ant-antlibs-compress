@@ -39,6 +39,28 @@
   value false only the first stream is uncompressed.</p>
 </a>
 
+<h2><a name="brotliresource">brotliresource</a></h2>
+
+<p>This is a <a href="#compresource">compressed resource</a> using the
+  Brotli compression.</p>
+
+  <p><em>Since Compress Antlib 1.5</em>
+
+<h4>Examples</h4>
+
+<pre>
+&lt;cmp:tarentry xmlns:cmp="antlib:org.apache.ant.compress"
+    name="some-file.txt"&gt;
+  &lt;cmp:brotliresource&gt;
+    &lt;file file="some-archive.tar.br"/&gt;
+  &lt;/cmp:brotliresource&gt;
+&lt;/cmp:tarentry&gt;
+</pre>
+
+<p>Represents the entry named some-file.txt in archive
+  some-archive.tar.br where the <code>brotliresource</code> provides
+  the decompression of the archive.</p>
+
 <h2><a name="bzip2resource">bzip2resource</a></h2>
 
 <p>This is a <a href="#compresource">compressed resource</a> using the

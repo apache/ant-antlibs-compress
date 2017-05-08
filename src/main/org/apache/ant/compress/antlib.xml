@@ -29,6 +29,10 @@
      classname="org.apache.ant.compress.taskdefs.Unarj"
      />
   <taskdef
+     name="unbrotli"
+     classname="org.apache.ant.compress.taskdefs.UnBrotli"
+     />
+  <taskdef
      name="uncpio"
      classname="org.apache.ant.compress.taskdefs.Uncpio"
      />
@@ -197,6 +201,10 @@
   <typedef
      name="archives"
      classname="org.apache.ant.compress.resources.Archives"
+     />
+  <typedef
+     name="brotliresource"
+     classname="org.apache.ant.compress.resources.BrotliResource"
      />
   <typedef
      name="bzip2resource"

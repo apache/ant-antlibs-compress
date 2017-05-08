@@ -42,7 +42,8 @@
         The Apache Compress Antlib now requires Apache Commons
         Compress 1.14 or later for 7z, DEFLATE, LZ4 and write support
         for LZMA and Snappy.
-        XZ for Java 1.6 is required for write support for LZMA.
+        XZ for Java 1.6 or later is required for write support for LZMA.
+        Brotli dec 0.1.2 or later is required for Brotli support.
       </action>
       <action type="add">
         A new keepCompression flag can be used to keep the content
@@ -68,6 +69,9 @@
       </action>
       <action type="add">
         Added support for the LZ4 format.
+      </action>
+      <action type="add">
+        Added read-only support for the Brotli format.
       </action>
     </release>
 

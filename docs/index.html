@@ -30,9 +30,10 @@
       based on <a href="http://commons.apache.org/compress/">Apache
       Commons Compress</a>.  Using Apache Commons Compress 1.14 this
       Antlib supports gzip, bzip2, lzma standalone, xz, .Z, DEFLATE,
-      Snappy, LZ4 and pack200 compression and ar, arj, cpio, 7z, Unix
-      dump, tar and zip archives.  Support for arj, .Z and dump is
-      read-only.  7z can only be used on filesystem resources.</p>
+      Snappy, LZ4, Brotli and pack200 compression and ar, arj, cpio,
+      7z, Unix dump, tar and zip archives.  Support for arj, .Z,
+      Brotli and dump is read-only.  7z can only be used on filesystem
+      resources.</p>
 
     <h3>Known Limitations</h3>
 
@@ -62,6 +63,7 @@
       <li><a href="expand.html#un7z">un7z</a></li>
       <li><a href="expand.html#unar">unar</a></li>
       <li><a href="expand.html#unarj">unarj</a></li>
+      <li><a href="unpack.html#unbrotli">unbrotli</a></li>
       <li><a href="expand.html#uncpio">uncpio</a></li>
       <li><a href="unpack.html#undeflate">undeflate</a></li>
       <li><a href="expand.html#undump">undump</a></li>
@@ -85,6 +87,7 @@
       <li><a href="entry.html#arjentry">arjentry</a></li>
       <li><a href="fileset.html#arfileset">arfileset</a></li>
       <li><a href="fileset.html#arjfileset">arjfileset</a></li>
+      <li><a href="compresource.html#brotliresource">brotliresource</a></li>
       <li><a href="compresource.html#bzip2resource">bzip2resource</a></li>
       <li><a href="entry.html#cpioentry">cpioentry</a></li>
       <li><a href="fileset.html#cpiofileset">cpiofileset</a></li>
@@ -121,11 +124,15 @@
     <h3>Installing and Using</h3>
 
     <p>This Antlib requires Apache Ant 1.8.0 or higher, Apache
-      Commons Compress 1.13 or higher and Java7 or higher.</p>
+      Commons Compress 1.14 or higher and Java7 or higher.</p>
 
     <p>In order to use LZMA, XZ or most of the 7z support
       the <a href="https://tukaani.org/xz/java.html">XZ for Java</a>
-      version 1.6 or later is required.
+      version 1.6 or later is required.</p>
+
+    <p>In order to use Brotli
+      the <a href="https://github.com/google/brotli">Brotli dec</a>
+      library verision 0.1.2 or later is required.</p>
 
     <p>If you are building the Antlib from sources, run
       the <code>antlib</code> target and you'll get a
@@ -155,6 +162,7 @@
           &lt;pathelement location="YOUR-PATH-TO/commons-compress-VERSION2.jar"/&gt;
           &lt;!-- optional dependencies --&gt;
           &lt;pathelement location="YOUR-PATH-TO/xz-VERSION3.jar"/&gt;
+          &lt;pathelement location="YOUR-PATH-TO/dec-VERSION4.jar"/&gt;
         &lt;/classpath&gt;
       &lt;/taskdef&gt;
 </pre>

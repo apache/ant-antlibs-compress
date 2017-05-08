@@ -29,7 +29,8 @@
     <description homepage="http://ant.apache.org/antlibs/compress/">
       Provides tasks and types that deal with AR, ARJ, CPIO, TAR,
       DUMP, 7Z and ZIP archives as well as BZIP2, PACK200, GZIP, LZMA,
-      Snappy, LZ4 and XZ compressed files based on Apache Commons Compress.
+      Snappy, LZ4, Brotli and XZ compressed files based on Apache
+      Commons Compress.
     </description>
   </info>
   <configurations>
@@ -57,6 +58,7 @@
   <dependencies>
     <dependency org="org.apache.commons" name="commons-compress" rev="1.14" conf="default"/>
     <dependency org="org.tukaani" name="xz" rev="1.6" conf="default"/>
+    <dependency org="org.brotli" name="dec" rev="0.1.2" conf="default"/>
     <dependency org="junit" name="junit" rev="4.11" conf="test->default"/>
   </dependencies>
 </ivy-module>
