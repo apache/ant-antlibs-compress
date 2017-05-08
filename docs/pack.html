@@ -151,6 +151,33 @@
     </tr>
   </table>
 
+  <h3><a name="lz4">LZ4</a></h3>
+
+  <p>Is a <a href="#pack">compressing task</a> that uses
+    the <a href="http://lz4.github.io/lz4/">LZ4</a> compression
+    algorithm.</p>
+
+  <p><em>Since Compress Antlib 1.5</em>
+
+  <h4>Parameters</h4>
+  <p>In addition to the attributes supported by all compressing task
+    this task also supports.</p>
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">framed</td>
+      <td valign="top">Whether to use
+        the <a href="http://lz4.github.io/lz4/lz4_Frame_format.html">frame
+        format</a>.
+      </td>
+      <td align="center" valign="top">No, defaults to true.</td>
+    </tr>
+  </table>
+
   <h3><a name="lzma">LZMA</a></h3>
 
   <p>Is a <a href="#pack">compressing task</a> that uses the LZMA

@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<project default="antunit"
+         xmlns:au="antlib:org.apache.ant.antunit"
+         xmlns:cond="antlib:org.apache.tools.ant.types.conditions"
+         xmlns:cmp="antlib:org.apache.ant.compress">
+
+  <import file="antunit-base.xml" />
+
+  <target name="setUp">
+    <mkdir dir="${output}"/>
+  </target>
+
+  <target name="test1">
+    <au:expectfailure>
+      <cmp:unlz4/>
+    </au:expectfailure>
+  </target>
+
+  <target name="test2">
+    <au:expectfailure>
+      <cmp:unlz4 src=""/>
+    </au:expectfailure>
+  </target>
+
+  <target name="testLz4Task" depends="setUp">
+    <cmp:lz4 src="../resources/asf-logo.gif"
+                destfile="${output}/asf-logo.gif.lz4"/>
+    <cmp:unlz4 src="${output}/asf-logo.gif.lz4" dest="${output}/asf-logo.gif" />
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
+  <target name="testLz4TaskWithoutFrame" depends="setUp">
+    <cmp:lz4 src="../resources/asf-logo.gif"
+                destfile="${output}/asf-logo.gif.lz4"
+                framed="false"/>
+    <cmp:unlz4 src="${output}/asf-logo.gif.lz4"
+                  dest="${output}/asf-logo.gif"
+                  framed="false"/>
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
+  <target name="testNativeLz4" depends="setUp">
+    <cmp:unlz4 src="../resources/asf-logo.gif.lz4"
+                dest="${output}/asf-logo.gif" />
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
+  <target name="testWithResource" depends="setUp">
+    <cmp:unlz4 dest="${output}/asf-logo.gif">
+      <file file="../resources/asf-logo.gif.lz4"/>
+    </cmp:unlz4>
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
+  <target name="testConcatenatedStreamsDefault"
+          depends="setUp">
+    <echo file="${output}/expected">a</echo>
+    <cmp:unlz4 dest="${output}/actual">
+      <file file="../resources/multiple.lz4"/>
+    </cmp:unlz4>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
+
+  <target name="testConcatenatedStreamsOnlyFirstStream"
+          depends="setUp">
+    <echo file="${output}/expected">a</echo>
+    <cmp:unlz4 dest="${output}/actual" decompressconcatenated="false">
+      <file file="../resources/multiple.lz4"/>
+    </cmp:unlz4>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
+
+  <target name="testConcatenatedStreamsAllStreams"
+          depends="setUp">
+    <echo file="${output}/expected">ab</echo>
+    <cmp:unlz4 dest="${output}/actual" decompressconcatenated="true">
+      <file file="../resources/multiple.lz4"/>
+    </cmp:unlz4>
+    <au:assertFilesMatch expected="${output}/expected"
+                         actual="${output}/actual"/>
+  </target>
+</project>

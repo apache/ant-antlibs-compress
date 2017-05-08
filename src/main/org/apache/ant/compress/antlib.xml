@@ -73,6 +73,10 @@
      classname="org.apache.ant.compress.taskdefs.GUnzip"
      />
   <taskdef
+     name="unlz4"
+     classname="org.apache.ant.compress.taskdefs.UnLZ4"
+     />
+  <taskdef
      name="unlzma"
      classname="org.apache.ant.compress.taskdefs.UnLZMA"
      />
@@ -123,6 +127,10 @@
   <taskdef
      name="xz"
      classname="org.apache.ant.compress.taskdefs.XZ"
+     />
+  <taskdef
+     name="lz4"
+     classname="org.apache.ant.compress.taskdefs.LZ4"
      />
   <taskdef
      name="lzma"
@@ -201,6 +209,10 @@
   <typedef
      name="gzipresource"
      classname="org.apache.ant.compress.resources.GZipResource"
+     />
+  <typedef
+     name="lz4resource"
+     classname="org.apache.ant.compress.resources.LZ4Resource"
      />
   <typedef
      name="lzmaresource"

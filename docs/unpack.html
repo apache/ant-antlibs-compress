@@ -117,7 +117,36 @@ resource collection</h4>
     </tr>
   </table>
 
-<h3><a name="unlzma">UnLZMA</a></h3>
+<h3><a name="unlz4">UnLZ4</a></h3>
+
+<p>Is an <a href="#unpack">uncompressing task</a> that uses the LZ4
+  compression algorithm.</p>
+
+<p><em>Since Apache Compress Antlib 1.5</em>.</p>
+
+<p>This task supports
+  the <a href="#decompressConcatenated">decompressConcatenated</a>
+  attribute if the frame format is used.</p>
+
+<h4>Parameters</h4>
+  <p>In addition to the attributes supported by all uncompressing task
+    this task also supports.</p>
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">framed</td>
+      <td valign="top">Whether the input is expected to use
+      the <a href="http://lz4.github.io/lz4/lz4_Frame_format.html">frame
+     format</a>.</td>
+      <td align="center" valign="top">No, defaults to true.</td>
+    </tr>
+  </table>
+
+  <h3><a name="unlzma">UnLZMA</a></h3>
 
 <p>Is an <a href="#unpack">uncompressing task</a> that uses the LZMA
   compression algorithm.</p>
