@@ -87,9 +87,7 @@
     <au:assertLogContains text="Nothing to do: asf-logo.gif.lzma is up to date."/>
   </target>
 
-  <!-- re-enable once we upgrade to CC 1.14, see
-       https://issues.apache.org/jira/browse/COMPRESS-393 -->
-  <target name="XtestNestedTask" depends="setUp">
+  <target name="testNestedTask" depends="setUp">
     <cmp:lzma destfile="${output}/asf-logo.tar.lzma">
       <cmp:tar>
         <cmp:cpiofileset src="../resources/asf-logo.gif.bin.cpio"
