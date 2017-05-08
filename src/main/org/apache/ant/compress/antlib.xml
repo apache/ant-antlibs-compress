@@ -117,6 +117,10 @@
      classname="org.apache.ant.compress.taskdefs.SevenZ"
      />
   <taskdef
+     name="snappy"
+     classname="org.apache.ant.compress.taskdefs.Snappy"
+     />
+  <taskdef
      name="xz"
      classname="org.apache.ant.compress.taskdefs.XZ"
      />

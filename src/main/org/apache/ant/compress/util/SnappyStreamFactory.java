@@ -25,12 +25,13 @@ import java.io.OutputStream;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorOutputStream;
 import org.apache.commons.compress.compressors.snappy.FramedSnappyCompressorInputStream;
+import org.apache.commons.compress.compressors.snappy.FramedSnappyCompressorOutputStream;
 import org.apache.commons.compress.compressors.snappy.SnappyCompressorInputStream;
 
 /**
  * Creates streams for the standalone Snappy format.
- * @since Apache Compress Antlib 1.4
- * @see <a href="http://code.google.com/p/snappy/">Snappy Project</a>
+ * @since Apache Compress Antlib 1.4, write support added with 1.5
+ * @see <a href="https://github.com/google/snappy">Snappy Project</a>
  */
 public class SnappyStreamFactory implements CompressorStreamFactory {
 
@@ -46,6 +47,13 @@ public class SnappyStreamFactory implements CompressorStreamFactory {
     }
 
     /**
+     * Whether to use the "framing format".
+     */
+    protected boolean isFramed() {
+        return framed;
+    }
+
+    /**
      * @param stream the stream to read from, should be buffered
      */
     @Override
@@ -56,11 +64,15 @@ public class SnappyStreamFactory implements CompressorStreamFactory {
     }
 
     /**
-     * Not implemented.
+     * @param stream the stream to write to, should be buffered
      */
     @Override
     public CompressorOutputStream getCompressorStream(OutputStream stream)
         throws IOException {
-        throw new UnsupportedOperationException();
+        if (!framed) {
+            throw new UnsupportedOperationException("Must know the uncompressed size"
+                                                    + " for non-framed snappy");
+        }
+        return new FramedSnappyCompressorOutputStream(stream);
     }
 }

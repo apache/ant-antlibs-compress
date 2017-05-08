@@ -39,6 +39,14 @@
     </au:expectfailure>
   </target>
 
+  <target name="testSnappyTask" depends="setUp">
+    <cmp:snappy src="../resources/asf-logo.gif"
+                destfile="${output}/asf-logo.gif.sz"/>
+    <cmp:unsnappy src="${output}/asf-logo.gif.sz" dest="${output}/asf-logo.gif" />
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
   <target name="testNativeSnappy" depends="setUp">
     <cmp:unsnappy src="../resources/asf-logo.gif.sz"
                 dest="${output}/asf-logo.gif" />

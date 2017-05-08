@@ -216,6 +216,32 @@
     </tr>
   </table>
 
+  <h3><a name="snappy">Snappy</a></h3>
+
+  <p>Is a <a href="#pack">compressing task</a> that uses
+    the <a href="https://github.com/google/snappy">Snappy</a>
+    compression algorithm.</p>
+
+  <p><em>Since Compress Antlib 1.5</em>
+
+<h4>Parameters</h4>
+  <p>In addition to the attributes supported by all compressing task
+    this task also supports.</p>
+  <table border="1" cellpadding="2" cellspacing="0">
+    <tr>
+      <td valign="top"><b>Attribute</b></td>
+      <td valign="top"><b>Description</b></td>
+      <td align="center" valign="top"><b>Required</b></td>
+    </tr>
+    <tr>
+      <td valign="top">framed</td>
+      <td valign="top">Whether to use
+      the <a href="https://github.com/google/snappy/blob/master/framing_format.txt">framing
+     format</a>.</td>
+      <td align="center" valign="top">No, defaults to true.</td>
+    </tr>
+  </table>
+
   <h3><a name="xz">XZ</a></h3>
 
   <p>Is a <a href="#pack">compressing task</a> that uses the XZ
