@@ -232,6 +232,13 @@ public abstract class PackBase extends Task {
         }
     }
 
+    /**
+     * @since Apache Compress Antlib 1.5
+     */
+    protected final Resource getSrc() {
+        return src;
+    }
+
     public static interface ResourceWrapper {
         CommonsCompressCompressorResource wrap(Resource dest);
     }

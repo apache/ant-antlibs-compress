@@ -47,6 +47,17 @@
                          actual="${output}/asf-logo.gif"/>
   </target>
 
+  <target name="testSnappyTaskWithoutFraming" depends="setUp">
+    <cmp:snappy src="../resources/asf-logo.gif"
+                destfile="${output}/asf-logo.gif.sz"
+                framed="false"/>
+    <cmp:unsnappy src="${output}/asf-logo.gif.sz"
+                  dest="${output}/asf-logo.gif"
+                  framed="false"/>
+    <au:assertFilesMatch expected="../resources/asf-logo.gif"
+                         actual="${output}/asf-logo.gif"/>
+  </target>
+
   <target name="testNativeSnappy" depends="setUp">
     <cmp:unsnappy src="../resources/asf-logo.gif.sz"
                 dest="${output}/asf-logo.gif" />

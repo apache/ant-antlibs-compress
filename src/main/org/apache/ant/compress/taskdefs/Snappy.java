@@ -18,9 +18,14 @@
 
 package org.apache.ant.compress.taskdefs;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import org.apache.ant.compress.resources.SnappyResource;
 import org.apache.ant.compress.resources.CommonsCompressCompressorResource;
 import org.apache.ant.compress.util.SnappyStreamFactory;
+import org.apache.commons.compress.compressors.CompressorOutputStream;
+import org.apache.commons.compress.compressors.snappy.SnappyCompressorOutputStream;
 import org.apache.tools.ant.types.Resource;
 
 /**
@@ -51,5 +56,13 @@ public final class Snappy extends PackBase {
     }
 
     private class InnerSnappyStreamFactory extends SnappyStreamFactory {
+        @Override
+        public CompressorOutputStream getCompressorStream(OutputStream stream)
+            throws IOException {
+            if (isFramed() || getSrc() == null || getSrc().getSize() < 0) {
+                return super.getCompressorStream(stream);
+            }
+            return new SnappyCompressorOutputStream(stream, getSrc().getSize());
+        }
     }
 }
