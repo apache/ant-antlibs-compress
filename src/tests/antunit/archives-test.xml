@@ -90,6 +90,51 @@
     <au:assertFileExists file="${output}/cpio/${filename}"/>
   </target>
 
+  <target name="testArj">
+    <mkdir dir="${output}"/>
+    <copy todir="${output}">
+      <cmp:archives>
+        <arjs>
+          <file file="../resources/asf-logo.gif.arj"/>
+        </arjs>
+      </cmp:archives>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+  <target name="testDump">
+    <mkdir dir="${output}"/>
+    <copy todir="${output}">
+      <cmp:archives>
+        <dumps>
+          <file file="../resources/asf-logo.gif.dump"/>
+        </dumps>
+      </cmp:archives>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
+  <target name="test7z">
+    <mkdir dir="${output}"/>
+    <copy todir="${output}">
+      <cmp:archives>
+        <sevenzs>
+          <file file="../resources/asf-logo.gif.7z"/>
+        </sevenzs>
+      </cmp:archives>
+    </copy>
+    <au:assertFilesMatch
+       actual="${output}/asf-logo.gif"
+       expected="../resources/asf-logo.gif"
+       />
+  </target>
+
   <target name="testReference" depends="-findAntHomeLib">
     <mkdir dir="${output}"/>
     <cmp:archives id="ref">

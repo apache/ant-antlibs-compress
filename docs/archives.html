@@ -36,15 +36,21 @@
 
 <h3>Parameters specified as nested elements</h3>
 
-  <p><code>&lt;archives&gt;</code> has four nested
-    elements <code>&lt;ars&gt;</code>, <code>&lt;cpios&gt;</code>,
-    <code>&lt;zips&gt;</code> and
-    <code>&lt;tars&gt;</code> that are <a href="http://ant.apache.org/manual/CoreTypes/resources.html#union">unions</a>
+  <p><code>&lt;archives&gt;</code> has seven nested
+    elements <code>&lt;ars&gt;</code>, <code>&lt;arjs&gt;</code>, <code>&lt;cpios&gt;</code>,
+    <code>&lt;dumps&gt;</code>, <code>&lt;sevenzs&gt;</code>, <code>&lt;zips&gt;</code>
+    and
+    <code>&lt;tars&gt;</code> that
+    are <a href="http://ant.apache.org/manual/CoreTypes/resources.html#union">unions</a>
     themselves, i.e. they accept arbitrary many resource(collection)s
     as nested elements.</p>
 
   <p>The nested resources of &lt;zips&gt; are treated as ZIP archives,
     the nested resources of &lt;tars&gt; as TAR archives and so on.</p>
+
+  <p>Support for nested <code>arjs</code>, <code>dumps</code>
+    and <code>sevenzs</code> has been added with the Compress Antlib
+    1.5.</p>
 
   <h4>Examples</h4>
 

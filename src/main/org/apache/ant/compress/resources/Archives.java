@@ -42,6 +42,9 @@ public class Archives extends DataType
     private Union tars = new Union();
     private Union ars = new Union();
     private Union cpios = new Union();
+    private Union arjs = new Union();
+    private Union dumps = new Union();
+    private Union sevenzs = new Union();
 
     /**
      * Wrapper to identify nested resource collections as ZIP
@@ -80,6 +83,19 @@ public class Archives extends DataType
     }
 
     /**
+     * Wrapper to identify nested resource collections as ARJ
+     * archives.
+     * @since Apache Compress Antlib 1.5
+     */
+    public Union createArjs() {
+        if (isReference()) {
+            throw noChildrenAllowed();
+        }
+        setChecked(false);
+        return arjs;
+    }
+
+    /**
      * Wrapper to identify nested resource collections as CPIO
      * archives.
      */
@@ -89,6 +105,32 @@ public class Archives extends DataType
         }
         setChecked(false);
         return cpios;
+    }
+
+    /**
+     * Wrapper to identify nested resource collections as Unix dump
+     * archives.
+     * @since Apache Compress Antlib 1.5
+     */
+    public Union createDumps() {
+        if (isReference()) {
+            throw noChildrenAllowed();
+        }
+        setChecked(false);
+        return dumps;
+    }
+
+    /**
+     * Wrapper to identify nested resource collections as 7z
+     * archives.
+     * @since Apache Compress Antlib 1.5
+     */
+    public Union createSevenzs() {
+        if (isReference()) {
+            throw noChildrenAllowed();
+        }
+        setChecked(false);
+        return sevenzs;
     }
 
     /**
@@ -145,6 +187,9 @@ public class Archives extends DataType
         if (zips.getResourceCollections().size() > 0
             || ars.getResourceCollections().size() > 0
             || cpios.getResourceCollections().size() > 0
+            || arjs.getResourceCollections().size() > 0
+            || dumps.getResourceCollections().size() > 0
+            || sevenzs.getResourceCollections().size() > 0
             || tars.getResourceCollections().size() > 0) {
             throw tooManyAttributes();
         }
@@ -164,6 +209,9 @@ public class Archives extends DataType
             a.tars = (Union) tars.clone();
             a.ars = (Union) ars.clone();
             a.cpios = (Union) cpios.clone();
+            a.arjs = (Union) arjs.clone();
+            a.dumps = (Union) dumps.clone();
+            a.sevenzs = (Union) sevenzs.clone();
             return a;
         } catch (CloneNotSupportedException e) {
             throw new BuildException(e);
@@ -192,6 +240,18 @@ public class Archives extends DataType
         }
         for (Iterator iter = cpios.iterator(); iter.hasNext(); ) {
             l.add(configureArchive(new CpioFileSet(),
+                                   (Resource) iter.next()));
+        }
+        for (Iterator iter = arjs.iterator(); iter.hasNext(); ) {
+            l.add(configureArchive(new ArjFileSet(),
+                                   (Resource) iter.next()));
+        }
+        for (Iterator iter = dumps.iterator(); iter.hasNext(); ) {
+            l.add(configureArchive(new DumpFileSet(),
+                                   (Resource) iter.next()));
+        }
+        for (Iterator iter = sevenzs.iterator(); iter.hasNext(); ) {
+            l.add(configureArchive(new SevenZFileSet(),
                                    (Resource) iter.next()));
         }
         return l.iterator();
@@ -228,6 +288,9 @@ public class Archives extends DataType
             pushAndInvokeCircularReferenceCheck(tars, stk, p);
             pushAndInvokeCircularReferenceCheck(ars, stk, p);
             pushAndInvokeCircularReferenceCheck(cpios, stk, p);
+            pushAndInvokeCircularReferenceCheck(arjs, stk, p);
+            pushAndInvokeCircularReferenceCheck(dumps, stk, p);
+            pushAndInvokeCircularReferenceCheck(sevenzs, stk, p);
             setChecked(true);
         }
     }
