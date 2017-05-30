@@ -20,7 +20,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
   <groupId>${m2.groupID}</groupId>
-  <artifactId>compress-antlib</artifactId>
+  <artifactId>${artifact.name}</artifactId>
   <packaging>jar</packaging>
   <version>${artifact.version}</version>
   <name>Apache Compress Antlib</name>
