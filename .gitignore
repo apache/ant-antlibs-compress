@@ -25,3 +25,5 @@ src/tests/antunit/core/output
 ivy
 lib
 docs/style.css
+/dist-bin/
+/distrib/
