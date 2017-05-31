@@ -44,6 +44,8 @@
         for LZMA and Snappy.
         XZ for Java 1.6 or later is required for write support for LZMA.
         Brotli dec 0.1.2 or later is required for Brotli support.
+        As a side effect the Compress Antlib now requires Java 7 at
+        runtime as this is required by Commons Compress 1.14.
       </action>
       <action type="add">
         A new keepCompression flag can be used to keep the content
