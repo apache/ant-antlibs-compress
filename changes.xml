@@ -39,6 +39,10 @@
 
     <release version="1.5" date="unreleased">
       <action type="update" breaks-bwc="true">
+        The coordinates inside the Ivy file have been changed to match
+        those of the POM.
+      </action>
+      <action type="update" breaks-bwc="true">
         The Apache Compress Antlib now requires Apache Commons
         Compress 1.14 or later for 7z, DEFLATE, LZ4 and write support
         for LZMA and Snappy.
