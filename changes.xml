@@ -37,7 +37,9 @@
       <title>Apache Compress Ant Library</title>
     </properties>
 
-    <release version="1.5" date="unreleased">
+    <release version="1.6" date="unreleased">
+    </release>
+    <release version="1.5" date="2017-06-11">
       <action type="update" breaks-bwc="true">
         The coordinates inside the Ivy file have been changed to match
         those of the POM.
