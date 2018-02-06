@@ -26,10 +26,10 @@
   <name>Apache Compress Antlib</name>
   <url>http://ant.apache.org/antlibs/compress/</url>
   <description>
-    Provides tasks and types that deal with AR, ARJ, CPIO, TAR,
-    DUMP, 7Z and ZIP archives as well as BZIP2, PACK200, GZIP, LZMA,
-    Snappy, LZ4, Brotli and XZ compressed files based on Apache
-    Commons Compress.
+    Provides tasks and types that deal with AR, ARJ, CPIO, TAR, DUMP,
+    7Z and ZIP archives as well as BZIP2, PACK200, GZIP, LZMA, Snappy,
+    LZ4, Brotli, DEFLATE, DEFLATE64, Zstandard, Unix compress and XZ
+    compressed files based on Apache Commons Compress.
   </description>
   <licenses>
     <license>
