@@ -41,6 +41,10 @@
      classname="org.apache.ant.compress.taskdefs.Undeflate"
      />
   <taskdef
+     name="undeflate64"
+     classname="org.apache.ant.compress.taskdefs.Undeflate64"
+     />
+  <taskdef
      name="undump"
      classname="org.apache.ant.compress.taskdefs.Undump"
      />
@@ -213,6 +217,10 @@
   <typedef
      name="deflateresource"
      classname="org.apache.ant.compress.resources.DeflateResource"
+     />
+  <typedef
+     name="deflate64resource"
+     classname="org.apache.ant.compress.resources.Deflate64Resource"
      />
   <typedef
      name="gzipresource"

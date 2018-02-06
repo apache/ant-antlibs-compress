@@ -29,10 +29,10 @@
       compression/uncompression and archival/unarchival capabilities
       based on <a href="http://commons.apache.org/compress/">Apache
       Commons Compress</a>.  Using Apache Commons Compress 1.14 this
-      Antlib supports gzip, bzip2, lzma standalone, xz, .Z, DEFLATE,
+      Antlib supports gzip, bzip2, lzma standalone, xz, .Z, DEFLATE, DEFLATE64,
       Snappy, LZ4, Brotli and pack200 compression and ar, arj, cpio,
       7z, Unix dump, tar and zip archives.  Support for arj, .Z,
-      Brotli and dump is read-only.  7z can only be used on filesystem
+      Brotli, DEFLATE64 and dump is read-only.  7z can only be used on filesystem
       resources.</p>
 
     <h3>Known Limitations</h3>
@@ -66,6 +66,7 @@
       <li><a href="unpack.html#unbrotli">unbrotli</a></li>
       <li><a href="expand.html#uncpio">uncpio</a></li>
       <li><a href="unpack.html#undeflate">undeflate</a></li>
+      <li><a href="unpack.html#undeflate64">undeflate64</a></li>
       <li><a href="expand.html#undump">undump</a></li>
       <li><a href="unpack.html#unlz4">unlz4</a></li>
       <li><a href="unpack.html#unlzma">unlzma</a></li>
@@ -92,6 +93,7 @@
       <li><a href="entry.html#cpioentry">cpioentry</a></li>
       <li><a href="fileset.html#cpiofileset">cpiofileset</a></li>
       <li><a href="compresource.html#deflateresource">deflateresource</a></li>
+      <li><a href="compresource.html#deflate64resource">deflate64resource</a></li>
       <li><a href="entry.html#dumpentry">dumpentry</a></li>
       <li><a href="fileset.html#dumpfileset">dumpfileset</a></li>
       <li><a href="compresource.html#gzipresource">gzipresource</a></li>

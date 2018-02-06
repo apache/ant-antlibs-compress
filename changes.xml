@@ -38,6 +38,15 @@
     </properties>
 
     <release version="1.6" date="unreleased">
+      <action type="update" breaks-bwc="true">
+        The Apache Compress Antlib now requires Apache Commons
+        Compress 1.16 or later for DEFLATE64 support.
+      </action>
+      <action type="add">
+        Added read-only support for the DEFLATE64 format. More
+        importantly we can now read zip and 7z entries using this
+        algorithm.
+      </action>
     </release>
     <release version="1.5" date="2017-06-13">
       <action type="update" breaks-bwc="true">
