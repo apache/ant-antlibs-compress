@@ -56,9 +56,9 @@
               e:classifier="ivy"/>
   </publications>
   <dependencies>
-    <dependency org="org.apache.commons" name="commons-compress" rev="1.14" conf="default"/>
-    <dependency org="org.tukaani" name="xz" rev="1.6" conf="default"/>
+    <dependency org="org.apache.commons" name="commons-compress" rev="1.16" conf="default"/>
+    <dependency org="org.tukaani" name="xz" rev="1.8" conf="default"/>
     <dependency org="org.brotli" name="dec" rev="0.1.2" conf="default"/>
-    <dependency org="junit" name="junit" rev="4.11" conf="test->default"/>
+    <dependency org="junit" name="junit" rev="4.12" conf="test->default"/>
   </dependencies>
 </ivy-module>
