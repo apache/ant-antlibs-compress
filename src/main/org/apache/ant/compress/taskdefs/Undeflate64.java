@@ -30,8 +30,6 @@ import org.apache.commons.compress.compressors.CompressorInputStream;
  */
 public final class Undeflate64 extends UnpackBase {
 
-    private boolean zlibHeader = true;
-
     public Undeflate64() {
         super(".dfl64", new Deflate64StreamFactory());
     }
