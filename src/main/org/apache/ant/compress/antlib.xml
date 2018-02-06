@@ -105,6 +105,10 @@
      classname="org.apache.ant.compress.taskdefs.UnZ"
      />
   <taskdef
+     name="unzstd"
+     classname="org.apache.ant.compress.taskdefs.UnZstd"
+     />
+  <taskdef
      name="bzip2"
      classname="org.apache.ant.compress.taskdefs.BZip2"
      />
@@ -143,6 +147,10 @@
   <taskdef
      name="lzma"
      classname="org.apache.ant.compress.taskdefs.LZMA"
+     />
+  <taskdef
+     name="zstd"
+     classname="org.apache.ant.compress.taskdefs.Zstd"
      />
 
   <typedef
@@ -249,6 +257,10 @@
   <typedef
      name="zresource"
      classname="org.apache.ant.compress.resources.ZResource"
+     />
+  <typedef
+     name="zstdresource"
+     classname="org.apache.ant.compress.resources.ZstdResource"
      />
 
   <componentdef

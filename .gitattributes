@@ -1,0 +1,9 @@
+*.ar                                    binary
+*.arj                                   binary
+*.java                                  text diff=java
+*.md                                    text
+*.txt                                   text
+*.xml                                   text
+*.yml                                   text
+*.zstd                                  binary
+.gitattributes                          text

@@ -40,12 +40,16 @@
     <release version="1.6" date="unreleased">
       <action type="update" breaks-bwc="true">
         The Apache Compress Antlib now requires Apache Commons
-        Compress 1.16 or later for DEFLATE64 support.
+        Compress 1.16 or later for DEFLATE64 and Zstandard support.
+        zstd-jni 1.3.3-1 or later is required for Zstandard support.
       </action>
       <action type="add">
         Added read-only support for the DEFLATE64 format. More
         importantly we can now read zip and 7z entries using this
         algorithm.
+      </action>
+      <action type="add">
+        Added support for the Zstandard format.
       </action>
     </release>
     <release version="1.5" date="2017-06-13">
