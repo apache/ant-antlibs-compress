@@ -25,8 +25,8 @@
     <license name="Apache Software License 2.0"
              url="https://www.apache.org/licenses/LICENSE-2.0"/>
     <ivyauthor name="Apache Ant Development Team"
-               url="http://ant.apache.org/"/>
-    <description homepage="http://ant.apache.org/antlibs/compress/">
+               url="https://ant.apache.org/"/>
+    <description homepage="https://ant.apache.org/antlibs/compress/">
       Provides tasks and types that deal with AR, ARJ, CPIO, TAR,
       DUMP, 7Z and ZIP archives as well as BZIP2, PACK200, GZIP, LZMA,
       Snappy, LZ4, Brotli, DEFLATE, DEFLATE64 and XZ compressed files

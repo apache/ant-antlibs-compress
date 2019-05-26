@@ -24,7 +24,7 @@
   <packaging>jar</packaging>
   <version>${artifact.version}</version>
   <name>Apache Compress Antlib</name>
-  <url>http://ant.apache.org/antlibs/compress/</url>
+  <url>https://ant.apache.org/antlibs/compress/</url>
   <description>
     Provides tasks and types that deal with AR, ARJ, CPIO, TAR, DUMP,
     7Z and ZIP archives as well as BZIP2, PACK200, GZIP, LZMA, Snappy,
@@ -40,7 +40,7 @@
   </licenses>
   <organization>
     <name>The Apache Software Foundation</name>
-    <url>http://www.apache.org/</url>
+    <url>https://www.apache.org/</url>
   </organization>
   <dependencies>
     <dependency>

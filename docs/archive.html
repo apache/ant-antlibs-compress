@@ -29,8 +29,8 @@
   <p>For each of the supported archiving formats there is a
     correspondig <code>archiving</code> task.  These tasks are
     supersets of the
-    core <a href="http://ant.apache.org/manual/CoreTasks/tar.html">tar</a>
-    and <a href="http://ant.apache.org/manual/CoreTasks/zip.html">zip</a>
+    core <a href="https://ant.apache.org/manual/CoreTasks/tar.html">tar</a>
+    and <a href="https://ant.apache.org/manual/CoreTasks/zip.html">zip</a>
     tasks but don't share any code with them.  Note that some
     attributes may use different defaults from the core tasks or some
     functionality may be available in different ways than with the core
@@ -41,11 +41,11 @@
     archive are archive resources themselves - i.e. they come from one
     of this Antlib's <a href="entry.html"><code>entry</code></a> or
     <a href="fileset.html"><code>fileset</code></a> resources or are
-    core <a href="http://ant.apache.org/manual/CoreTypes/resources.html#tarentry"><code>tarentry</code></a>
-    or <a href="http://ant.apache.org/manual/CoreTypes/resources.html#zipentry"><code>zipentry</code></a>
+    core <a href="https://ant.apache.org/manual/CoreTypes/resources.html#tarentry"><code>tarentry</code></a>
+    or <a href="https://ant.apache.org/manual/CoreTypes/resources.html#zipentry"><code>zipentry</code></a>
     resources or returned by a
-    core <a href="http://ant.apache.org/manual/CoreTypes/tarfileset.html"><code>tarfileset</code></a>
-    or <a href="http://ant.apache.org/manual/CoreTypes/zipfileset.html"><code>zipfileset</code></a>
+    core <a href="https://ant.apache.org/manual/CoreTypes/tarfileset.html"><code>tarfileset</code></a>
+    or <a href="https://ant.apache.org/manual/CoreTypes/zipfileset.html"><code>zipfileset</code></a>
     - the task will try to preserve the entry's permissions and as
     many other attributes of the entry as the archiving format
     supports.</p>
@@ -208,12 +208,12 @@
   <h4>dest</h4>
 
   <p>Accepts
-    any <a href="http://ant.apache.org/manual/CoreTypes/resources.html">resource</a>
+    any <a href="https://ant.apache.org/manual/CoreTypes/resources.html">resource</a>
     or single element resource collection as nested element.</p>
 
   <p>The specified resource will be used as dest.</p>
 
-  <h4>any <a href="http://ant.apache.org/manual/CoreTypes/resources.html">resource</a>
+  <h4>any <a href="https://ant.apache.org/manual/CoreTypes/resources.html">resource</a>
     or resource collection</h4>
 
   <p>This specifies the files and directories that shall be added to
@@ -331,7 +331,7 @@
   <p>Some methods support additional options, "DELTA_FILTER" even
     requires one.  The interpretation or even the type of an option
     depends on the method -
-    see <a href="http://commons.apache.org/proper/commons-compress/javadocs/api-1.8/org/apache/commons/compress/archivers/sevenz/SevenZMethodConfiguration.html">Commons
+    see <a href="https://commons.apache.org/proper/commons-compress/javadocs/api-1.8/org/apache/commons/compress/archivers/sevenz/SevenZMethodConfiguration.html">Commons
     Compress' documentation</a>.  As of version 1.5 only numeric
     options are supported.</p>
 
@@ -361,7 +361,7 @@
 
   <p>This task does not support the <code>compression</code> attribute
     of
-    the <a href="http://ant.apache.org/manual/CoreTasks/tar.html">core
+    the <a href="https://ant.apache.org/manual/CoreTasks/tar.html">core
     task</a>.  You should use a <a href="pack.html">compressing
     task</a> with a <code>tar</code> task as nested element
     instead.</p>
@@ -422,10 +422,10 @@
     <tr>
       <td valign="top">star</td>
       <td valign="top" rowspan="2">Uses an extension first introduced by J&#xf6;rg
-          Schilling's <a href="http://developer.berlios.de/projects/star">star</a>
+          Schilling's <a href="https://developer.berlios.de/projects/star">star</a>
           and later adopted by GNU tar and BSD tar.</td>
       <td valign="top">Uses a
-          PAX <a href="http://pubs.opengroup.org/onlinepubs/009695399/utilities/pax.html#tag_04_100_13_03">extended
+          PAX <a href="https://pubs.opengroup.org/onlinepubs/009695399/utilities/pax.html#tag_04_100_13_03">extended
           header</a> as defined by POSIX 1003.1.</td>
       <td valign="top">Created archives will be readable by star and
         modern versions of GNU tar and BSD tar.</td>
@@ -534,7 +534,7 @@ the executable files and include all others. </p>
     ZIP format.</p>
 
   <p>The discussion about encodings in
-    the <a href="http://ant.apache.org/manual/CoreTasks/zip.html#encoding">core
+    the <a href="https://ant.apache.org/manual/CoreTasks/zip.html#encoding">core
       zip task manual</a> applies to this task as well.</p>
   
   <p><b>Note</b> the following attributes have default values
@@ -580,7 +580,7 @@ the executable files and include all others. </p>
         encoding is UTF-8.  This setting doesn't have any effect if the
         encoding is not UTF-8.
         <br/>See also
-        the <a href="http://ant.apache.org/manual/CoreTasks/zip.html#encoding">discussion</a>
+        the <a href="https://ant.apache.org/manual/CoreTasks/zip.html#encoding">discussion</a>
         in the core task's manual.
         Default is true.</td>
       <td align="center" valign="top">No</td>
@@ -593,7 +593,7 @@ the executable files and include all others. </p>
         which will only add Unicode extra fields if the file name cannot
         be encoded using the specified encoding.
         <br/>See also
-        the <a href="http://ant.apache.org/manual/CoreTasks/zip.html#encoding">discussion</a>
+        the <a href="https://ant.apache.org/manual/CoreTasks/zip.html#encoding">discussion</a>
         in the core task's manual.
         Default is "never".</td>
       <td align="center" valign="top">No</td>
@@ -604,7 +604,7 @@ the executable files and include all others. </p>
         flag instead of the specified encoding if a file name cannot be
         encoded using the specified encoding.
         <br/>See also
-        the <a href="http://ant.apache.org/manual/CoreTasks/zip.html#encoding">discussion</a>
+        the <a href="https://ant.apache.org/manual/CoreTasks/zip.html#encoding">discussion</a>
         in the core task's manual.
         Default is false.</td>
       <td align="center" valign="top">No</td>
