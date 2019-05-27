@@ -32,7 +32,7 @@ import org.apache.commons.compress.compressors.lz4.FramedLZ4CompressorOutputStre
 /**
  * Creates streams for LZ4 format.
  * @since Apache Compress Antlib 1.5
- * @see <a href="http://lz4.github.io/lz4/">LZ4 Project</a>
+ * @see <a href="https://lz4.github.io/lz4/">LZ4 Project</a>
  */
 public class LZ4StreamFactory implements CompressorWithConcatenatedStreamsFactory {
 

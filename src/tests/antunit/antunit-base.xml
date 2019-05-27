@@ -67,7 +67,7 @@
          (in which case the pattern including the timezone is
          required).
          The change in OpenJDK is
-         http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/rev/90df6756406f
+         https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/rev/90df6756406f
          -->
     <condition property="zip-uses-extra-field">
       <cond:islastmodified datetime="2001-11-19-15:34:20 +0100"
