@@ -29,7 +29,7 @@ import org.apache.commons.compress.compressors.zstandard.ZstdCompressorOutputStr
 
 /**
  * Creates streams for the Zstandard format.
- * @since Apache Compress Antlib 1.6
+ * @since Apache Compress Antlib 1.6.0
  */
 public class ZstdStreamFactory implements CompressorStreamFactory {
 

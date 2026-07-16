@@ -22,7 +22,7 @@ import org.apache.ant.compress.util.ZstdStreamFactory;
 
 /**
  * Expands a Zstandard archive.
- * @since Apache Compress Antlib 1.6
+ * @since Apache Compress Antlib 1.6.0
  */
 public final class UnZstd extends UnpackBase {
 

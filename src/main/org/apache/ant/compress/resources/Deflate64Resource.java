@@ -22,7 +22,7 @@ import org.apache.tools.ant.types.ResourceCollection;
 
 /**
  * A DEFLATE64 compressed resource.
- * @since Apache Compress Antlib 1.6
+ * @since Apache Compress Antlib 1.6.0
  */
 public final class Deflate64Resource extends CommonsCompressCompressorResource {
     private boolean zlibHeader = true;

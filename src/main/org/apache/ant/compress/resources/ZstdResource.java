@@ -22,7 +22,7 @@ import org.apache.tools.ant.types.ResourceCollection;
 
 /**
  * A Zstdandard compressed resource.
- * @since Apache Compress Antlib 1.6
+ * @since Apache Compress Antlib 1.6.0
  */
 public final class ZstdResource extends CommonsCompressCompressorResource {
     private static final String NAME = "ZSTD";

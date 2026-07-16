@@ -28,7 +28,7 @@ import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInpu
 
 /**
  * Creates streams for the standalone DEFLATE64 format.
- * @since Apache Compress Antlib 1.6
+ * @since Apache Compress Antlib 1.6.0
  */
 public class Deflate64StreamFactory implements CompressorStreamFactory {
 

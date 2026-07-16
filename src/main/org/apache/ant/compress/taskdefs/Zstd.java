@@ -25,7 +25,7 @@ import org.apache.tools.ant.types.Resource;
 
 /**
  * Compresses using Zstandard.
- * @since Apache Compress Antlib 1.6
+ * @since Apache Compress Antlib 1.6.0
  */
 public final class Zstd extends PackBase {
 
