@@ -50,7 +50,9 @@ public final class Deflate extends PackBase {
                 public CompressorOutputStream getCompressorStream(OutputStream stream)
                     throws IOException {
                     DeflateParameters params = new DeflateParameters();
-                    params.setCompressionLevel(level);
+                    if (level != Deflater.DEFAULT_COMPRESSION) {
+                        params.setCompressionLevel(level);
+                    }
                     params.setWithZlibHeader(zlibHeader);
                     return new DeflateCompressorOutputStream(stream, params);
                 }

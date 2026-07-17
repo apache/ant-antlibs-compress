@@ -637,16 +637,10 @@ public abstract class ArchiveBase extends Task {
                     new ZipExtraField[extra == null ? 0 : extra.length];
                 if (extra != null && extra.length > 0) {
                     for (int i = 0; i < extra.length; i++) {
-                        try {
-                            ex[i] = ExtraFieldUtils
-                                .createExtraField(new ZipShort(extra[i]
-                                                               .getHeaderId()
-                                                               .getValue()));
-                        } catch (InstantiationException e) {
-                            throw new BuildException(e);
-                        } catch (IllegalAccessException e) {
-                            throw new BuildException(e);
-                        }
+                        ex[i] = ExtraFieldUtils
+                            .createExtraField(new ZipShort(extra[i]
+                                                           .getHeaderId()
+                                                           .getValue()));
                         byte[] b = extra[i].getCentralDirectoryData();
                         ex[i].parseFromCentralDirectoryData(b, 0, b.length);
                         b = extra[i].getLocalFileDataData();
