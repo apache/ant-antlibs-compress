@@ -41,7 +41,9 @@
       <action type="update" breaks-bwc="true">
         The Apache Compress Antlib now requires Apache Commons
         Compress 1.16 or later for DEFLATE64 and Zstandard support.
-        zstd-jni 1.5.7-11 or later is required for Zstandard support.
+      </action>
+      <action type="update" breaks-bwc="true">
+        Requires Ant 1.10.x and Java 8 now.
       </action>
       <action type="add">
         Added read-only support for the DEFLATE64 format. More
@@ -51,6 +53,10 @@
       <action type="add">
         Added support for the Zstandard format. This requires the
         zstd-jni library version 1.5.7-11 or later.
+      </action>
+      <action type="update">
+        Updated XZ for Java dependency to 1.12. Note the license has
+        changed from public domain to BSD Zero Clause License.
       </action>
     </release>
     <release version="1.5" date="2017-06-13">
