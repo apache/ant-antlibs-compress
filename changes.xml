@@ -42,6 +42,8 @@
         The Apache Compress Antlib now requires Apache Commons
         Compress 1.26.0 or later for DEFLATE64 and Zstandard support
         as well as fixes for several vulnerabilities.
+        Compress 1.26.0 requires commons-codec as additional
+        dependency and asm is needed for pack200 support.
       </action>
       <action type="update" breaks-bwc="true">
         Requires Ant 1.10.x and Java 8 now.
