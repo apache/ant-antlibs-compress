@@ -61,6 +61,12 @@
         Updated XZ for Java dependency to 1.12. Note the license has
         changed from public domain to BSD Zero Clause License.
       </action>
+      <action type="update" breaks-bwc="true">
+        Some of the public or protected methods in Archives,
+        ArchiveBase and SevenZResource use generic now, so their
+        method signature has changed and the change is not source
+        compatible to Compress Antlib 1.5.
+      </action>
     </release>
     <release version="1.5" date="2017-06-13">
       <action type="update" breaks-bwc="true">

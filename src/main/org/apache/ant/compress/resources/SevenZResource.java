@@ -154,7 +154,7 @@ public final class SevenZResource extends CommonsCompressArchiveResource {
      *
      * @since 1.5
      */
-    public Iterable/*<? extends SevenZMethodConfiguration>*/ getContentMethods() {
+    public Iterable<? extends SevenZMethodConfiguration> getContentMethods() {
         return contentMethods;
     }
 

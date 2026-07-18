@@ -47,6 +47,7 @@ import org.apache.ant.compress.util.StreamHelper;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.sevenz.SevenZMethodConfiguration;
 import org.apache.commons.compress.archivers.zip.ExtraFieldUtils;
 import org.apache.commons.compress.archivers.zip.ZipExtraField;
 import org.apache.commons.compress.archivers.zip.ZipShort;
@@ -281,7 +282,7 @@ public abstract class ArchiveBase extends Task {
             mode = new Mode();
             mode.setValue(Mode.FORCE_CREATE);
         }
-        Collection sourceResources;
+        Collection<ResourceWithFlags> sourceResources;
         try {
             sourceResources = findSources();
         } catch (IOException ioex) {
@@ -303,8 +304,7 @@ public abstract class ArchiveBase extends Task {
             existingEntries.setProject(getProject());
             try {
 
-                List/*<ResourceWithFlags>*/ toAdd
-                    = new ArrayList/*<ResourceWithFlags>*/();
+                List<ResourceWithFlags> toAdd = new ArrayList<>();
                 toAdd.addAll(sourceResources);
 
                 if (checkAndLogUpToDate(toAdd, targetArchive,
@@ -356,16 +356,14 @@ public abstract class ArchiveBase extends Task {
      * Find all the resources with their flags that should be added to
      * the archive.
      */
-    protected Collection/*<ResourceWithFlags>*/ findSources()
+    protected Collection<ResourceWithFlags> findSources()
         throws IOException {
 
         List<ResourceWithFlags> l = new ArrayList<>();
         Set<String> addedNames = new HashSet<>();
-        for (Iterator rcs = sources.iterator(); rcs.hasNext(); ) {
-            ResourceCollection rc = (ResourceCollection) rcs.next();
+        for (ResourceCollection rc : sources) {
             ResourceCollectionFlags rcFlags = getFlags(rc);
-            for (Iterator rs = rc.iterator(); rs.hasNext(); ) {
-                Resource r = (Resource) rs.next();
+            for (Resource r : rc) {
                 if (!isFilesOnly() || !r.isDirectory()) {
                     ResourceWithFlags rwf =
                         new ResourceWithFlags(r, rcFlags, getFlags(r));
@@ -382,7 +380,7 @@ public abstract class ArchiveBase extends Task {
         return l;
     }
 
-    private boolean checkAndLogUpToDate(Collection/*<ResourceWithFlags>*/ src,
+    private boolean checkAndLogUpToDate(Collection<ResourceWithFlags> src,
                                         Resource targetArchive,
                                         ArchiveFileSet existingEntries) {
         try {
@@ -411,14 +409,13 @@ public abstract class ArchiveBase extends Task {
      *
      * @return true if the target is up-to-date
      */
-    protected boolean isUpToDate(Collection/*<ResourceWithFlags>*/ src,
+    protected boolean isUpToDate(Collection<ResourceWithFlags> src,
                                  ArchiveFileSet existingEntries)
         throws IOException {
 
         final Resource[] srcResources = new Resource[src.size()];
         int index = 0;
-        for (Iterator i = src.iterator(); i.hasNext(); ) {
-            ResourceWithFlags r = (ResourceWithFlags) i.next();
+        for (ResourceWithFlags r : src) {
             srcResources[index++] =
                 new MappedResource(r.getResource(),
                                    new MergingMapper(r.getName()));
@@ -433,11 +430,9 @@ public abstract class ArchiveBase extends Task {
             for (int i = 0; i < outOfDate.length; i++) {
                 oodNames.add(outOfDate[i].getName());
             }
-            List/*<ResourceWithFlags>*/ copy =
-                new LinkedList/*<ResourceWithFlags>*/(src);
+            List<ResourceWithFlags> copy = new LinkedList<>(src);
             src.clear();
-            for (Iterator i = copy.iterator(); i.hasNext(); ) {
-                ResourceWithFlags r = (ResourceWithFlags) i.next();
+            for (ResourceWithFlags r : copy) {
                 if (oodNames.contains(r.getName())) {
                     src.add(r);
                 }
@@ -450,9 +445,9 @@ public abstract class ArchiveBase extends Task {
      * Add the resources of the target archive that shall be kept when
      * creating the new one.
      */
-    private void addResourcesToKeep(Collection/*<ResourceWithFlags>*/ toAdd,
+    private void addResourcesToKeep(Collection<ResourceWithFlags> toAdd,
                                     ArchiveFileSet target,
-                                    Collection/*<ResourceWithFlags>*/ src) {
+                                    Collection<ResourceWithFlags> src) {
         if (!Mode.FORCE_CREATE.equals(getMode().getValue())
             && !Mode.CREATE.equals(getMode().getValue())) {
             try {
@@ -467,9 +462,9 @@ public abstract class ArchiveBase extends Task {
      * Find the resources from the target archive that don't have a
      * matching resource in the sources to be added.
      */
-    protected Collection/*<ResourceWithFlags>*/
+    protected Collection<ResourceWithFlags>
         findUnmatchedTargets(ArchiveFileSet target,
-                             Collection/*<ResourceWithFlags>*/ src)
+                             Collection<ResourceWithFlags> src)
         throws IOException {
 
         List<ResourceWithFlags> l = new ArrayList<>();
@@ -482,16 +477,14 @@ public abstract class ArchiveBase extends Task {
         Not not = new Not();
         Or or = new Or();
         not.add(or);
-        for (Iterator i = src.iterator(); i.hasNext(); ) {
-            ResourceWithFlags r = (ResourceWithFlags) i.next();
+        for (ResourceWithFlags r : src) {
             Name name = new Name();
             name.setName(r.getName());
             or.add(name);
         }
         res.add(not);
 
-        for (Iterator rs = res.iterator(); rs.hasNext(); ) {
-            Resource r = (Resource) rs.next();
+        for (Resource r : res) {
             String name = r.getName();
             if ("".equals(name) || "/".equals(name)) {
                 continue;
@@ -507,12 +500,10 @@ public abstract class ArchiveBase extends Task {
     /**
      * Sorts the list of resources to add.
      */
-    protected void sort(List/*<ResourceWithFlags>*/ l) {
-        Collections.sort(l, new Comparator/*<ResourceWithFlags>*/() {
+    protected void sort(List<ResourceWithFlags> l) {
+        Collections.sort(l, new Comparator<ResourceWithFlags>() {
                 @Override
-                public int compare(Object o1, Object o2) {
-                    ResourceWithFlags r1 = (ResourceWithFlags) o1;
-                    ResourceWithFlags r2 = (ResourceWithFlags) o2;
+                public int compare(ResourceWithFlags r1, ResourceWithFlags r2) {
                     return r1.getName().compareTo(r2.getName());
                 }
             });
@@ -521,10 +512,10 @@ public abstract class ArchiveBase extends Task {
     /**
      * Creates the archive archiving the given resources.
      */
-    protected void writeArchive(Collection/*<ResourceWithFlags>*/ src)
+    protected void writeArchive(Collection<ResourceWithFlags> src)
         throws IOException {
         ArchiveOutputStream out = null;
-        Set addedDirectories = new HashSet();
+        Set<String> addedDirectories = new HashSet<>();
         try {
             String enc = Expand.NATIVE_ENCODING.equals(getEncoding())
                 ? null : getEncoding();
@@ -535,9 +526,7 @@ public abstract class ArchiveBase extends Task {
                                                                       .getOutputStream()),
                                              enc);
             }
-            for (Iterator i = src.iterator(); i.hasNext(); ) {
-                ResourceWithFlags r = (ResourceWithFlags) i.next();
-
+            for (ResourceWithFlags r : src) {
                 if (!isFilesOnly()) {
                     ensureParentDirs(out, r, addedDirectories);
                 }
@@ -552,7 +541,6 @@ public abstract class ArchiveBase extends Task {
                     addedDirectories.add(r.getName());
                 }
                 out.closeArchiveEntry();
-
             }
         } finally {
             FILE_UTILS.close(out);
@@ -920,7 +908,7 @@ public abstract class ArchiveBase extends Task {
         private final String userName;
         private final String groupName;
         private final int compressionMethod;
-        private Iterable/*<? extends SevenZMethodConfiguration>*/ contentMethods;
+        private Iterable<? extends SevenZMethodConfiguration> contentMethods;
 
         public ResourceFlags() {
             this(-1);
@@ -946,7 +934,7 @@ public abstract class ArchiveBase extends Task {
             this(mode, new ZipExtraField[0], uid, gid, userName, groupName, -1, null);
         }
 
-        public ResourceFlags(Iterable/*<? extends SevenZMethodConfiguration>*/ contentMethods) {
+        public ResourceFlags(Iterable<? extends SevenZMethodConfiguration> contentMethods) {
             this(-1, new ZipExtraField[0], EntryHelper.UNKNOWN_ID,
                  EntryHelper.UNKNOWN_ID, null, null, -1, contentMethods);
         }
@@ -955,7 +943,7 @@ public abstract class ArchiveBase extends Task {
                               int uid, int gid,
                               String userName, String groupName,
                               int compressionMethod,
-                              Iterable/*<? extends SevenZMethodConfiguration>*/ contentMethods) {
+                              Iterable<? extends SevenZMethodConfiguration> contentMethods) {
             this.mode = mode;
             this.extraFields = extraFields;
             this.gid = gid;
@@ -993,7 +981,7 @@ public abstract class ArchiveBase extends Task {
         public int getCompressionMethod() { return compressionMethod; }
 
         public boolean hasContentMethods() { return contentMethods != null; }
-        public Iterable/*<? extends SevenZMethodConfiguration>*/ getContentMethods() {
+        public Iterable<? extends SevenZMethodConfiguration> getContentMethods() {
             return contentMethods;
         }
     }

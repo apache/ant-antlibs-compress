@@ -224,7 +224,7 @@ public class Archives extends DataType
      * Turns all nested resources into corresponding ArchiveFileSets
      * and returns an iterator over the collected archives.
      */
-    protected Iterator/*<ArchiveFileset>*/ grabArchives() {
+    protected Iterator<ArchiveFileSet> grabArchives() {
         List l = new LinkedList();
         for (Iterator iter = zips.iterator(); iter.hasNext(); ) {
             l.add(configureArchive(new ZipFileSet(),
